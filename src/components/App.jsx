@@ -1,5 +1,13 @@
 import React from 'react';
-import './App.module.scss';
+import classnames from "classnames/bind";
+import styles from "./App.module.scss";
+import PlainGraph from "./PlainGraph/PlainGraph";
 
-const App = () => (<p>abc</p>);
+const cx = classnames.bind(styles);
+
+const App = () => (
+    <div className={cx("app")}>
+        <PlainGraph/>
+    </div>
+);
 export default App;
