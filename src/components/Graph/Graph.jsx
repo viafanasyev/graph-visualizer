@@ -21,14 +21,12 @@ class Graph extends React.Component {
     };
 
     componentDidMount() {
-        const handleResize = () => {
-            this.setState(oldState => {
-                const newState = {...oldState};
+        this.setState(oldState => {
+            const newState = {...oldState};
 
-                newState.windowWidth = window.innerWidth;
-                newState.windowHeight = window.innerHeight;
-
-                const vertices = [
+            let vertices = JSON.parse(localStorage.getItem('vertices'));
+            if ((vertices === undefined) || (vertices === null) || (vertices.length === undefined) || (vertices.length === 0))
+                vertices = [
                     new Vertex(50, 50, vertexRadius),
                     new Vertex(100, 50, vertexRadius),
                     new Vertex(100, 100, vertexRadius),
@@ -36,9 +34,16 @@ class Graph extends React.Component {
                     new Vertex(300, 150, vertexRadius),
                     new Vertex(350, 175, vertexRadius)
                 ];
-                newState.vertices = vertices;
+            else {
+                vertices = vertices.map(vertex => {
+                    return new Vertex(vertex.x, vertex.y, vertex.radius);
+                });
+            }
+            newState.vertices = vertices;
 
-                newState.edgesList = [
+            let edgesList = JSON.parse(localStorage.getItem('edgesList'));
+            if ((edgesList === undefined) || (edgesList === null) || (edgesList.length  === undefined) || (edgesList.length === 0))
+                edgesList = [
                     new Edge(vertices[0], vertices[1]),
                     new Edge(vertices[0], vertices[0]),
                     new Edge(vertices[0], vertices[5], 15),
@@ -51,14 +56,35 @@ class Graph extends React.Component {
                     new Edge(vertices[5], vertices[3]),
                     new Edge(vertices[5], vertices[4])
                 ];
+            else {
+                edgesList = edgesList.map(edge => {
+                    const vertexFrom = vertices.findIndex(vertex => (vertex.x === edge._from.x) && (vertex.y === edge._from.y));
+                    const vertexTo = vertices.findIndex(vertex => (vertex.x === edge._to.x) && (vertex.y === edge._to.y));
+                    if ((vertexFrom !== -1) && (vertexTo !== -1))
+                        return new Edge(vertices[vertexFrom], vertices[vertexTo], edge.weight);
+                    return null;
+                }).filter(edge => edge !== null);
+            }
+            newState.edgesList = edgesList;
 
-                return newState;
-            });
+            return newState;
+        });
+
+        const handleResize = () => {
+            this.setState({ windowWidth: window.innerWidth, windowHeight: window.innerHeight });
         };
-
         window.addEventListener('resize', handleResize);
         handleResize();
+
+        window.onbeforeunload = () => {
+            localStorage.setItem('vertices', JSON.stringify(this.state.vertices));
+            localStorage.setItem('edgesList', JSON.stringify(this.state.edgesList));
+        };
     }
+
+    findIndexOfVertex = (x, y) => {
+        return this.state.vertices.findIndex(vertex => (vertex.x === x) && (vertex.y === y));
+    };
 
     handleVertexDragStart = e => {
         e.target.setAttrs({
@@ -70,7 +96,7 @@ class Graph extends React.Component {
             shadowOpacity: 0.5
         });
         e.target.moveToTop();
-        const i = this.state.vertices.findIndex(vertex => (vertex.x === e.target.x()) && (vertex.y === e.target.y()));
+        const i = this.findIndexOfVertex(e.target.x(), e.target.y());
         this.setState({ draggedVertex: (i !== -1 ? i : undefined) });
     };
 
