@@ -1,11 +1,12 @@
 import { vertexBorderWidth } from "../Vertex/GraphVertex";
-import { Arrow, Line } from "react-konva";
+import { Arrow, Line, Rect, Text, Group } from "react-konva";
 import React from "react";
 
 export class Edge {
-    constructor(vertexFrom, vertexTo) {
+    constructor(vertexFrom, vertexTo, weight) {
         this._from = vertexFrom;
         this._to = vertexTo;
+        this.weight = weight;
         this.state = EdgeState.NORMAL;
     }
 
@@ -29,28 +30,74 @@ export class Edge {
                 return 'black';
         }
     }
+
+    get isWeighted() {
+        return (this.weight !== undefined) && (this.weight !== null);
+    }
 }
 
-export const GraphEdge = ({edge, edgeType}) => {
+export const GraphEdge = ({ edge, edgeType }) => {
     const points = getEdgePointsForType(edge, edgeType);
     const color = edge.color;
+
+    let edgeComponent;
     if (edgeType === EdgeType.NOT_ORIENTED)
-        return (
-            <Line
-                points={points}
-                stroke={color}
-                fill={color}
-                strokeWidth={2}/>
+        edgeComponent = (
+        <Line
+            points={points.linePoints}
+            stroke={color}
+            fill={color}
+            strokeWidth={2}/>
         );
     else
-        return (
+        edgeComponent = (
             <Arrow
-                points={points}
+                points={points.linePoints}
                 stroke={color}
                 fill={color}
                 strokeWidth={2}
-                tension={edgeType === EdgeType.LOOP ? 0.75 : 0.5}/>
+                tension={edgeType === EdgeType.LOOP ? 0.5 : 0.5}/>
         );
+
+    if (edge.isWeighted)
+        return (
+            <Group>
+                {edgeComponent}
+                <GraphEdgeLabel
+                    x={points.labelPoints[0]}
+                    y={points.labelPoints[1]}
+                    text={edge.weight}/>
+            </Group>
+        );
+    else
+        return (edgeComponent);
+};
+
+const GraphEdgeLabel = ({ x, y, text }) => {
+    const labelWidth = 40, labelHeight = 20;
+    const labelHorizontalPadding = 1, labelVerticalPadding = 5;
+    const labelBorderWidth = 1;
+    return (
+        <Group>
+            <Rect
+                x={x - labelWidth / 2. - labelHorizontalPadding - labelBorderWidth}
+                y={y - labelHeight / 2. - labelVerticalPadding - labelBorderWidth}
+                fill={'white'}
+                stroke={'black'}
+                strokeWidth={labelBorderWidth}
+                width={labelWidth + 2 * (labelHorizontalPadding + labelBorderWidth)}
+                height={labelHeight + 2 * (labelVerticalPadding + labelBorderWidth)}/>
+            <Text
+                x={x - labelWidth / 2.}
+                y={y - labelHeight / 2.}
+                text={text}
+                fontSize={20}
+                width={labelWidth}
+                height={labelHeight}
+                align={'center'}
+                verticalAlign={'middle'}/>
+        </Group>
+    );
 };
 
 export const EdgeType = Object.freeze({ ONE_SIDE_ORIENTED: 0, TWO_SIDE_ORIENTED: 1, NOT_ORIENTED: 2, LOOP: 3 });
@@ -71,10 +118,16 @@ export const getEdgePointsForType = (edge, edgeType) => {
         const xTo = vertexTo.x - vertexToOffset * Math.cos(angle);
         const yTo = vertexTo.y + vertexToOffset * Math.sin(angle);
 
-        return [
-            xFrom, yFrom,
-            xTo, yTo
-        ];
+        return {
+            linePoints: [
+                xFrom, yFrom,
+                xTo, yTo
+            ],
+            labelPoints: [
+                (xFrom + xTo) / 2.,
+                (yFrom + yTo) / 2.
+            ]
+        };
     } else if (edgeType === EdgeType.TWO_SIDE_ORIENTED) {
         const angleOffset = 0.25;
         const xFrom = vertexFrom.x + vertexFromOffset * Math.cos(angle + angleOffset);
@@ -86,11 +139,17 @@ export const getEdgePointsForType = (edge, edgeType) => {
         const xMiddle = (xFrom + xTo) / 2. - (yFrom - yTo) * middlePointHeightCoefficient;
         const yMiddle = (yFrom + yTo) / 2. + (xFrom - xTo) * middlePointHeightCoefficient;
 
-        return [
-            xFrom, yFrom,
-            xMiddle, yMiddle,
-            xTo, yTo
-        ];
+        return {
+            linePoints: [
+                xFrom, yFrom,
+                xMiddle, yMiddle,
+                xTo, yTo
+            ],
+            labelPoints: [
+                xMiddle,
+                yMiddle
+            ]
+        };
     } else if (edgeType === EdgeType.LOOP) {
         const xFrom = vertexFrom.x - vertexFromOffset;
         const yFrom = vertexFrom.y;
@@ -101,14 +160,22 @@ export const getEdgePointsForType = (edge, edgeType) => {
         const anchorDy = 1.5 * vertexFromOffset / Math.sqrt(2.);
         const xMiddleFirst = xFrom - anchorDx;
         const yMiddleFirst = yFrom - anchorDy;
+        const xMiddle = xMiddleFirst - vertexFromOffset;
+        const yMiddle = yFrom;
         const xMiddleSecond = xTo - anchorDx;
         const yMiddleSecond = yTo + anchorDy;
 
-        return [
-            xFrom, yFrom,
-            xMiddleFirst, yMiddleFirst,
-            xMiddleSecond, yMiddleSecond,
-            xTo, yTo
-        ];
+        return {
+            linePoints: [
+                xFrom, yFrom,
+                xMiddleFirst, yMiddleFirst,
+                xMiddle, yMiddle,
+                xMiddleSecond, yMiddleSecond,
+                xTo, yTo
+            ],
+            labelPoints: [
+                xMiddle, yMiddle
+            ]
+        };
     }
 };

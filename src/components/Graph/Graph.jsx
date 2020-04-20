@@ -3,8 +3,8 @@ import classnames from "classnames/bind";
 import styles from "./Graph.module.scss";
 import Konva from "konva";
 import { Layer, Stage } from "react-konva";
-import { GraphVertex, Vertex, VertexState } from "./Vertex/GraphVertex";
-import { GraphEdge, EdgeState, EdgeType, Edge } from "./Edge/GraphEdge";
+import { GraphVertex, Vertex } from "./Vertex/GraphVertex";
+import { Edge, EdgeType, GraphEdge } from "./Edge/GraphEdge";
 
 const cx = classnames.bind(styles);
 
@@ -17,7 +17,7 @@ class Graph extends React.Component {
         draggedVertex: undefined,
         windowWidth: 700,
         windowHeight: 700,
-        oriented: true
+        oriented: false
     };
 
     componentDidMount() {
@@ -41,10 +41,10 @@ class Graph extends React.Component {
                 newState.edgesList = [
                     new Edge(vertices[0], vertices[1]),
                     new Edge(vertices[0], vertices[0]),
-                    new Edge(vertices[0], vertices[5]),
+                    new Edge(vertices[0], vertices[5], 15),
                     new Edge(vertices[1], vertices[2]),
                     new Edge(vertices[1], vertices[4]),
-                    new Edge(vertices[2], vertices[5]),
+                    new Edge(vertices[2], vertices[5], 42),
                     new Edge(vertices[2], vertices[2]),
                     new Edge(vertices[3], vertices[4]),
                     new Edge(vertices[4], vertices[5]),
