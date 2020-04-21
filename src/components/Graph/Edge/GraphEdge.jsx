@@ -8,6 +8,8 @@ export class Edge {
         this._to = vertexTo;
         this.weight = weight;
         this.state = EdgeState.NORMAL;
+        // TODO: Add edge type (loop, oriented, non-oriented, two-way oriented)
+        // TODO: Add vertexTo to vertexFrom neighbours
     }
 
     get from() {
@@ -76,20 +78,24 @@ export const GraphEdge = ({ edge, edgeType }) => {
 const GraphEdgeLabel = ({ x, y, text }) => {
     const labelWidth = 40, labelHeight = 20;
     const labelHorizontalPadding = 1, labelVerticalPadding = 5;
-    const labelBorderWidth = 1;
+    const labelBorderWidth = 0;
     return (
-        <Group>
+        <Group
+            x={x - labelWidth / 2. - labelHorizontalPadding - labelBorderWidth}
+            y={y - labelHeight / 2. - labelVerticalPadding - labelBorderWidth}
+            width={labelWidth + 2 * (labelHorizontalPadding + labelBorderWidth)}
+            height={labelHeight + 2 * (labelVerticalPadding + labelBorderWidth)}>
             <Rect
-                x={x - labelWidth / 2. - labelHorizontalPadding - labelBorderWidth}
-                y={y - labelHeight / 2. - labelVerticalPadding - labelBorderWidth}
+                x={0}
+                y={0}
                 fill={'white'}
                 stroke={'black'}
                 strokeWidth={labelBorderWidth}
                 width={labelWidth + 2 * (labelHorizontalPadding + labelBorderWidth)}
                 height={labelHeight + 2 * (labelVerticalPadding + labelBorderWidth)}/>
             <Text
-                x={x - labelWidth / 2.}
-                y={y - labelHeight / 2.}
+                x={labelBorderWidth + labelHorizontalPadding}
+                y={labelBorderWidth + labelVerticalPadding}
                 text={text}
                 fontSize={20}
                 width={labelWidth}
