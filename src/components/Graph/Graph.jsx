@@ -1,7 +1,6 @@
 import React from 'react';
 import classnames from "classnames/bind";
 import styles from "./Graph.module.scss";
-import Konva from "konva";
 import { Layer, Stage } from "react-konva";
 import { GraphVertex, Vertex } from "./Vertex/GraphVertex";
 import { Edge, EdgeType, GraphEdge } from "./Edge/GraphEdge";
@@ -27,16 +26,16 @@ class Graph extends React.Component {
             let vertices = JSON.parse(localStorage.getItem('vertices'));
             if ((vertices === undefined) || (vertices === null) || (vertices.length === undefined) || (vertices.length === 0))
                 vertices = [
-                    new Vertex(50, 50, vertexRadius),
-                    new Vertex(100, 50, vertexRadius),
-                    new Vertex(100, 100, vertexRadius),
-                    new Vertex(150, 150, vertexRadius),
-                    new Vertex(300, 150, vertexRadius),
-                    new Vertex(350, 175, vertexRadius)
+                    new Vertex(50, 50, vertexRadius, 0),
+                    new Vertex(100, 50, vertexRadius, 1),
+                    new Vertex(100, 100, vertexRadius, 2),
+                    new Vertex(150, 150, vertexRadius, 3),
+                    new Vertex(300, 150, vertexRadius, 4),
+                    new Vertex(350, 175, vertexRadius, 5)
                 ];
             else {
                 vertices = vertices.map(vertex => {
-                    return new Vertex(vertex.x, vertex.y, vertex.radius);
+                    return new Vertex(vertex.x, vertex.y, vertex.radius, vertex.name);
                 });
             }
             newState.vertices = vertices;
@@ -58,12 +57,13 @@ class Graph extends React.Component {
                 ];
             else {
                 edgesList = edgesList.map(edge => {
-                    const vertexFrom = vertices.findIndex(vertex => (vertex.x === edge._from.x) && (vertex.y === edge._from.y));
-                    const vertexTo = vertices.findIndex(vertex => (vertex.x === edge._to.x) && (vertex.y === edge._to.y));
+                    const vertexFrom = vertices.findIndex(vertex => vertex.name === edge.from);
+                    const vertexTo = vertices.findIndex(vertex => vertex.name === edge.to);
+                    console.log(vertexFrom + " " + vertexTo);
                     if ((vertexFrom !== -1) && (vertexTo !== -1))
                         return new Edge(vertices[vertexFrom], vertices[vertexTo], edge.weight);
-                    return null;
-                }).filter(edge => edge !== null);
+                    return undefined;
+                }).filter(edge => edge !== undefined);
             }
             newState.edgesList = edgesList;
 
@@ -78,25 +78,22 @@ class Graph extends React.Component {
 
         window.onbeforeunload = () => {
             localStorage.setItem('vertices', JSON.stringify(this.state.vertices));
-            localStorage.setItem('edgesList', JSON.stringify(this.state.edgesList));
+            localStorage.setItem('edgesList', JSON.stringify(this.state.edgesList.map(edge => {
+                return {
+                    from: edge.from.name,
+                    to: edge.to.name,
+                    weight: edge.weight
+                };
+            })));
         };
     }
 
-    findIndexOfVertex = (x, y) => {
-        return this.state.vertices.findIndex(vertex => (vertex.x === x) && (vertex.y === y));
+    findIndexOfVertex = (vertex) => {
+        return this.state.vertices.findIndex(v => v == vertex);
     };
 
-    handleVertexDragStart = e => {
-        e.target.setAttrs({
-            scaleX: 1.1,
-            scaleY: 1.1,
-            shadowColor: 'black',
-            shadowBlur: 10,
-            shadowOffset: { x: 10, y: 10 },
-            shadowOpacity: 0.5
-        });
-        e.target.moveToTop();
-        const i = this.findIndexOfVertex(e.target.x(), e.target.y());
+    handleVertexDragStart = (e, vertex) => {
+        const i = this.findIndexOfVertex(vertex);
         this.setState({ draggedVertex: (i !== -1 ? i : undefined) });
     };
 
@@ -118,16 +115,7 @@ class Graph extends React.Component {
         this.updateDraggedVertex(e.target.x(), e.target.y());
     };
 
-    handleVertexDragEnd = e => {
-        e.target.to({
-            duration: 0.25,
-            easing: Konva.Easings.EaseOut,
-            scaleX: 1,
-            scaleY: 1,
-            shadowBlur: 0,
-            shadowOffsetX: 0,
-            shadowOffsetY: 0
-        });
+    handleVertexDragEnd = (e, vertex) => {
         this.updateDraggedVertex(e.target.x(), e.target.y());
         this.setState({ draggedVertex: undefined });
     };
@@ -162,9 +150,9 @@ class Graph extends React.Component {
                             <GraphVertex
                                 key={index}
                                 vertex={vertex}
-                                onDragStart={this.handleVertexDragStart}
-                                onDragEnd={this.handleVertexDragEnd}
-                                onDragMove={this.handleVertexDragMove}/>
+                                onDragStart={e => this.handleVertexDragStart(e, vertex)}
+                                onDragEnd={e => this.handleVertexDragEnd(e, vertex)}
+                                onDragMove={e => this.handleVertexDragMove(e, vertex)}/>
                         )
                     }
                 </Layer>
