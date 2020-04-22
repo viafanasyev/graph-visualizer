@@ -3,13 +3,12 @@ import { Arrow, Line, Rect, Text, Group } from "react-konva";
 import React from "react";
 
 export class Edge {
-    constructor(vertexFrom, vertexTo, weight) {
+    constructor(vertexFrom, vertexTo, oriented, weight) {
         this._from = vertexFrom;
         this._to = vertexTo;
         this.weight = weight;
         this.state = EdgeState.NORMAL;
-        // TODO: Add edge type (loop, oriented, non-oriented, two-way oriented)
-        // TODO: Add vertexTo to vertexFrom neighbours
+        this._oriented = oriented;
     }
 
     get from() {
@@ -33,8 +32,12 @@ export class Edge {
         }
     }
 
-    get isWeighted() {
+    isWeighted() {
         return (this.weight !== undefined) && (this.weight !== null);
+    }
+
+    isOriented() {
+        return this._oriented;
     }
 }
 
@@ -61,7 +64,7 @@ export const GraphEdge = ({ edge, edgeType }) => {
                 tension={edgeType === EdgeType.LOOP ? 0.5 : 0.5}/>
         );
 
-    if (edge.isWeighted)
+    if (edge.isWeighted())
         return (
             <Group>
                 {edgeComponent}
