@@ -1,4 +1,4 @@
-import { vertexBorderWidth } from "../Vertex/GraphVertex";
+import { vertexBorderWidth } from "../Vertex/Vertex";
 import { Arrow, Line, Rect, Text, Group } from "react-konva";
 import React from "react";
 
@@ -41,7 +41,7 @@ export class Edge {
     }
 }
 
-export const GraphEdge = ({ edge, edgeType }) => {
+export const EdgeComponent = ({ edge, edgeType }) => {
     const points = getEdgePointsForType(edge, edgeType);
     const color = edge.color;
 
@@ -68,7 +68,7 @@ export const GraphEdge = ({ edge, edgeType }) => {
         return (
             <Group>
                 {edgeComponent}
-                <GraphEdgeLabel
+                <EdgeLabel
                     x={points.labelPoints[0]}
                     y={points.labelPoints[1]}
                     text={edge.weight}/>
@@ -78,7 +78,7 @@ export const GraphEdge = ({ edge, edgeType }) => {
         return (edgeComponent);
 };
 
-const GraphEdgeLabel = ({ x, y, text }) => {
+const EdgeLabel = ({ x, y, text }) => {
     const labelWidth = 40, labelHeight = 20;
     const labelHorizontalPadding = 1, labelVerticalPadding = 5;
     const labelBorderWidth = 0;

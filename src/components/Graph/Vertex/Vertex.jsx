@@ -55,7 +55,7 @@ const handleDragEnd = (e, call) => {
     call(e);
 };
 
-export const GraphVertex = ({ vertex, onDragStart, onDragEnd, onDragMove }) => {
+export const VertexComponent = ({ vertex, onDragStart, onDragEnd, onDragMove }) => {
     const labelWidth = 40, labelHeight = 20;
     return (
         <Group

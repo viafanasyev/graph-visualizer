@@ -2,8 +2,8 @@ import React from 'react';
 import classnames from "classnames/bind";
 import styles from "./Graph.module.scss";
 import { Layer, Stage } from "react-konva";
-import { GraphVertex, Vertex } from "./Vertex/GraphVertex";
-import { Edge, EdgeType, GraphEdge } from "./Edge/GraphEdge";
+import { VertexComponent, Vertex } from "./Vertex/Vertex";
+import { Edge, EdgeType, EdgeComponent } from "./Edge/Edge";
 
 const cx = classnames.bind(styles);
 
@@ -172,7 +172,7 @@ class GraphComponent extends React.Component {
                 <Layer>
                     {
                         this.state.graph.edges.map((edge, index) =>
-                            <GraphEdge
+                            <EdgeComponent
                                 key={index}
                                 vertexFrom={this.state.graph.vertices[edge.from]}
                                 vertexTo={this.state.graph.vertices[edge.to]}
@@ -182,7 +182,7 @@ class GraphComponent extends React.Component {
                     }
                     {
                         this.state.graph.vertices.map((vertex, index) =>
-                            <GraphVertex
+                            <VertexComponent
                                 key={index}
                                 vertex={vertex}
                                 onDragStart={e => this.handleVertexDragStart(e, vertex)}
