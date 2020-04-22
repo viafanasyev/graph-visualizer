@@ -75,10 +75,10 @@ class GraphComponent extends React.Component {
             }
             vertices = graph.vertices;
 
-            let edgesList = JSON.parse(localStorage.getItem('edgesList'));
+            let edgesList = JSON.parse(localStorage.getItem('edges'));
             if ((edgesList === undefined) || (edgesList === null) || (edgesList.length  === undefined) || (edgesList.length === 0)) {
                 graph.addEdge(vertices[0], vertices[1]);
-                graph.addEdge(vertices[0], vertices[0]);
+                graph.addEdge(vertices[0], vertices[0], 82);
                 graph.addEdge(vertices[0], vertices[5], 15);
                 graph.addEdge(vertices[1], vertices[2]);
                 graph.addEdge(vertices[1], vertices[4]);

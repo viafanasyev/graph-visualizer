@@ -1,5 +1,5 @@
 import { vertexBorderWidth } from "../Vertex/Vertex";
-import { Arrow, Line, Rect, Text, Group } from "react-konva";
+import { Arrow, Line, Rect, Circle, Text, Group } from "react-konva";
 import React from "react";
 
 export class Edge {
@@ -79,30 +79,29 @@ export const EdgeComponent = ({ edge, edgeType }) => {
 };
 
 const EdgeLabel = ({ x, y, text }) => {
-    const labelWidth = 40, labelHeight = 20;
+    const labelRadius = 15;
     const labelHorizontalPadding = 1, labelVerticalPadding = 5;
     const labelBorderWidth = 0;
     return (
         <Group
-            x={x - labelWidth / 2. - labelHorizontalPadding - labelBorderWidth}
-            y={y - labelHeight / 2. - labelVerticalPadding - labelBorderWidth}
-            width={labelWidth + 2 * (labelHorizontalPadding + labelBorderWidth)}
-            height={labelHeight + 2 * (labelVerticalPadding + labelBorderWidth)}>
-            <Rect
-                x={0}
-                y={0}
+            x={x - labelRadius - labelHorizontalPadding - labelBorderWidth}
+            y={y - labelRadius - labelVerticalPadding - labelBorderWidth}
+            width={labelRadius * 2. + 2. * (labelHorizontalPadding + labelBorderWidth)}
+            height={labelRadius * 2. + 2. * (labelVerticalPadding + labelBorderWidth)}>
+            <Circle
+                x={labelRadius + labelHorizontalPadding + labelBorderWidth}
+                y={labelRadius + labelVerticalPadding + labelBorderWidth}
+                radius={labelRadius}
                 fill={'white'}
                 stroke={'black'}
-                strokeWidth={labelBorderWidth}
-                width={labelWidth + 2 * (labelHorizontalPadding + labelBorderWidth)}
-                height={labelHeight + 2 * (labelVerticalPadding + labelBorderWidth)}/>
+                strokeWidth={labelBorderWidth}/>
             <Text
                 x={labelBorderWidth + labelHorizontalPadding}
                 y={labelBorderWidth + labelVerticalPadding}
                 text={text}
                 fontSize={20}
-                width={labelWidth}
-                height={labelHeight}
+                width={labelRadius * 2.}
+                height={labelRadius * 2.}
                 align={'center'}
                 verticalAlign={'middle'}/>
         </Group>
