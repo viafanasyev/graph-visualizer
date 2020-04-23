@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.react-draggable {
+  cursor: default;
+}
+
+.not-draggable {
+  cursor: auto;
+}

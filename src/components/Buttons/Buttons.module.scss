@@ -1,0 +1,26 @@
+.button {
+  width: fit-content;
+  font-size: large;
+  color: #444;
+  border: 1px solid rgb(187, 187, 187);
+  border-radius: 10px;
+  background: #fff;
+  padding: 14px 25px;
+
+  &:focus {
+    outline: none;
+    filter: drop-shadow(0 0 5px rgba(59, 153, 252, .7));
+    color: #000;
+  }
+
+  &:hover {
+    filter: drop-shadow(0 0 5px rgb(180, 180, 180));
+    color: #000;
+  }
+
+  &:active {
+    background: #f5f5f5;
+    transform: translateY(2px);
+    filter: drop-shadow(0 0 3px rgb(170, 170, 170));
+  }
+}
