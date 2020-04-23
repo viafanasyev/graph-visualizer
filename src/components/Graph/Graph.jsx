@@ -43,13 +43,13 @@ class Graph {
 
 class GraphComponent extends React.Component {
     state = {
-        graph: undefined,
+        graph: new Graph(false),
         draggedVertex: undefined,
         windowWidth: 700,
         windowHeight: 700
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState(oldState => {
             const newState = {...oldState};
 
