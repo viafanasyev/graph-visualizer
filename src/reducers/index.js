@@ -1,9 +1,17 @@
 import { Graph } from "../components/Graph/Graph";
-import { actionNames } from "../actions";
+import { actionName } from "../actions";
+
+export const graphMode = Object.freeze({
+    DEFAULT: 0,
+    ADD_VERTEX: 1,
+    ADD_EDGE: 2,
+    REMOVE_VERTEX_OR_EDGE: 3
+});
 
 const defaultState = {
     graph: new Graph(false),
-    message: undefined
+    message: undefined,
+    graphMode: graphMode.DEFAULT
 };
 
 const clone = object => {
@@ -13,7 +21,7 @@ const clone = object => {
 const reducer = (state = defaultState, action) => {
     let newState;
     switch (action.type) {
-        case actionNames.addVertex:
+        case actionName.ADD_VERTEX:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -22,7 +30,7 @@ const reducer = (state = defaultState, action) => {
             newState.graph.addVertex(action.x, action.y, action.radius);
 
             return newState;
-        case actionNames.addEdge:
+        case actionName.ADD_EDGE:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -31,14 +39,14 @@ const reducer = (state = defaultState, action) => {
             newState.graph.addEdge(action.vertexFrom, action.vertexTo, action.weight);
 
             return newState;
-        case actionNames.removeVertexOrEdge:
+        case actionName.REMOVE_VERTEX_OR_EDGE:
             newState = {
                 ...state,
                 graph: clone(state.graph)
             };
 
             return newState;
-        case actionNames.updateVertexPosition:
+        case actionName.UPDATE_VERTEX_POSITION:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -48,33 +56,16 @@ const reducer = (state = defaultState, action) => {
             newState.graph.vertices[action.vertexIndex].y = action.y;
 
             return newState;
-        case actionNames.askForAction:
+        case actionName.CHANGE_GRAPH_MODE:
             newState = {
                 ...state,
                 graph: clone(state.graph)
             };
 
-            switch (action.actionName) {
-                case actionNames.addVertex:
-
-                    // Change graph component state to 'waiting for vertex'
-
-                    break;
-                case actionNames.addEdge:
-
-                    // Change graph component state to 'waiting for edge'
-
-                    break;
-                case actionNames.removeVertexOrEdge:
-
-                    // Change graph component state to 'waiting for vertex/edge click'
-                    break;
-                default:
-                    break;
-            }
+            newState.graphMode = action.graphMode;
 
             return newState;
-        case actionNames.showMessage:
+        case actionName.SHOW_MESSAGE:
             newState = {
                 ...state
             };
@@ -82,7 +73,7 @@ const reducer = (state = defaultState, action) => {
             newState.message = action.message;
 
             return newState;
-        case actionNames.closeMessage:
+        case actionName.CLOSE_MESSAGE:
             newState = {
                 ...state
             };

@@ -6,15 +6,16 @@ import { ButtonComponent } from "../Buttons/Buttons";
 import { SliderComponent } from "../Sliders/Sliders";
 import { DropDownList } from "../DropDownLists/DropDownLists";
 import {
-    actionNames,
+    actionName,
     addEdge,
     addVertex,
-    askForAction,
+    changeGraphMode,
     closeMessage,
     showMessage,
     updateVertexPosition
 } from "../../actions";
 import { connect } from "react-redux";
+import { graphMode } from "../../reducers";
 
 const cx = classnames.bind(styles);
 
@@ -27,18 +28,14 @@ const algorithms = [
     "Алгоритм Дейкстры"
 ];
 
-const modes = Object.freeze({
-    DEFAULT: 0,
-    ADD_VERTEX: 1,
-    ADD_EDGE: 2,
-    REMOVE_VERTEX_OR_EDGE: 3
+const mapStateToProps = state => ({
+    graphMode: state.graphMode
 });
 
 class MenuComponent extends React.Component {
     state = {
         selectedAlgorithm: algorithms[0],
         visualizationSpeed: (minAlgorithmSpeed + maxAlgorithmSpeed) / 2,
-        mode: modes.DEFAULT
     };
 
     handleAlgorithmChange = e => {
@@ -64,31 +61,14 @@ class MenuComponent extends React.Component {
         this.setState({ visualizationSpeed: e.target.value });
     };
 
-    askForAction = (message, actionName) => {
-        this.setState(oldState => {
-            const newState = {...oldState};
-
-            switch (actionName) {
-                case actionNames.addVertex:
-                    newState.mode = modes.ADD_VERTEX;
-                    return newState;
-                case actionNames.addEdge:
-                    newState.mode = modes.ADD_EDGE;
-                    return newState;
-                case actionNames.removeVertexOrEdge:
-                    newState.mode = modes.REMOVE_VERTEX_OR_EDGE;
-                    return newState;
-                default:
-                    return newState;
-            }
-        });
-
+    askForAction = (message, graphMode) => {
         this.props.showMessage(message);
-        this.props.askForAction(actionName);
+        this.props.changeGraphMode(graphMode);
+        console.log(this.props.graphMode);
     };
 
     closeMessage = () => {
-        this.setState({ mode: modes.DEFAULT });
+        this.props.changeGraphMode(graphMode.DEFAULT);
         this.props.closeMessage();
     };
 
@@ -102,19 +82,19 @@ class MenuComponent extends React.Component {
                             <ButtonComponent
                                 text={"Режим просмотра"} // TODO: Find proper name
                                 onClick={() => this.closeMessage()}
-                                activated={this.state.mode === modes.DEFAULT}/>
+                                activated={this.props.graphMode === graphMode.DEFAULT}/>
                             <ButtonComponent
                                 text={"Добавить вершину"}
-                                onClick={() => this.askForAction("Выберите точку для добавления вершины", actionNames.addVertex)}
-                                activated={this.state.mode === modes.ADD_VERTEX}/>
+                                onClick={() => this.askForAction("Выберите точку для добавления вершины", graphMode.ADD_VERTEX)}
+                                activated={this.props.graphMode === graphMode.ADD_VERTEX}/>
                             <ButtonComponent
                                 text={"Добавить ребро"}
-                                onClick={() => this.askForAction("Выберите вершины, которые нужно соединить ребром", actionNames.addEdge)}
-                                activated={this.state.mode === modes.ADD_EDGE}/>
+                                onClick={() => this.askForAction("Выберите вершины, которые нужно соединить ребром", graphMode.ADD_EDGE)}
+                                activated={this.props.graphMode === graphMode.ADD_EDGE}/>
                             <ButtonComponent
                                 text={"Удалить вершину/ребро"}
-                                onClick={() => this.askForAction("Выберите объект для удаления", actionNames.removeVertexOrEdge)}
-                                activated={this.state.mode === modes.REMOVE_VERTEX_OR_EDGE}/>
+                                onClick={() => this.askForAction("Выберите объект для удаления", graphMode.REMOVE_VERTEX_OR_EDGE)}
+                                activated={this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE}/>
                         </div>
                     </div>
                     <div className={cx("menu-sub")}>
@@ -143,9 +123,9 @@ class MenuComponent extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    askForAction: (actionName) => dispatch(askForAction(actionName)),
+    changeGraphMode: (graphMode) => dispatch(changeGraphMode(graphMode)),
     showMessage: (message) => dispatch(showMessage(message)),
     closeMessage: () => dispatch(closeMessage()),
 });
 
-export default connect(null, mapDispatchToProps)(MenuComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

@@ -1,47 +1,47 @@
-export const actionNames = Object.freeze({
-    addVertex: 'ADD_VERTEX',
-    addEdge: 'ADD_EDGE',
-    removeVertexOrEdge: 'REMOVE_VERTEX_OR_EDGE',
-    askForAction: 'ASK_FOR_ACTION',
-    showMessage: 'SHOW_MESSAGE',
-    closeMessage: 'CLOSE_MESSAGE',
-    updateVertexPosition: 'UPDATE_VERTEX_POSITION'
+export const actionName = Object.freeze({
+    ADD_VERTEX: 'ADD_VERTEX',
+    ADD_EDGE: 'ADD_EDGE',
+    REMOVE_VERTEX_OR_EDGE: 'REMOVE_VERTEX_OR_EDGE',
+    CHANGE_GRAPH_MODE: 'CHANGE_GRAPH_MODE',
+    SHOW_MESSAGE: 'SHOW_MESSAGE',
+    CLOSE_MESSAGE: 'CLOSE_MESSAGE',
+    UPDATE_VERTEX_POSITION: 'UPDATE_VERTEX_POSITION'
 });
 
 export const addVertex = (x, y, radius) => ({
-    type: actionNames.addVertex,
+    type: actionName.ADD_VERTEX,
     x: x,
     y: y,
     radius: radius
 });
 
 export const addEdge = (vertexFrom, vertexTo, weight) => ({
-    type: actionNames.addEdge,
+    type: actionName.ADD_EDGE,
     vertexFrom: vertexFrom,
     vertexTo: vertexTo,
     weight: weight
 });
 
 export const removeVertexOrEdge = () => ({
-    type: actionNames.removeVertexOrEdge
+    type: actionName.REMOVE_VERTEX_OR_EDGE
 });
 
-export const askForAction = (actionName) => ({
-    type: actionNames.askForAction,
-    actionName: actionName
+export const changeGraphMode = (graphMode) => ({
+    type: actionName.CHANGE_GRAPH_MODE,
+    graphMode: graphMode
 });
 
 export const showMessage = (message) => ({
-    type: actionNames.showMessage,
+    type: actionName.SHOW_MESSAGE,
     message: message
 });
 
 export const closeMessage = () => ({
-    type: actionNames.closeMessage
+    type: actionName.CLOSE_MESSAGE
 });
 
 export const updateVertexPosition = (vertexIndex, x, y) => ({
-    type: actionNames.updateVertexPosition,
+    type: actionName.UPDATE_VERTEX_POSITION,
     vertexIndex: vertexIndex,
     x: x,
     y: y
