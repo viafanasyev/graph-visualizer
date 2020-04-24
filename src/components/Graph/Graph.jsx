@@ -12,7 +12,8 @@ const cx = classnames.bind(styles);
 const vertexRadius = 20;
 
 const mapStateToProps = state => ({
-    graph: state.graph
+    graph: state.graph,
+    graphMode: state.graphMode
 });
 
 export class Graph {
@@ -51,8 +52,7 @@ class GraphComponent extends React.Component {
     state = {
         draggedVertex: undefined,
         windowWidth: 700,
-        windowHeight: 700,
-        graph: undefined
+        windowHeight: 700
     };
 
     componentDidMount() {
@@ -128,7 +128,7 @@ class GraphComponent extends React.Component {
     }
 
     findIndexOfVertex = (vertex) => {
-        return this.props.graph.vertices.findIndex(v => v == vertex);
+        return this.props.graph.vertices.findIndex(v => v === vertex);
     };
 
     handleVertexDragStart = (e, vertex) => {
@@ -140,7 +140,7 @@ class GraphComponent extends React.Component {
         const vertex = this.state.draggedVertex;
         if (vertex !== undefined)
             this.props.updateVertexPosition(vertex, x, y);
-    }
+    };
 
     handleVertexDragMove = e => {
         this.updateDraggedVertex(e.target.x(), e.target.y());
@@ -154,11 +154,11 @@ class GraphComponent extends React.Component {
     getEdgeType = edge => {
         const vertexFrom = edge.from, vertexTo = edge.to;
 
-        if (vertexTo == vertexFrom)
+        if (vertexTo === vertexFrom)
             return EdgeType.LOOP;
         else if (!edge.isOriented())
             return EdgeType.NOT_ORIENTED;
-        else if (this.props.graph.edges.findIndex(e => (e.from == vertexTo) && (e.to == vertexFrom)) !== -1)
+        else if (this.props.graph.edges.findIndex(e => (e.from === vertexTo) && (e.to === vertexFrom)) !== -1)
             return EdgeType.TWO_SIDE_ORIENTED;
         else
             return EdgeType.ONE_SIDE_ORIENTED;

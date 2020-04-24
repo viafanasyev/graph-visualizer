@@ -61,7 +61,7 @@ export const EdgeComponent = ({ edge, edgeType }) => {
                 stroke={color}
                 fill={color}
                 strokeWidth={2}
-                tension={edgeType === EdgeType.LOOP ? 0.5 : 0.5}/>
+                tension={0.5}/>
         );
 
     if (edge.isWeighted())

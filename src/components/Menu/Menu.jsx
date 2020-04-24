@@ -64,7 +64,6 @@ class MenuComponent extends React.Component {
     askForAction = (message, graphMode) => {
         this.props.showMessage(message);
         this.props.changeGraphMode(graphMode);
-        console.log(this.props.graphMode);
     };
 
     closeMessage = () => {
