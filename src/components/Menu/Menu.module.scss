@@ -1,7 +1,7 @@
 .menu {
   position: absolute;
   z-index: 10000;
-  background: rgba(74, 117, 124, 0.1);
+  background: rgba(60, 67, 102, 0.2);
   border-radius: 8px;
   padding: 10px 20px 20px;
   text-align: center;
@@ -19,8 +19,7 @@
   }
 
   &-sub {
-    background: rgba(74, 117, 124, 0.2);
-    //border-bottom: 1px gray solid;
+    background: rgba(60, 67, 102, 0.2);
     padding: 6px;
     border-radius: 8px;
     display: flex;
