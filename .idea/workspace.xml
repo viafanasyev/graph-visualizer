@@ -3,12 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="90e173de-d09d-451d-b996-5c2b8e601c18" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Buttons/Buttons.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Buttons/Buttons.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Buttons/Buttons.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Buttons/Buttons.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Graph/Graph.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Graph/Graph.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Menu/Menu.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Menu/Menu.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Menu/Menu.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Menu/Menu.module.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/PlainGraph/PlainGraph.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlainGraph/PlainGraph.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/PlainGraph/PlainGraph.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlainGraph/PlainGraph.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +28,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/MessageBox" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -34,7 +37,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
@@ -43,11 +46,11 @@
       <recent name="$PROJECT_DIR$/public" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/MessageBox" />
+      <recent name="$PROJECT_DIR$/src/actions" />
+      <recent name="$PROJECT_DIR$/src/reducers" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/components/DropDownLists" />
-      <recent name="$PROJECT_DIR$/src/components/Sliders" />
-      <recent name="$PROJECT_DIR$/src/components" />
-      <recent name="$PROJECT_DIR$/src/components/Menu" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -84,7 +87,9 @@
       <workItem from="1587467636350" duration="26421000" />
       <workItem from="1587557733859" duration="225000" />
       <workItem from="1587558008432" duration="296000" />
-      <workItem from="1587558336245" duration="42193000" />
+      <workItem from="1587558336245" duration="42723000" />
+      <workItem from="1587646271819" duration="10154000" />
+      <workItem from="1587677533978" duration="13132000" />
     </task>
     <servers />
   </component>

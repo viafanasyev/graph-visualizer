@@ -4,12 +4,18 @@ import styles from "./Graph.module.scss";
 import { Layer, Stage } from "react-konva";
 import { VertexComponent, Vertex } from "./Vertex/Vertex";
 import { Edge, EdgeType, EdgeComponent } from "./Edge/Edge";
+import { connect } from "react-redux";
+import { addEdge, addVertex, updateVertexPosition } from "../../actions";
 
 const cx = classnames.bind(styles);
 
 const vertexRadius = 20;
 
-class Graph {
+const mapStateToProps = state => ({
+    graph: state.graph
+});
+
+export class Graph {
     constructor(oriented) {
         this._vertices = [];
         this._edges = [];
@@ -43,61 +49,61 @@ class Graph {
 
 class GraphComponent extends React.Component {
     state = {
-        graph: new Graph(false),
         draggedVertex: undefined,
         windowWidth: 700,
-        windowHeight: 700
+        windowHeight: 700,
+        graph: undefined
     };
 
     componentDidMount() {
         this.setState(oldState => {
             const newState = {...oldState};
 
-            let oriented = JSON.parse(localStorage.getItem('oriented'));
-            if ((oriented === undefined) || (oriented === null))
-                oriented = false;
-
-            let graph = new Graph(oriented);
+            // let oriented = JSON.parse(localStorage.getItem('oriented'));
+            // if ((oriented === undefined) || (oriented === null))
+            //     oriented = false;
+            //
+            // this.props.graph = new Graph(oriented);
 
             let vertices = JSON.parse(localStorage.getItem('vertices'));
             if ((vertices === undefined) || (vertices === null) || (vertices.length === undefined) || (vertices.length === 0)) {
-                graph.addVertex(50, 50, vertexRadius);
-                graph.addVertex(100, 50, vertexRadius);
-                graph.addVertex(100, 100, vertexRadius);
-                graph.addVertex(150, 150, vertexRadius);
-                graph.addVertex(300, 150, vertexRadius);
-                graph.addVertex(350, 175, vertexRadius);
+                this.props.addVertex(50, 50, vertexRadius);
+                this.props.addVertex(100, 50, vertexRadius);
+                this.props.addVertex(100, 100, vertexRadius);
+                this.props.addVertex(150, 150, vertexRadius);
+                this.props.addVertex(300, 150, vertexRadius);
+                this.props.addVertex(350, 175, vertexRadius);
             } else {
                 vertices.sort((v1, v2) => v1.name - v2.name)
                         .forEach(vertex => {
-                            graph.addVertex(vertex.x, vertex.y, vertex.radius);
+                            this.props.addVertex(vertex.x, vertex.y, vertex.radius);
                 });
             }
-            vertices = graph.vertices;
+            vertices = this.props.graph.vertices;
 
             let edgesList = JSON.parse(localStorage.getItem('edges'));
             if ((edgesList === undefined) || (edgesList === null) || (edgesList.length  === undefined) || (edgesList.length === 0)) {
-                graph.addEdge(vertices[0], vertices[1]);
-                graph.addEdge(vertices[0], vertices[0], 82);
-                graph.addEdge(vertices[0], vertices[5], 15);
-                graph.addEdge(vertices[1], vertices[2]);
-                graph.addEdge(vertices[1], vertices[4]);
-                graph.addEdge(vertices[2], vertices[5], 42);
-                graph.addEdge(vertices[2], vertices[2]);
-                graph.addEdge(vertices[3], vertices[4]);
-                graph.addEdge(vertices[4], vertices[5]);
-                graph.addEdge(vertices[5], vertices[3]);
-                graph.addEdge(vertices[5], vertices[4]);
+                this.props.addEdge(vertices[0], vertices[1]);
+                this.props.addEdge(vertices[0], vertices[0], 82);
+                this.props.addEdge(vertices[0], vertices[5], 15);
+                this.props.addEdge(vertices[1], vertices[2]);
+                this.props.addEdge(vertices[1], vertices[4]);
+                this.props.addEdge(vertices[2], vertices[5], 42);
+                this.props.addEdge(vertices[2], vertices[2]);
+                this.props.addEdge(vertices[3], vertices[4]);
+                this.props.addEdge(vertices[4], vertices[5]);
+                this.props.addEdge(vertices[5], vertices[3]);
+                this.props.addEdge(vertices[5], vertices[4]);
             } else {
                 edgesList.forEach(edge => {
                     const vertexFrom = vertices.findIndex(vertex => vertex.name === edge.from);
                     const vertexTo = vertices.findIndex(vertex => vertex.name === edge.to);
                     if ((vertexFrom !== -1) && (vertexTo !== -1))
-                        graph.addEdge(vertices[vertexFrom], vertices[vertexTo], edge.weight);
+                        this.props.addEdge(vertices[vertexFrom], vertices[vertexTo], edge.weight);
                 });
             }
 
-            newState.graph = graph;
+            newState.graph = this.props.graph;
 
             return newState;
         });
@@ -109,9 +115,9 @@ class GraphComponent extends React.Component {
         handleResize();
 
         window.onbeforeunload = () => {
-            localStorage.setItem('oriented', JSON.stringify(this.state.graph.isOriented()));
-            localStorage.setItem('vertices', JSON.stringify(this.state.graph.vertices));
-            localStorage.setItem('edges', JSON.stringify(this.state.graph.edges.map(edge => {
+            localStorage.setItem('oriented', JSON.stringify(this.props.graph.isOriented()));
+            localStorage.setItem('vertices', JSON.stringify(this.props.graph.vertices));
+            localStorage.setItem('edges', JSON.stringify(this.props.graph.edges.map(edge => {
                 return {
                     from: edge.from.name,
                     to: edge.to.name,
@@ -122,7 +128,7 @@ class GraphComponent extends React.Component {
     }
 
     findIndexOfVertex = (vertex) => {
-        return this.state.graph.vertices.findIndex(v => v == vertex);
+        return this.props.graph.vertices.findIndex(v => v == vertex);
     };
 
     handleVertexDragStart = (e, vertex) => {
@@ -130,18 +136,10 @@ class GraphComponent extends React.Component {
         this.setState({ draggedVertex: (i !== -1 ? i : undefined) });
     };
 
-    updateDraggedVertex(x, y) {
+    updateDraggedVertex = (x, y) => {
         const vertex = this.state.draggedVertex;
-        if (vertex !== undefined) {
-            this.setState(oldState => {
-                const newState = {...oldState};
-
-                newState.graph.vertices[vertex].x = x;
-                newState.graph.vertices[vertex].y = y;
-
-                return newState;
-            });
-        }
+        if (vertex !== undefined)
+            this.props.updateVertexPosition(vertex, x, y);
     }
 
     handleVertexDragMove = e => {
@@ -160,7 +158,7 @@ class GraphComponent extends React.Component {
             return EdgeType.LOOP;
         else if (!edge.isOriented())
             return EdgeType.NOT_ORIENTED;
-        else if (this.state.graph.edges.findIndex(e => (e.from == vertexTo) && (e.to == vertexFrom)) !== -1)
+        else if (this.props.graph.edges.findIndex(e => (e.from == vertexTo) && (e.to == vertexFrom)) !== -1)
             return EdgeType.TWO_SIDE_ORIENTED;
         else
             return EdgeType.ONE_SIDE_ORIENTED;
@@ -171,17 +169,17 @@ class GraphComponent extends React.Component {
             <Stage width={this.state.windowWidth} height={this.state.windowHeight}>
                 <Layer>
                     {
-                        this.state.graph.edges.map((edge, index) =>
+                        this.props.graph.edges.map((edge, index) =>
                             <EdgeComponent
                                 key={index}
-                                vertexFrom={this.state.graph.vertices[edge.from]}
-                                vertexTo={this.state.graph.vertices[edge.to]}
+                                vertexFrom={edge.from}
+                                vertexTo={edge.to}
                                 edge={edge}
                                 edgeType={this.getEdgeType(edge)}/>
                         )
                     }
                     {
-                        this.state.graph.vertices.map((vertex, index) =>
+                        this.props.graph.vertices.map((vertex, index) =>
                             <VertexComponent
                                 key={index}
                                 vertex={vertex}
@@ -196,4 +194,11 @@ class GraphComponent extends React.Component {
     }
 }
 
-export default GraphComponent;
+
+const mapDispatchToProps = dispatch => ({
+    addVertex: (x, y, radius) => dispatch(addVertex(x, y, radius)),
+    addEdge: (vertexFrom, vertexTo, radius) => dispatch(addEdge(vertexFrom, vertexTo, radius)),
+    updateVertexPosition: (vertexIndex, x, y) => dispatch(updateVertexPosition(vertexIndex, x, y))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GraphComponent);

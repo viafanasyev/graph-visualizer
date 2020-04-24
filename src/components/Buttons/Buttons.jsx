@@ -4,9 +4,9 @@ import styles from "./Buttons.module.scss";
 
 const cx = classnames.bind(styles);
 
-export const ButtonComponent = ({ text, onClick }) => {
+export const ButtonComponent = ({ text, onClick, activated }) => {
     return (
-        <button className={cx("button")} onClick={onClick}>
+        <button className={cx("button", {[`activated`]: activated})} onClick={onClick}>
             {text}
         </button>
     );
