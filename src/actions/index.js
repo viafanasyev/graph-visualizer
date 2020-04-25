@@ -1,8 +1,11 @@
 export const actionName = Object.freeze({
     ADD_VERTEX: 'ADD_VERTEX',
     ADD_EDGE: 'ADD_EDGE',
-    REMOVE_VERTEX_OR_EDGE: 'REMOVE_VERTEX_OR_EDGE',
+    REMOVE_VERTEX: 'REMOVE_VERTEX',
+    REMOVE_EDGE: 'REMOVE_EDGE',
     CHANGE_GRAPH_MODE: 'CHANGE_GRAPH_MODE',
+    SELECT_VERTEX: 'SELECT_VERTEX',
+    UNSELECT_VERTEX: 'UNSELECT_VERTEX',
     SHOW_MESSAGE: 'SHOW_MESSAGE',
     CLOSE_MESSAGE: 'CLOSE_MESSAGE',
     UPDATE_VERTEX_POSITION: 'UPDATE_VERTEX_POSITION'
@@ -22,13 +25,29 @@ export const addEdge = (vertexFrom, vertexTo, weight) => ({
     weight: weight
 });
 
-export const removeVertexOrEdge = () => ({
-    type: actionName.REMOVE_VERTEX_OR_EDGE
+export const removeVertex = (vertex) => ({
+    type: actionName.REMOVE_VERTEX,
+    vertex: vertex
+});
+
+export const removeEdge = (edge) => ({
+    type: actionName.REMOVE_EDGE,
+    edge: edge
 });
 
 export const changeGraphMode = (graphMode) => ({
     type: actionName.CHANGE_GRAPH_MODE,
     graphMode: graphMode
+});
+
+export const selectVertex = (vertex) => ({
+   type: actionName.SELECT_VERTEX,
+   vertex: vertex
+});
+
+export const unselectVertex = (vertex) => ({
+   type: actionName.UNSELECT_VERTEX,
+   vertex: vertex
 });
 
 export const showMessage = (message) => ({

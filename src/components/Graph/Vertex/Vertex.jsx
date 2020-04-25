@@ -55,14 +55,15 @@ const handleDragEnd = (e, call) => {
     call(e);
 };
 
-export const VertexComponent = ({ vertex, onDragStart, onDragEnd, onDragMove }) => {
+export const VertexComponent = ({ vertex, draggable, onDragStart, onDragEnd, onDragMove, onClick }) => {
     const labelWidth = 40, labelHeight = 20;
     return (
         <Group
-            draggable
+            draggable={draggable}
             onDragStart={e => handleDragStart(e, onDragStart)}
             onDragEnd={e => handleDragEnd(e, onDragEnd)}
             onDragMove={onDragMove}
+            onClick={onClick}
             x={vertex.x}
             y={vertex.y}>
             <Circle

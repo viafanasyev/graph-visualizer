@@ -15,7 +15,7 @@ import {
     updateVertexPosition
 } from "../../actions";
 import { connect } from "react-redux";
-import { graphMode } from "../../reducers";
+import { graphMode } from "../Graph/Graph";
 
 const cx = classnames.bind(styles);
 

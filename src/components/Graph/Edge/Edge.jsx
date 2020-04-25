@@ -41,32 +41,36 @@ export class Edge {
     }
 }
 
-export const EdgeComponent = ({ edge, edgeType }) => {
+export const EdgeComponent = ({ edge, edgeType, onClick }) => {
     const points = getEdgePointsForType(edge, edgeType);
     const color = edge.color;
 
     let edgeComponent;
     if (edgeType === EdgeType.NOT_ORIENTED)
         edgeComponent = (
-        <Line
-            points={points.linePoints}
-            stroke={color}
-            fill={color}
-            strokeWidth={2}/>
+            <Line
+                points={points.linePoints}
+                onClick={onClick}
+                stroke={color}
+                fill={color}
+                strokeWidth={2}
+                hitStrokeWidth={15}/>
         );
     else
         edgeComponent = (
             <Arrow
                 points={points.linePoints}
+                onClick={onClick}
                 stroke={color}
                 fill={color}
                 strokeWidth={2}
+                hitStrokeWidth={15}
                 tension={0.5}/>
         );
 
     if (edge.isWeighted())
         return (
-            <Group>
+            <Group onClick={onClick}>
                 {edgeComponent}
                 <EdgeLabel
                     x={points.labelPoints[0]}
