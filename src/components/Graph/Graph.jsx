@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from "classnames/bind";
 import styles from "./Graph.module.scss";
-import { Layer, Stage } from "react-konva";
+import { Layer, Stage, Rect } from "react-konva";
 import { VertexComponent, Vertex } from "./Vertex/Vertex";
 import { Edge, EdgeType, EdgeComponent } from "./Edge/Edge";
 import { connect } from "react-redux";
@@ -235,6 +235,7 @@ class GraphComponent extends React.Component {
         return (
             <Stage onClick={this.handleCanvasClick} width={this.state.windowWidth} height={this.state.windowHeight}>
                 <Layer>
+                    <Rect fill={'white'} x={0} y={0} width={this.state.windowWidth} height={this.state.windowHeight}/>
                     {
                         this.props.graph.edges.map((edge, index) =>
                             <EdgeComponent
