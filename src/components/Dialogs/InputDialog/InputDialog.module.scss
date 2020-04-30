@@ -1,0 +1,40 @@
+.input-dialog {
+  width: 460px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50% - 0.5, -50% - 0.5);
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(60, 67, 102, 0.2);
+  backdrop-filter: blur(3px);
+
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+
+  &:focus {
+    outline: none;
+  }
+
+  .text-input {
+    width: 50%;
+    height: 50px;
+  }
+
+  .button {
+    height: 50px;
+  }
+
+  .hint {
+    color: #222;
+    font-size: .9em;
+  }
+}
+
+// TODO: Beutify

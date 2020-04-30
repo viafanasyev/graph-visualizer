@@ -14,15 +14,16 @@ import {
     unselectVertex,
     updateVertexPosition
 } from "../../actions";
+import { startDialogForResult } from "../../actions/dialog";
 
 const cx = classnames.bind(styles);
 
 const vertexRadius = 20;
 
 const mapStateToProps = state => ({
-    graph: state.graph,
-    graphMode: state.graphMode,
-    selectedVertex: state.selectedVertex
+    graph: state.graphReducer.graph,
+    graphMode: state.graphReducer.graphMode,
+    selectedVertex: state.graphReducer.selectedVertex
 });
 
 export const graphMode = Object.freeze({
@@ -55,20 +56,22 @@ export class Graph {
         }
     }
 
-    edgeExists(vertexFrom, vertexTo) {
-        let i;
+    findEdge(vertexFrom, vertexTo) {
         if (this._oriented)
-            i = this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo));
+            return this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo));
         else
-            i = this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo) || (e.to === vertexFrom) && (e.from === vertexTo));
-        return i !== -1;
+            return this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo) || (e.to === vertexFrom) && (e.from === vertexTo));
     }
 
     addEdge(vertexFrom, vertexTo, weight) {
-        if (!this.edgeExists(vertexFrom, vertexTo)) { // Multigraphs aren't supported
+        const i = this.findEdge(vertexFrom, vertexTo);
+        if (i === -1) {
             const edge = new Edge(vertexFrom, vertexTo, this._oriented, weight);
             this._edges.push(edge);
             return edge;
+        }
+        else {
+            this._edges[i].weight = weight;
         }
     }
 
@@ -210,25 +213,48 @@ class GraphComponent extends React.Component {
 
         if (this.props.graphMode === graphMode.ADD_VERTEX)
             this.props.addVertex(x, y, vertexRadius);
-    };
-
-    handleVertexClick = vertex => {
-        if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE)
-            this.props.removeVertex(vertex);
         else if (this.props.graphMode === graphMode.ADD_EDGE) {
-            if (this.props.selectedVertex === undefined) {
-                this.props.selectVertex(vertex);
-            }
-            else {
-                this.props.addEdge(this.props.selectedVertex, vertex);
+            if (this.props.selectedVertex !== undefined) {
                 this.props.unselectVertex();
             }
         }
     };
 
-    handleEdgeClick = edge => {
-        if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE)
+    handleVertexClick = (e, vertex) => {
+        if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE) {
+            e.cancelBubble = true;
+            this.props.removeVertex(vertex);
+        }
+        else if (this.props.graphMode === graphMode.ADD_EDGE) {
+            e.cancelBubble = true;
+
+            if (this.props.selectedVertex === undefined) {
+                this.props.selectVertex(vertex);
+            }
+            else {
+                this.props.startDialogForResult(
+                    "Введите вес ребра",
+                    "",
+                    "Оставьте поле пустым, чтобы добавить невзвешенное ребро",
+                    "Вес ребра",
+                    (value) => {
+                        if (value === "")
+                            value = undefined;
+                        this.props.addEdge(this.props.selectedVertex, vertex, value);
+                        this.props.unselectVertex();
+                    },
+                    null,
+                    "[0-9]{0,2}"
+                );
+            }
+        }
+    };
+
+    handleEdgeClick = (e, edge) => {
+        if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE) {
+            e.cancelBubble = true;
             this.props.removeEdge(edge);
+        }
     };
 
     render() {
@@ -244,7 +270,7 @@ class GraphComponent extends React.Component {
                                 vertexTo={edge.to}
                                 edge={edge}
                                 edgeType={this.getEdgeType(edge)}
-                                onClick={() => this.handleEdgeClick(edge)}/>
+                                onClick={(e) => this.handleEdgeClick(e, edge)}/>
                         )
                     }
                     {
@@ -253,7 +279,7 @@ class GraphComponent extends React.Component {
                                 key={index}
                                 vertex={vertex}
                                 draggable={this.props.graphMode === graphMode.DEFAULT}
-                                onClick={() => this.handleVertexClick(vertex)}
+                                onClick={(e) => this.handleVertexClick(e, vertex)}
                                 onDragStart={e => this.handleVertexDragStart(e, vertex)}
                                 onDragEnd={e => this.handleVertexDragEnd(e, vertex)}
                                 onDragMove={e => this.handleVertexDragMove(e, vertex)}/>
@@ -274,6 +300,8 @@ const mapDispatchToProps = dispatch => ({
     updateVertexPosition: (vertexIndex, x, y) => dispatch(updateVertexPosition(vertexIndex, x, y)),
     selectVertex: (vertex) => dispatch(selectVertex(vertex)),
     unselectVertex: (vertex) => dispatch(unselectVertex(vertex)),
+    startDialogForResult: (title, text, hint, inputPlaceholder, onSubmit, onClose, pattern) =>
+        dispatch(startDialogForResult(title, text, hint, inputPlaceholder, onSubmit, onClose, pattern))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GraphComponent);

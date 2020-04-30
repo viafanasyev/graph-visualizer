@@ -1,6 +1,8 @@
 import { Graph, graphMode } from "../components/Graph/Graph";
 import { actionName } from "../actions";
 import { VertexState } from "../components/Graph/Vertex/Vertex";
+import { combineReducers } from "redux";
+import dialog from "./dialog";
 
 const defaultState = {
     graph: new Graph(false),
@@ -130,4 +132,7 @@ const reducer = (state = defaultState, action) => {
     }
 };
 
-export default reducer;
+export default combineReducers({
+    graphReducer: reducer,
+    dialogReducer: dialog
+});

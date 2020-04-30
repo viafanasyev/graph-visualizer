@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 const cx = classnames.bind(styles);
 
 const mapStateToProps = state => ({
-    message: state.message
+    message: state.graphReducer.message
 });
 
 const MessageBox = ({ message }) => {

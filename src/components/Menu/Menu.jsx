@@ -5,15 +5,7 @@ import Draggable from 'react-draggable';
 import { ButtonComponent } from "../Buttons/Buttons";
 import { SliderComponent } from "../Sliders/Sliders";
 import { DropDownList } from "../DropDownLists/DropDownLists";
-import {
-    actionName,
-    addEdge,
-    addVertex,
-    changeGraphMode,
-    closeMessage,
-    showMessage,
-    updateVertexPosition
-} from "../../actions";
+import { changeGraphMode, closeMessage, showMessage } from "../../actions";
 import { connect } from "react-redux";
 import { graphMode } from "../Graph/Graph";
 
@@ -29,7 +21,7 @@ const algorithms = [
 ];
 
 const mapStateToProps = state => ({
-    graphMode: state.graphMode
+    graphMode: state.graphReducer.graphMode
 });
 
 class MenuComponent extends React.Component {

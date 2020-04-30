@@ -1,0 +1,14 @@
+.text-input {
+  width: 100%;
+  margin: 10px 0 10px 0;
+  font-size: large;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+  padding: 15px;
+
+  &:hover, &:focus {
+    outline: none;
+    border-color: #888;
+  }
+}

@@ -5,14 +5,30 @@ import PlainGraph from "./PlainGraph/PlainGraph";
 import GraphComponent from "./Graph/Graph";
 import MenuComponent from "./Menu/Menu";
 import MessageBox from "./MessageBox/MessageBox";
+import InputDialog from "./Dialogs/InputDialog/InputDialog";
+import { connect } from "react-redux";
 
 const cx = classnames.bind(styles);
 
-const App = () => (
+const mapStateToProps = state => ({
+    inputDialogProps: state.dialogReducer,
+});
+
+const App = ({ inputDialogProps }) => (
     <div className={cx("app")}>
         <MenuComponent/>
         <GraphComponent/>
         <MessageBox/>
+        <InputDialog
+            isOpen={inputDialogProps.isOpen}
+            title={inputDialogProps.title}
+            text={inputDialogProps.text}
+            hint={inputDialogProps.hint}
+            inputPlaceholder={inputDialogProps.inputPlaceholder}
+            pattern={inputDialogProps.pattern}
+            onSubmit={inputDialogProps.onSubmit}
+            onCancel={inputDialogProps.onCancel}/>
     </div>
 );
-export default App;
+
+export default connect(mapStateToProps)(App);
