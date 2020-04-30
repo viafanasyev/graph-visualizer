@@ -24,7 +24,7 @@ const dialog = (state = defaultState, action) => {
                 hint: action.hint,
                 inputPlaceholder: action.inputPlaceholder,
                 pattern: action.pattern
-            }
+            };
 
             newState.onSubmit = (value) => {
                 const onSubmit = action.onSubmit;

@@ -112,21 +112,15 @@ const reducer = (state = defaultState, action) => {
 
             return newState;
         case actionName.SHOW_MESSAGE:
-            newState = {
-                ...state
+            return {
+                ...state,
+                message: action.message
             };
-
-            newState.message = action.message;
-
-            return newState;
         case actionName.CLOSE_MESSAGE:
-            newState = {
-                ...state
+            return {
+                ...state,
+                message: undefined
             };
-
-            newState.message = undefined;
-
-            return newState;
         case actionName.INVERT_ORIENTATION:
             newState = {
                 ...state,

@@ -70,5 +70,3 @@ export const updateVertexPosition = (vertexIndex, x, y) => ({
 export const invertOrientation = () => ({
    type: actionName.INVERT_ORIENTATION
 });
-
-// TODO: Add 'CHANGE_GRAPH_ORIENTATION' action

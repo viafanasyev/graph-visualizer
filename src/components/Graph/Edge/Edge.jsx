@@ -1,5 +1,5 @@
 import { vertexBorderWidth } from "../Vertex/Vertex";
-import { Arrow, Line, Rect, Circle, Text, Group } from "react-konva";
+import { Arrow, Circle, Group, Line, Text } from "react-konva";
 import React from "react";
 
 export class Edge {
