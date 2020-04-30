@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 750px;
+  height: 720px;
   width: 400px;
   backdrop-filter: blur(10px);
 
@@ -35,8 +35,9 @@
       flex-direction: column;
       justify-content: space-between;
       width: 100%;
-      padding: 14px;
+      padding: 6px 14px 14px;
       height: 275px;
+      margin-bottom: 0;
       margin-top: 0;
 
       button {
@@ -45,9 +46,14 @@
       }
     }
 
+    .switch {
+      width: 100%;
+      margin: 0 0 14px;
+    }
+
     .visualization-control-buttons {
       width: 100%;
-      padding: 14px;
+      padding: 6px 14px 14px;
       margin: 0;
       display: flex;
       flex-direction: row;
@@ -66,6 +72,8 @@
       width: 100%;
       padding-left: 14px;
       padding-right: 14px;
+      margin-top: 6px;
+      margin-bottom: 6px;
 
       * {
         margin-left: 0;

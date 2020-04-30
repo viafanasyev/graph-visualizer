@@ -127,6 +127,15 @@ const reducer = (state = defaultState, action) => {
             newState.message = undefined;
 
             return newState;
+        case actionName.INVERT_ORIENTATION:
+            newState = {
+                ...state,
+                graph: clone(state.graph)
+            };
+
+            newState.graph.invertOrientation();
+
+            return newState;
         default:
             return state;
     }

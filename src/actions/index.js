@@ -8,7 +8,8 @@ export const actionName = Object.freeze({
     UNSELECT_VERTEX: 'UNSELECT_VERTEX',
     SHOW_MESSAGE: 'SHOW_MESSAGE',
     CLOSE_MESSAGE: 'CLOSE_MESSAGE',
-    UPDATE_VERTEX_POSITION: 'UPDATE_VERTEX_POSITION'
+    UPDATE_VERTEX_POSITION: 'UPDATE_VERTEX_POSITION',
+    INVERT_ORIENTATION: 'INVERT_ORIENTATION'
 });
 
 export const addVertex = (x, y, radius) => ({
@@ -64,6 +65,10 @@ export const updateVertexPosition = (vertexIndex, x, y) => ({
     vertexIndex: vertexIndex,
     x: x,
     y: y
+});
+
+export const invertOrientation = () => ({
+   type: actionName.INVERT_ORIENTATION
 });
 
 // TODO: Add 'CHANGE_GRAPH_ORIENTATION' action

@@ -39,6 +39,10 @@ export class Edge {
     isOriented() {
         return this._oriented;
     }
+
+    invertOrientation() {
+        this._oriented = !this._oriented;
+    }
 }
 
 export const EdgeComponent = ({ edge, edgeType, onClick }) => {

@@ -5,9 +5,10 @@ import Draggable from 'react-draggable';
 import { ButtonComponent } from "../Buttons/Buttons";
 import { SliderComponent } from "../Sliders/Sliders";
 import { DropDownList } from "../DropDownLists/DropDownLists";
-import { changeGraphMode, closeMessage, showMessage } from "../../actions";
+import { changeGraphMode, closeMessage, invertOrientation, showMessage } from "../../actions";
 import { connect } from "react-redux";
 import { graphMode } from "../Graph/Graph";
+import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
 
 const cx = classnames.bind(styles);
 
@@ -21,7 +22,8 @@ const algorithms = [
 ];
 
 const mapStateToProps = state => ({
-    graphMode: state.graphReducer.graphMode
+    graphMode: state.graphReducer.graphMode,
+    isOriented: state.graphReducer.graph.isOriented()
 });
 
 class MenuComponent extends React.Component {
@@ -65,7 +67,7 @@ class MenuComponent extends React.Component {
 
     render() {
         return (
-            <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select"]}>
+            <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select", "." + cx("switch")]}>
                 <div className={cx("menu")}>
                     <div className={cx("menu-sub")}>
                         <div className={cx("header")}>Редактировать</div>
@@ -87,6 +89,11 @@ class MenuComponent extends React.Component {
                                 onClick={() => this.askForAction("Выберите объект для удаления", graphMode.REMOVE_VERTEX_OR_EDGE)}
                                 activated={this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE}/>
                         </div>
+                        <RoundedToggleSwitch
+                            className={cx("switch")}
+                            text={"Ориентированный?"}
+                            onChange={() => this.props.invertOrientation()}
+                            isChecked={this.props.isOriented}/>
                     </div>
                     <div className={cx("menu-sub")}>
                         <div className={cx("header")}>Визуализировать</div>
@@ -117,6 +124,7 @@ const mapDispatchToProps = dispatch => ({
     changeGraphMode: (graphMode) => dispatch(changeGraphMode(graphMode)),
     showMessage: (message) => dispatch(showMessage(message)),
     closeMessage: () => dispatch(closeMessage()),
+    invertOrientation: () => dispatch(invertOrientation())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

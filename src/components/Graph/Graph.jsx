@@ -79,6 +79,24 @@ export class Graph {
         this._edges = this._edges.filter(e => e !== edge);
     }
 
+    invertOrientation() {
+        this._oriented = !this._oriented;
+        if (this._oriented)
+            this._edges.forEach(edge => edge.invertOrientation());
+        else {
+            const newEdges = [];
+            this._edges.forEach(edge => {
+                if (newEdges.findIndex(e => (e.from === edge.from) && (e.to === edge.to)
+                    || (e.to === edge.from) && (e.from === edge.to)) === -1) {
+
+                    edge.invertOrientation();
+                    newEdges.push(edge);
+                }
+            });
+            this._edges = newEdges;
+        }
+    }
+
     get vertices() {
         return this._vertices;
     }
