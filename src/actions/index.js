@@ -1,3 +1,5 @@
+import { sleep } from "../utils/sleep";
+
 export const actionName = Object.freeze({
     ADD_VERTEX: 'ADD_VERTEX',
     ADD_EDGE: 'ADD_EDGE',
@@ -53,7 +55,17 @@ export const unselectVertex = (vertex) => ({
    vertex
 });
 
-export const showMessage = (message) => ({
+let currentMessageId = 0;
+
+export const showMessage = (message) => async (dispatch) => {
+    const messageId = ++currentMessageId;
+    dispatch(showMessageConnector(message));
+    await sleep(2000);
+    if (messageId === currentMessageId)
+        dispatch(closeMessage());
+};
+
+const showMessageConnector = (message) => ({
     type: actionName.SHOW_MESSAGE,
     message
 });
