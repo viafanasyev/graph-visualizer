@@ -67,7 +67,7 @@ class MenuComponent extends React.Component {
     };
 
     handleAlgorithmSpeedChange = e => {
-        this.props.setSpeed(e.target.value);
+        this.props.setSpeed(maxAlgorithmSpeed - e.target.value);
     };
 
     askForAction = (message, graphMode) => {
@@ -134,7 +134,7 @@ class MenuComponent extends React.Component {
                         <div className={cx("slider")}>
                             <SliderComponent
                                 label={"Скорость анимации"}
-                                value={this.props.visualizationSpeed}
+                                value={maxAlgorithmSpeed - this.props.visualizationSpeed}
                                 min={minAlgorithmSpeed}
                                 max={maxAlgorithmSpeed}
                                 onChange={this.handleAlgorithmSpeedChange}/>
