@@ -64,6 +64,8 @@ class MenuComponent extends React.Component {
 
     stopVisualization = () => {
         this.clearVisualization();
+        this.props.closeMessage();
+        this.props.changeGraphMode(graphMode.DEFAULT);
     };
 
     handleAlgorithmSpeedChange = e => {

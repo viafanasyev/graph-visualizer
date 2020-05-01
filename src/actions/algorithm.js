@@ -66,11 +66,18 @@ const callConnector = (graph, vertex, edge) => ({
     edge
 });
 
+let currentVisualizationId = 0; // To prevent several visualization 'threads'
+
 const callSuccess = () => async (dispatch, getState) => {
+    const visualizationId = ++currentVisualizationId;
     while ((getState().algorithmReducer.trace.length > 0) && getState().algorithmReducer.isActive) {
         dispatch(algorithmStep(getState().algorithmReducer.trace[0]));
         dispatch(popTraceStep());
-        await sleep(getState().algorithmReducer.speed);
+        if (getState().algorithmReducer.trace.length > 0) {
+            await sleep(getState().algorithmReducer.speed);
+            if (currentVisualizationId !== visualizationId)
+                return;
+        }
     }
     if (getState().algorithmReducer.isActive) {
         dispatch(pause());
