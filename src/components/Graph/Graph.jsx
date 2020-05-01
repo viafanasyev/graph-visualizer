@@ -121,75 +121,11 @@ class GraphComponent extends React.Component {
     };
 
     componentDidMount() {
-        this.setState(oldState => {
-            const newState = {...oldState};
-
-            // let oriented = JSON.parse(localStorage.getItem('oriented'));
-            // if ((oriented === undefined) || (oriented === null))
-            //     oriented = false;
-            //
-            // this.props.graph = new Graph(oriented);
-
-            let vertices = JSON.parse(localStorage.getItem('vertices'));
-            if ((vertices === undefined) || (vertices === null) || (vertices.length === undefined) || (vertices.length === 0)) {
-                this.props.addVertex(50, 50, vertexRadius);
-                this.props.addVertex(100, 50, vertexRadius);
-                this.props.addVertex(100, 100, vertexRadius);
-                this.props.addVertex(150, 150, vertexRadius);
-                this.props.addVertex(300, 150, vertexRadius);
-                this.props.addVertex(350, 175, vertexRadius);
-            } else {
-                vertices.sort((v1, v2) => v1.name - v2.name)
-                        .forEach(vertex => {
-                            this.props.addVertex(vertex.x, vertex.y, vertex.radius);
-                });
-            }
-            vertices = this.props.graph.vertices;
-
-            let edgesList = JSON.parse(localStorage.getItem('edges'));
-            if ((edgesList === undefined) || (edgesList === null) || (edgesList.length  === undefined) || (edgesList.length === 0)) {
-                this.props.addEdge(vertices[0], vertices[1]);
-                this.props.addEdge(vertices[0], vertices[0], 82);
-                this.props.addEdge(vertices[0], vertices[5], 15);
-                this.props.addEdge(vertices[1], vertices[2]);
-                this.props.addEdge(vertices[1], vertices[4]);
-                this.props.addEdge(vertices[2], vertices[5], 42);
-                this.props.addEdge(vertices[2], vertices[2]);
-                this.props.addEdge(vertices[3], vertices[4]);
-                this.props.addEdge(vertices[4], vertices[5]);
-                this.props.addEdge(vertices[5], vertices[3]);
-                this.props.addEdge(vertices[5], vertices[4]);
-            } else {
-                edgesList.forEach(edge => {
-                    const vertexFrom = vertices.findIndex(vertex => vertex.name === edge.from);
-                    const vertexTo = vertices.findIndex(vertex => vertex.name === edge.to);
-                    if ((vertexFrom !== -1) && (vertexTo !== -1))
-                        this.props.addEdge(vertices[vertexFrom], vertices[vertexTo], edge.weight);
-                });
-            }
-
-            newState.graph = this.props.graph;
-
-            return newState;
-        });
-
         const handleResize = () => {
             this.setState({ windowWidth: window.innerWidth, windowHeight: window.innerHeight });
         };
         window.onresize = handleResize;
         handleResize();
-
-        window.onbeforeunload = () => {
-            localStorage.setItem('oriented', JSON.stringify(this.props.graph.isOriented()));
-            localStorage.setItem('vertices', JSON.stringify(this.props.graph.vertices));
-            localStorage.setItem('edges', JSON.stringify(this.props.graph.edges.map(edge => {
-                return {
-                    from: edge.from.name,
-                    to: edge.to.name,
-                    weight: edge.weight
-                };
-            })));
-        };
     }
 
     findIndexOfVertex = (vertex) => {
