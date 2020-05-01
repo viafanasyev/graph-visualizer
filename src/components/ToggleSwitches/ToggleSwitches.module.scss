@@ -2,8 +2,8 @@
   .switch-round {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 56px;
+    height: 30px;
     margin: 0;
 
     input {
@@ -34,20 +34,20 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 34px;
-      width: 60px;
+      height: 30px;
+      width: 56px;
       background-color: #ccc;
       -webkit-transition: .4s;
       transition: .4s;
-      border-radius: 34px;
+      border-radius: 30px;
       margin: 0;
 
       &:before {
         border-radius: 50%;
         position: absolute;
         content: "";
-        height: 26px;
-        width: 26px;
+        height: 22px;
+        width: 22px;
         left: 4px;
         bottom: 4px;
         background-color: white;
@@ -60,7 +60,8 @@
   .text {
     font-size: smaller;
     vertical-align: middle;
-    line-height: 34px;
+    line-height: 30px;
+    margin-left: 14px;
     color: #000;
 
     -webkit-user-select: none; /* Safari */

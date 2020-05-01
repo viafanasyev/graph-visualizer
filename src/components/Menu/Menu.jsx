@@ -98,10 +98,9 @@ class MenuComponent extends React.Component {
 
     render() {
         return (
-            <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select", "." + cx("switch")]}>
+            <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select"]}>
                 <div className={cx("menu")}>
                     <div className={cx("menu-sub")}>
-                        <div className={cx("header")}>Редактировать</div>
                         <div className={cx("graph-control-buttons")}>
                             <ButtonComponent
                                 text={"Режим просмотра"} // TODO: Find proper name
@@ -127,7 +126,6 @@ class MenuComponent extends React.Component {
                             isChecked={this.props.isOriented}/>
                     </div>
                     <div className={cx("menu-sub")}>
-                        <div className={cx("header")}>Визуализировать</div>
                         <div className={cx("algorithms-list")}>
                             <DropDownList
                                 items={this.state.algorithms.map(a => a.name)}
