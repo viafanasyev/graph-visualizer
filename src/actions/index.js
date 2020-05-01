@@ -9,7 +9,9 @@ export const actionName = Object.freeze({
     SHOW_MESSAGE: 'SHOW_MESSAGE',
     CLOSE_MESSAGE: 'CLOSE_MESSAGE',
     UPDATE_VERTEX_POSITION: 'UPDATE_VERTEX_POSITION',
-    INVERT_ORIENTATION: 'INVERT_ORIENTATION'
+    INVERT_ORIENTATION: 'INVERT_ORIENTATION',
+    ALGORITHM_STEP: 'ALGORITHM_STEP',
+    CLEAN_GRAPH_SELECTIONS: 'CLEAN_GRAPH_SELECTIONS'
 });
 
 export const addVertex = (x, y, radius) => ({
@@ -69,4 +71,13 @@ export const updateVertexPosition = (vertexIndex, x, y) => ({
 
 export const invertOrientation = () => ({
    type: actionName.INVERT_ORIENTATION
+});
+
+export const algorithmStep = (step) => ({
+   type: actionName.ALGORITHM_STEP,
+   step
+});
+
+export const cleanGraphSelections = () => ({
+   type: actionName.CLEAN_GRAPH_SELECTIONS
 });

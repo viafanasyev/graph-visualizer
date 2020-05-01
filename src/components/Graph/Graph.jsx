@@ -15,6 +15,7 @@ import {
     updateVertexPosition
 } from "../../actions";
 import { startDialogForResult } from "../../actions/dialog";
+import { call } from "../../actions/algorithm";
 
 const cx = classnames.bind(styles);
 
@@ -30,7 +31,9 @@ export const graphMode = Object.freeze({
     DEFAULT: 0,
     ADD_VERTEX: 1,
     ADD_EDGE: 2,
-    REMOVE_VERTEX_OR_EDGE: 3
+    REMOVE_VERTEX_OR_EDGE: 3,
+    ALGORITHM_PRE_CALL_SELECT_VERTEX: 4,
+    ALGORITHM_PRE_CALL_SELECT_EDGE: 5
 });
 
 export class Graph {
@@ -242,8 +245,7 @@ class GraphComponent extends React.Component {
         if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE) {
             e.cancelBubble = true;
             this.props.removeVertex(vertex);
-        }
-        else if (this.props.graphMode === graphMode.ADD_EDGE) {
+        } else if (this.props.graphMode === graphMode.ADD_EDGE) {
             e.cancelBubble = true;
 
             if (this.props.selectedVertex === undefined) {
@@ -265,6 +267,10 @@ class GraphComponent extends React.Component {
                     "[0-9]{0,2}"
                 );
             }
+        } else if (this.props.graphMode === graphMode.ALGORITHM_PRE_CALL_SELECT_VERTEX) {
+            e.cancelBubble = true;
+
+            this.props.callAlgorithm(vertex, null);
         }
     };
 
@@ -272,6 +278,10 @@ class GraphComponent extends React.Component {
         if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE) {
             e.cancelBubble = true;
             this.props.removeEdge(edge);
+        } else if (this.props.graphMode === graphMode.ALGORITHM_PRE_CALL_SELECT_EDGE) {
+            e.cancelBubble = true;
+
+            this.props.callAlgorithm(null, edge);
         }
     };
 
@@ -319,7 +329,8 @@ const mapDispatchToProps = dispatch => ({
     selectVertex: (vertex) => dispatch(selectVertex(vertex)),
     unselectVertex: (vertex) => dispatch(unselectVertex(vertex)),
     startDialogForResult: (title, text, hint, inputPlaceholder, onSubmit, onClose, pattern) =>
-        dispatch(startDialogForResult(title, text, hint, inputPlaceholder, onSubmit, onClose, pattern))
+        dispatch(startDialogForResult(title, text, hint, inputPlaceholder, onSubmit, onClose, pattern)),
+    callAlgorithm: (vertex, edge) => dispatch(call(vertex, edge))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GraphComponent);

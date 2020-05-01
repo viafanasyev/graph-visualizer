@@ -5,57 +5,74 @@ import Draggable from 'react-draggable';
 import { ButtonComponent } from "../Buttons/Buttons";
 import { SliderComponent } from "../Sliders/Sliders";
 import { DropDownList } from "../DropDownLists/DropDownLists";
-import { changeGraphMode, closeMessage, invertOrientation, showMessage } from "../../actions";
+import { changeGraphMode, cleanGraphSelections, closeMessage, invertOrientation, showMessage } from "../../actions";
 import { connect } from "react-redux";
 import { graphMode } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
+import { call, continueCall, preCall, setAlgorithm, setSpeed, pause } from "../../actions/algorithm";
+import DFS from "../../algorithms/graph/dfs"
+import BFS from "../../algorithms/graph/bfs"
 
 const cx = classnames.bind(styles);
 
 const minAlgorithmSpeed = 0;
-const maxAlgorithmSpeed = 100;
-
-const algorithms = [
-    "Поиск в глубину",
-    "Поиск в ширину",
-    "Алгоритм Дейкстры"
-];
+const maxAlgorithmSpeed = 1000;
 
 const mapStateToProps = state => ({
     graphMode: state.graphReducer.graphMode,
-    isOriented: state.graphReducer.graph.isOriented()
+    isOriented: state.graphReducer.graph.isOriented(),
+    isVisualizationActive: state.algorithmReducer.isActive,
+    visualizationSpeed: state.algorithmReducer.speed,
+    selectedAlgorithm: state.algorithmReducer.algorithm
 });
 
 class MenuComponent extends React.Component {
     state = {
-        selectedAlgorithm: algorithms[0],
-        visualizationSpeed: (minAlgorithmSpeed + maxAlgorithmSpeed) / 2,
+        algorithms: [DFS, BFS],
+        algorithmPaused: false
     };
 
+    componentDidMount() {
+        this.props.setAlgorithm(this.state.algorithms[0]);
+        this.props.setSpeed((minAlgorithmSpeed + maxAlgorithmSpeed) / 2);
+    }
+
     handleAlgorithmChange = e => {
-        this.setState({ selectedAlgorithm: algorithms[e.target.value] });
+        this.clearVisualization();
+        this.props.changeGraphMode(graphMode.DEFAULT);
+        this.props.closeMessage();
+
+        this.props.setAlgorithm(this.state.algorithms[e.target.value]);
     };
 
     startVisualization = () => {
-        // TODO: Add visualization
-        console.log(this.state.selectedAlgorithm);
+        if (this.state.algorithmPaused) {
+            this.props.continue();
+            this.setState({ algorithmPaused: false });
+        } else if (this.props.isVisualizationActive) {
+            this.props.pause();
+            this.setState({ algorithmPaused: true })
+        } else {
+            this.props.cleanGraphSelections();
+            this.props.preCall();
+        }
     };
 
     stepVisualization = () => {
-        // TODO: Add visualization
-        console.log(this.state.selectedAlgorithm);
+        // TODO: Add step-by-step visualization
     };
 
     stopVisualization = () => {
-        // TODO: Add visualization
-        console.log(this.state.selectedAlgorithm);
+        this.clearVisualization();
     };
 
     handleAlgorithmSpeedChange = e => {
-        this.setState({ visualizationSpeed: e.target.value });
+        this.props.setSpeed(e.target.value);
     };
 
     askForAction = (message, graphMode) => {
+        this.clearVisualization();
+
         this.props.showMessage(message);
         this.props.changeGraphMode(graphMode);
     };
@@ -63,6 +80,18 @@ class MenuComponent extends React.Component {
     closeMessage = () => {
         this.props.changeGraphMode(graphMode.DEFAULT);
         this.props.closeMessage();
+    };
+
+    invertOrientation = () => {
+        this.clearVisualization();
+
+        this.props.invertOrientation();
+    };
+
+    clearVisualization = () => {
+        this.props.pause();
+        this.setState({ algorithmPaused: false });
+        this.props.cleanGraphSelections();
     };
 
     render() {
@@ -92,24 +121,28 @@ class MenuComponent extends React.Component {
                         <RoundedToggleSwitch
                             className={cx("switch")}
                             text={"Ориентированный?"}
-                            onChange={() => this.props.invertOrientation()}
+                            onChange={() => this.invertOrientation()}
                             isChecked={this.props.isOriented}/>
                     </div>
                     <div className={cx("menu-sub")}>
                         <div className={cx("header")}>Визуализировать</div>
                         <div className={cx("algorithms-list")}>
-                            <DropDownList items={algorithms} onChange={this.handleAlgorithmChange}/>
+                            <DropDownList
+                                items={this.state.algorithms.map(a => a.name)}
+                                onChange={this.handleAlgorithmChange}/>
                         </div>
                         <div className={cx("slider")}>
                             <SliderComponent
                                 label={"Скорость анимации"}
-                                value={this.state.visualizationSpeed}
+                                value={this.props.visualizationSpeed}
                                 min={minAlgorithmSpeed}
                                 max={maxAlgorithmSpeed}
                                 onChange={this.handleAlgorithmSpeedChange}/>
                         </div>
                         <div className={cx("visualization-control-buttons")}>
-                            <ButtonComponent text={"Старт"} onClick={this.startVisualization}/>
+                            <ButtonComponent
+                                text={this.state.algorithmPaused ? "Далее" : (this.props.isVisualizationActive ? "Пауза" : "Старт")}
+                                onClick={this.startVisualization}/>
                             <ButtonComponent text={"Шаг"} onClick={this.stepVisualization}/>
                             <ButtonComponent text={"Стоп"} onClick={this.stopVisualization}/>
                         </div>
@@ -124,7 +157,14 @@ const mapDispatchToProps = dispatch => ({
     changeGraphMode: (graphMode) => dispatch(changeGraphMode(graphMode)),
     showMessage: (message) => dispatch(showMessage(message)),
     closeMessage: () => dispatch(closeMessage()),
-    invertOrientation: () => dispatch(invertOrientation())
+    invertOrientation: () => dispatch(invertOrientation()),
+    setAlgorithm: (algorithm) => dispatch(setAlgorithm(algorithm)),
+    setSpeed: (speed) => dispatch(setSpeed(speed)),
+    preCall: () => dispatch(preCall()),
+    call: () => dispatch(call()),
+    pause: () => dispatch(pause()),
+    continue: () => dispatch(continueCall()),
+    cleanGraphSelections: () => dispatch(cleanGraphSelections())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

@@ -3,6 +3,9 @@ import { actionName } from "../actions";
 import { VertexState } from "../components/Graph/Vertex/Vertex";
 import { combineReducers } from "redux";
 import dialog from "./dialog";
+import algorithm from "./algorithm";
+import { algorithmActionType, vertexAction } from "../algorithms/graph";
+import { EdgeState } from "../components/Graph/Edge/Edge";
 
 const defaultState = {
     graph: new Graph(false),
@@ -22,6 +25,26 @@ const unselectSelectedVertex = (state) => {
             state.graph.vertices[i].state = VertexState.EMPTY;
         state.selectedVertex = undefined;
     }
+};
+
+const updateVertexByAction = (vertex, action) => {
+    switch (action) {
+        case vertexAction.SELECT:
+            vertex.state = VertexState.HIGHLIGHTED;
+            break;
+        case vertexAction.ENTER:
+            vertex.state = VertexState.PRE_COMPLETED;
+            break;
+        case vertexAction.EXIT:
+            vertex.state = VertexState.COMPLETED;
+            break;
+    }
+};
+
+const cleanGraphSelections = (state) => {
+    state.graph.vertices.forEach(v => v.state = VertexState.EMPTY);
+    state.graph.edges.forEach(e => e.state = EdgeState.NORMAL);
+    state.selectedVertex = undefined;
 };
 
 const reducer = (state = defaultState, action) => {
@@ -130,6 +153,30 @@ const reducer = (state = defaultState, action) => {
             newState.graph.invertOrientation();
 
             return newState;
+        case actionName.ALGORITHM_STEP:
+            newState = {
+                ...state,
+                graph: clone(state.graph)
+            };
+
+            const step = action.step;
+            if (step.actionType === algorithmActionType.VERTEX_ACTION) {
+                const vertex = newState.graph.vertices[step.vertex];
+                updateVertexByAction(vertex, step.action);
+            } else if (step.actionType === algorithmActionType.EDGE_ACTION) {
+                // TODO: Implement edge action
+            }
+
+            return newState;
+        case actionName.CLEAN_GRAPH_SELECTIONS:
+            newState = {
+                ...state,
+                graph: clone(state.graph)
+            };
+
+            cleanGraphSelections(newState);
+
+            return newState;
         default:
             return state;
     }
@@ -137,5 +184,6 @@ const reducer = (state = defaultState, action) => {
 
 export default combineReducers({
     graphReducer: reducer,
-    dialogReducer: dialog
+    dialogReducer: dialog,
+    algorithmReducer: algorithm
 });
