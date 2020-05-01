@@ -5,13 +5,13 @@ export const actionName = Object.freeze({
 
 export const startDialogForResult = (title, text, hint, inputPlaceholder, onSubmit, onCancel, pattern = ".*") => ({
     type: actionName.START_DIALOG_FOR_RESULT,
-    title: title,
-    text: text,
-    hint: hint,
-    inputPlaceholder: inputPlaceholder,
-    onSubmit: onSubmit,
-    onCancel: onCancel,
-    pattern: pattern
+    title,
+    text,
+    hint,
+    inputPlaceholder,
+    onSubmit,
+    onCancel,
+    pattern
 });
 
 const closeDialog = () => ({

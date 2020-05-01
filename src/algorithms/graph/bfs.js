@@ -2,10 +2,7 @@ import { algorithmActionType, preCallAction, vertexAction } from "./index";
 import { Queue } from "../../utils/queue";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
-let used = {};
-let trace = [];
-
-const bfs = (start, adjacencyList) => {
+const bfs = (start, adjacencyList, used, trace) => {
     used[start] = true;
     const queue = new Queue();
     queue.push(start);
@@ -32,10 +29,10 @@ export default {
 
     call: (vertices, edges, start) => {
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
-        used = {};
+        let used = {};
         vertices.forEach(vertex => used[vertex.name] = false);
-        trace = [];
-        bfs(start.name, adjacencyList);
+        let trace = [];
+        bfs(start.name, adjacencyList, used, trace);
         return trace;
     }
 };

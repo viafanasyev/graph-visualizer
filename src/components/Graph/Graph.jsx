@@ -1,9 +1,9 @@
 import React from 'react';
 import classnames from "classnames/bind";
 import styles from "./Graph.module.scss";
-import { Layer, Stage, Rect } from "react-konva";
-import { VertexComponent, Vertex } from "./Vertex/Vertex";
-import { Edge, EdgeType, EdgeComponent } from "./Edge/Edge";
+import { Layer, Rect, Stage } from "react-konva";
+import { Vertex, VertexComponent } from "./Vertex/Vertex";
+import { Edge, EdgeComponent, EdgeType } from "./Edge/Edge";
 import { connect } from "react-redux";
 import {
     addEdge,
@@ -52,7 +52,6 @@ export class Graph {
 
     removeVertex(vertex) {
         const index = this._vertices.findIndex(v => v === vertex);
-        console.log(index);
         if (index !== -1) {
             this._vertices.splice(index, 1);
             this._edges = this._edges.filter(edge => (edge.from.name !== vertex.name) && (edge.to.name !== vertex.name));
@@ -63,7 +62,8 @@ export class Graph {
         if (this._oriented)
             return this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo));
         else
-            return this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo) || (e.to === vertexFrom) && (e.from === vertexTo));
+            return this._edges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo)
+                || (e.to === vertexFrom) && (e.from === vertexTo));
     }
 
     addEdge(vertexFrom, vertexTo, weight) {
@@ -280,7 +280,6 @@ class GraphComponent extends React.Component {
             this.props.removeEdge(edge);
         } else if (this.props.graphMode === graphMode.ALGORITHM_PRE_CALL_SELECT_EDGE) {
             e.cancelBubble = true;
-
             this.props.callAlgorithm(null, edge);
         }
     };

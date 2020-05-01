@@ -16,46 +16,46 @@ export const actionName = Object.freeze({
 
 export const addVertex = (x, y, radius) => ({
     type: actionName.ADD_VERTEX,
-    x: x,
-    y: y,
-    radius: radius
+    x,
+    y,
+    radius
 });
 
 export const addEdge = (vertexFrom, vertexTo, weight) => ({
     type: actionName.ADD_EDGE,
-    vertexFrom: vertexFrom,
-    vertexTo: vertexTo,
-    weight: weight
+    vertexFrom,
+    vertexTo,
+    weight
 });
 
 export const removeVertex = (vertex) => ({
     type: actionName.REMOVE_VERTEX,
-    vertex: vertex
+    vertex
 });
 
 export const removeEdge = (edge) => ({
     type: actionName.REMOVE_EDGE,
-    edge: edge
+    edge
 });
 
 export const changeGraphMode = (graphMode) => ({
     type: actionName.CHANGE_GRAPH_MODE,
-    graphMode: graphMode
+    graphMode
 });
 
 export const selectVertex = (vertex) => ({
    type: actionName.SELECT_VERTEX,
-   vertex: vertex
+   vertex
 });
 
 export const unselectVertex = (vertex) => ({
    type: actionName.UNSELECT_VERTEX,
-   vertex: vertex
+   vertex
 });
 
 export const showMessage = (message) => ({
     type: actionName.SHOW_MESSAGE,
-    message: message
+    message
 });
 
 export const closeMessage = () => ({
@@ -64,9 +64,9 @@ export const closeMessage = () => ({
 
 export const updateVertexPosition = (vertexIndex, x, y) => ({
     type: actionName.UPDATE_VERTEX_POSITION,
-    vertexIndex: vertexIndex,
-    x: x,
-    y: y
+    vertexIndex,
+    x,
+    y
 });
 
 export const invertOrientation = () => ({

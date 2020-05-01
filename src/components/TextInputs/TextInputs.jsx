@@ -6,6 +6,12 @@ const cx = classnames.bind(styles);
 
 export const TextInputComponent = ({ value, placeholder, onChange, pattern, className }) => {
     return (
-        <input className={cx("text-input", className)} type="text" pattern={pattern} value={value} onChange={onChange} placeholder={placeholder}/>
+        <input
+            className={cx("text-input", className)}
+            type="text"
+            pattern={pattern}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}/>
     );
 };

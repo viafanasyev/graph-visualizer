@@ -9,7 +9,7 @@ import { changeGraphMode, cleanGraphSelections, closeMessage, invertOrientation,
 import { connect } from "react-redux";
 import { graphMode } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
-import { call, continueCall, preCall, setAlgorithm, setSpeed, pause } from "../../actions/algorithm";
+import { call, continueCall, pause, preCall, setAlgorithm, setSpeed } from "../../actions/algorithm";
 import DFS from "../../algorithms/graph/dfs"
 import BFS from "../../algorithms/graph/bfs"
 

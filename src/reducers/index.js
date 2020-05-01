@@ -38,6 +38,7 @@ const updateVertexByAction = (vertex, action) => {
         case vertexAction.EXIT:
             vertex.state = VertexState.COMPLETED;
             break;
+        default:
     }
 };
 
