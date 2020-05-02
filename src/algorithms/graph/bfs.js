@@ -1,4 +1,4 @@
-import { AlgorithmActionType, PreCallAction, VertexAction } from "./index";
+import { AlgorithmActionType, EdgeAction, PreCallAction, VertexAction } from "./index";
 import { Queue } from "../../utils/queue";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
@@ -13,6 +13,7 @@ const bfs = (start, adjacencyList, used, trace) => {
         trace.push({ vertex, action: VertexAction.SELECT, actionType: AlgorithmActionType.VERTEX_ACTION });
         adjacencyList[vertex].forEach(to => {
             if (!used[to]) {
+                trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
                 used[to] = true;
                 queue.push(to);
                 trace.push({ vertex: to, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
