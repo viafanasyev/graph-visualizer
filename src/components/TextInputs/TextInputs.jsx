@@ -4,7 +4,7 @@ import styles from "./TextInputs.module.scss";
 
 const cx = classnames.bind(styles);
 
-export const TextInputComponent = ({ value, placeholder, onChange, pattern, className }) => {
+export const TextInputComponent = ({ value, placeholder, onChange, pattern, className, autoFocus = false }) => {
     return (
         <input
             className={cx("text-input", className)}
@@ -12,6 +12,7 @@ export const TextInputComponent = ({ value, placeholder, onChange, pattern, clas
             pattern={pattern}
             value={value}
             onChange={onChange}
-            placeholder={placeholder}/>
+            placeholder={placeholder}
+            autoFocus={autoFocus}/>
     );
 };

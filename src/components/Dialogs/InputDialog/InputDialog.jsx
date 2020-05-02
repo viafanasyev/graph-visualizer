@@ -23,6 +23,17 @@ class InputDialog extends React.Component {
             this.setState({ value: e.target.value });
     };
 
+    submit = (e) => {
+        e.preventDefault();
+        this.setState({ value: "" });
+        this.props.submitDialog(this.props.onSubmit, this.state.value);
+    };
+
+    cancel = () => {
+        this.setState({ value: "" });
+        this.props.cancelDialog(this.props.onCancel);
+    };
+
     render() {
         return (
             <Modal
@@ -37,27 +48,25 @@ class InputDialog extends React.Component {
 
                 <h2>{this.props.title}</h2>
                 <div>{this.props.text}</div>
-                <TextInputComponent
-                    className={cx("text-input")}
-                    placeholder={this.props.inputPlaceholder}
-                    pattern={this.props.pattern}
-                    onChange={this.handleChange}
-                    value={this.state.value}/>
+                <form onSubmit={(e) => this.submit(e)}>
+                    <TextInputComponent
+                        autoFocus={true}
+                        className={cx("text-input")}
+                        placeholder={this.props.inputPlaceholder}
+                        pattern={this.props.pattern}
+                        onChange={this.handleChange}
+                        value={this.state.value}/>
 
-                <ButtonComponent
-                    className={cx("button")}
-                    text={"Ок"}
-                    onClick={() => {
-                        this.setState({ value: "" });
-                        this.props.submitDialog(this.props.onSubmit, this.state.value);
-                    }}/>
-                <ButtonComponent
-                    className={cx("button")}
-                    text={"Отмена"}
-                    onClick={() => {
-                        this.setState({ value: "" });
-                        this.props.cancelDialog(this.props.onCancel);
-                    }}/>
+                    <ButtonComponent
+                        type={"submit"}
+                        className={cx("button")}
+                        text={"Ок"}
+                        onClick={(e) => this.submit(e)}/>
+                    <ButtonComponent
+                        className={cx("button")}
+                        text={"Отмена"}
+                        onClick={() => this.cancel()}/>
+                </form>
 
                 <div className={cx("hint")}>{this.props.hint}</div>
             </Modal>
