@@ -1,6 +1,5 @@
 import { Circle, Group, Text } from "react-konva";
 import React from "react";
-import Konva from "konva";
 
 export class Vertex {
     constructor(x, y, radius, name) {
@@ -25,6 +24,21 @@ export class Vertex {
                 return 'white';
         }
     }
+
+    get textColor() {
+        switch (this.state) {
+            case VertexState.DEFAULT:
+                return 'black';
+            case VertexState.HIGHLIGHTED:
+                return 'black';
+            case VertexState.PRE_COMPLETED:
+                return 'black';
+            case VertexState.COMPLETED:
+                return 'white';
+            default:
+                return 'black';
+        }
+    }
 }
 
 const handleDragStart = (e, call) => {
@@ -44,7 +58,6 @@ const handleDragStart = (e, call) => {
 const handleDragEnd = (e, call) => {
     e.target.getChildren()[0].to({
         duration: 0.25,
-        easing: Konva.Easings.EaseOut,
         scaleX: 1,
         scaleY: 1,
         shadowBlur: 0,
@@ -80,6 +93,7 @@ export const VertexComponent = ({ vertex, draggable, onDragStart, onDragEnd, onD
                 x={-labelWidth / 2.}
                 y={-labelHeight / 2.}
                 fontSize={20}
+                fill={vertex.textColor}
                 width={labelWidth}
                 height={labelHeight}
                 align={'center'}
