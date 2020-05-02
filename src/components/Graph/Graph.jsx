@@ -16,6 +16,7 @@ import {
 } from "../../actions";
 import { startDialogForResult } from "../../actions/dialog";
 import { call } from "../../actions/algorithm";
+import { VisualizationEdgeComponent } from "./VisualizationEdge/VisualizationEdge";
 
 const cx = classnames.bind(styles);
 
@@ -40,6 +41,7 @@ export class Graph {
     constructor(oriented) {
         this._vertices = [];
         this._edges = [];
+        this._visualizationEdges = [];
         this._oriented = oriented;
         this._currentName = 0;
     }
@@ -100,12 +102,41 @@ export class Graph {
         }
     }
 
+    findVisualizationEdge(vertexFrom, vertexTo) {
+        return this._visualizationEdges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo));
+    }
+
+    addVisualizationEdge(vertexFrom, vertexTo, oriented, weight) {
+        const i = this.findVisualizationEdge(vertexFrom, vertexTo);
+        if (i === -1) {
+            const edge = new Edge(vertexFrom, vertexTo, oriented, weight);
+            this._visualizationEdges.push(edge);
+            return edge;
+        }
+        else {
+            this._visualizationEdges[i].weight = weight;
+            return this._visualizationEdges[i];
+        }
+    }
+
+    removeVisualizationEdge(edge) {
+        this._visualizationEdges = this._visualizationEdges.filter(e => e !== edge);
+    }
+
     get vertices() {
         return this._vertices;
     }
 
     get edges() {
         return this._edges;
+    }
+
+    get visualizationEdges() {
+        return this._visualizationEdges;
+    }
+
+    set visualizationEdges(edges) {
+        this._visualizationEdges = edges;
     }
 
     isOriented() {
@@ -159,7 +190,8 @@ class GraphComponent extends React.Component {
             return EdgeType.LOOP;
         else if (!edge.isOriented())
             return EdgeType.NOT_ORIENTED;
-        else if (this.props.graph.edges.findIndex(e => (e.from === vertexTo) && (e.to === vertexFrom)) !== -1)
+        else if ((this.props.graph.edges.findIndex(e => (e.from === vertexTo) && (e.to === vertexFrom)) !== -1)
+                && (this.props.graph.edges.findIndex(e => (e.to === vertexTo) && (e.from === vertexFrom)) !== -1))
             return EdgeType.TWO_SIDE_ORIENTED;
         else
             return EdgeType.ONE_SIDE_ORIENTED;
@@ -234,6 +266,16 @@ class GraphComponent extends React.Component {
                                 edge={edge}
                                 edgeType={this.getEdgeType(edge)}
                                 onClick={(e) => this.handleEdgeClick(e, edge)}/>
+                        )
+                    }
+                    {
+                        this.props.graph.visualizationEdges.map((edge, index) =>
+                            <VisualizationEdgeComponent
+                                key={index}
+                                vertexFrom={edge.from}
+                                vertexTo={edge.to}
+                                edge={edge}
+                                edgeType={this.getEdgeType(edge)}/>
                         )
                     }
                     {

@@ -5,6 +5,11 @@ export const VertexAction = Object.freeze({
     EXIT: 3,
 });
 
+export const EdgeAction = Object.freeze({
+    WALK: 0,
+    HIGHLIGHT: 1
+});
+
 export const AlgorithmActionType = Object.freeze({
     VERTEX_ACTION: 0,
     EDGE_ACTION: 1

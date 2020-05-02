@@ -1,4 +1,4 @@
-import { AlgorithmActionType, PreCallAction, VertexAction } from "./index";
+import { AlgorithmActionType, EdgeAction, PreCallAction, VertexAction } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
 let used = {};
@@ -9,7 +9,9 @@ const dfs = (vertex, adjacencyList) => {
     trace.push({ vertex, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
     adjacencyList[vertex].forEach(to => {
         if (!used[to]) {
+            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
             dfs(to, adjacencyList);
+            trace.push({ from: to, to: vertex, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
         }
     });
     trace.push({ vertex, action: VertexAction.EXIT, actionType: AlgorithmActionType.VERTEX_ACTION });

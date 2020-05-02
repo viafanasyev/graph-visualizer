@@ -4,7 +4,7 @@ import { VertexState } from "../components/Graph/Vertex/Vertex";
 import { combineReducers } from "redux";
 import dialog from "./dialog";
 import algorithm from "./algorithm";
-import { AlgorithmActionType, VertexAction } from "../algorithms/graph";
+import { AlgorithmActionType, EdgeAction, VertexAction } from "../algorithms/graph";
 import { EdgeState } from "../components/Graph/Edge/Edge";
 
 const defaultState = {
@@ -42,9 +42,22 @@ const updateVertexByAction = (vertex, action) => {
     }
 };
 
+const updateEdgeByAction = (edge, action) => {
+    switch (action) {
+        case EdgeAction.WALK:
+            edge.state = EdgeState.WALKED;
+            break;
+        case EdgeAction.HIGHLIGHT:
+            edge.state = EdgeState.HIGHLIGHTED;
+            break;
+        default:
+    }
+};
+
 const cleanGraphSelections = (state) => {
     state.graph.vertices.forEach(v => v.state = VertexState.DEFAULT);
     state.graph.edges.forEach(e => e.state = EdgeState.DEFAULT);
+    state.graph.visualizationEdges = [];
     state.selectedVertex = undefined;
 };
 
@@ -166,7 +179,10 @@ const reducer = (state = defaultState, action) => {
                 if (vertex)
                     updateVertexByAction(vertex, step.action);
             } else if (step.actionType === AlgorithmActionType.EDGE_ACTION) {
-                // TODO: Implement edge action
+                const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
+                const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
+                const edge = newState.graph.addVisualizationEdge(vertexFrom, vertexTo, step.oriented, step.weight);
+                updateEdgeByAction(edge, step.action);
             }
 
             return newState;
