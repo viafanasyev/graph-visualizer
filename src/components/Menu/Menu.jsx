@@ -9,7 +9,7 @@ import { changeGraphMode, cleanGraphSelections, closeMessage, invertOrientation,
 import { connect } from "react-redux";
 import { GraphMode } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
-import { call, continueCall, pause, preCall, setAlgorithm, setSpeed } from "../../actions/algorithm";
+import { call, clearTrace, continueCall, pause, preCall, setAlgorithm, setSpeed } from "../../actions/algorithm";
 import DFS from "../../algorithms/graph/dfs"
 import BFS from "../../algorithms/graph/bfs"
 
@@ -23,7 +23,8 @@ const mapStateToProps = state => ({
     isOriented: state.graphReducer.graph.isOriented(),
     isVisualizationActive: state.algorithmReducer.isActive,
     visualizationSpeed: state.algorithmReducer.speed,
-    selectedAlgorithm: state.algorithmReducer.algorithm
+    selectedAlgorithm: state.algorithmReducer.algorithm,
+    remainingAlgorithmSteps: state.algorithmReducer.trace.length
 });
 
 class MenuComponent extends React.Component {
@@ -46,20 +47,26 @@ class MenuComponent extends React.Component {
     };
 
     startVisualization = () => {
-        if (this.state.algorithmPaused) {
-            this.props.continue();
-            this.setState({ algorithmPaused: false });
-        } else if (this.props.isVisualizationActive) {
-            this.props.pause();
-            this.setState({ algorithmPaused: true })
-        } else {
+        if (this.props.remainingAlgorithmSteps === 0) {
             this.props.cleanGraphSelections();
             this.props.preCall();
+        } else if (this.props.isVisualizationActive) {
+            this.props.pause();
+            this.setState({ algorithmPaused: true });
+        } else {
+            this.setState({ algorithmPaused: false });
+            this.props.continue();
         }
     };
 
     stepVisualization = () => {
-        // TODO: Add step-by-step visualization
+        if (this.props.remainingAlgorithmSteps === 0) {
+            this.props.cleanGraphSelections();
+            this.props.preCall(true);
+        } else {
+            this.setState({ algorithmPaused: false });
+            this.props.continue(true);
+        }
     };
 
     stopVisualization = () => {
@@ -94,6 +101,7 @@ class MenuComponent extends React.Component {
         this.props.pause();
         this.setState({ algorithmPaused: false });
         this.props.cleanGraphSelections();
+        this.props.clearTrace();
     };
 
     render() {
@@ -160,11 +168,12 @@ const mapDispatchToProps = dispatch => ({
     invertOrientation: () => dispatch(invertOrientation()),
     setAlgorithm: (algorithm) => dispatch(setAlgorithm(algorithm)),
     setSpeed: (speed) => dispatch(setSpeed(speed)),
-    preCall: () => dispatch(preCall()),
+    preCall: (isOneStep) => dispatch(preCall(isOneStep)),
     call: () => dispatch(call()),
     pause: () => dispatch(pause()),
-    continue: () => dispatch(continueCall()),
-    cleanGraphSelections: () => dispatch(cleanGraphSelections())
+    continue: (isOneStep) => dispatch(continueCall(isOneStep)),
+    cleanGraphSelections: () => dispatch(cleanGraphSelections()),
+    clearTrace: () => dispatch(clearTrace())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

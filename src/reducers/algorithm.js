@@ -6,7 +6,8 @@ const defaultState = {
     trace: [],
     isActive: false,
     algorithm: null,
-    speed: 1000
+    speed: 1000,
+    isOneStep: false
 };
 
 const algorithm = (state = defaultState, action) => {
@@ -57,6 +58,16 @@ const algorithm = (state = defaultState, action) => {
             return {
                 ...state,
                 speed: action.speed
+            };
+        case ActionType.SET_IS_ONE_STEP:
+            return {
+                ...state,
+                isOneStep: action.isOneStep
+            };
+        case ActionType.CLEAR_TRACE:
+            return {
+                ...state,
+                trace: []
             };
         default:
             return state;

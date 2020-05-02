@@ -1,4 +1,4 @@
-import { changeGraphMode, showMessage, algorithmStep, closeMessage } from "./index";
+import { algorithmStep, changeGraphMode, closeMessage, showMessage } from "./index";
 import { GraphMode } from "../components/Graph/Graph";
 import { PreCallAction } from "../algorithms/graph";
 import { sleep } from "../utils/sleep";
@@ -10,12 +10,15 @@ export const ActionType = Object.freeze({
     PAUSE: 'PAUSE',
     POP_TRACE_STEP: 'POP_TRACE_STEP',
     SET_ALGORITHM: 'SET_ALGORITHM',
-    SET_SPEED: 'SET_SPEED'
+    SET_SPEED: 'SET_SPEED',
+    SET_IS_ONE_STEP: 'SET_IS_ONE_STEP',
+    CLEAR_TRACE: 'CLEAR_TRACE'
 });
 
-export const preCall = () => (dispatch, getState) => {
-    const preCall = getState().algorithmReducer.algorithm.preCall;
+export const preCall = (isOneStep = false) => (dispatch, getState) => {
+    dispatch(setIsOneStep(isOneStep));
 
+    const preCall = getState().algorithmReducer.algorithm.preCall;
     if (preCall === PreCallAction.SELECT_VERTEX) {
         dispatch(changeGraphMode(GraphMode.ALGORITHM_PRE_CALL_SELECT_VERTEX));
         dispatch(showMessage("Выберите вершину"));
@@ -37,18 +40,25 @@ export const setAlgorithm = (algorithm) => ({
     algorithm
 });
 
+const setIsOneStep = (isOneStep) => ({
+    type: ActionType.SET_IS_ONE_STEP,
+    isOneStep
+});
+
 export const call = (vertex, edge) => (dispatch, getState) => {
     dispatch(closeMessage());
     dispatch(changeGraphMode(GraphMode.DEFAULT));
     const graph = getState().graphReducer.graph;
     dispatch(callConnector(graph, vertex, edge));
-    dispatch(start());
-    dispatch(callSuccess());
+
+    const isOneStep = getState().algorithmReducer.isOneStep;
+    isOneStep ? dispatch(pause()) : dispatch(start());
+    dispatch(callSuccess(isOneStep));
 };
 
-export const continueCall = () => (dispatch) => {
-    dispatch(start());
-    dispatch(callSuccess());
+export const continueCall = (isOneStep = false) => (dispatch) => {
+    isOneStep ? dispatch(pause()) : dispatch(start());
+    dispatch(callSuccess(isOneStep));
 };
 
 const start = () => ({
@@ -68,7 +78,15 @@ const callConnector = (graph, vertex, edge) => ({
 
 let currentVisualizationId = 0; // To prevent several visualization 'threads'
 
-const callSuccess = () => async (dispatch, getState) => {
+const callSuccess = (isOneStep = false) => async (dispatch, getState) => {
+    if (isOneStep) {
+        if (getState().algorithmReducer.trace.length > 0) {
+            dispatch(algorithmStep(getState().algorithmReducer.trace[0]));
+            dispatch(popTraceStep());
+        }
+        return;
+    }
+
     const visualizationId = ++currentVisualizationId;
     while ((getState().algorithmReducer.trace.length > 0) && getState().algorithmReducer.isActive) {
         dispatch(algorithmStep(getState().algorithmReducer.trace[0]));
@@ -86,4 +104,8 @@ const callSuccess = () => async (dispatch, getState) => {
 
 const popTraceStep = () => ({
     type: ActionType.POP_TRACE_STEP
+});
+
+export const clearTrace = () => ({
+    type: ActionType.CLEAR_TRACE
 });
