@@ -7,13 +7,13 @@ export class Vertex {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.state = VertexState.EMPTY;
+        this.state = VertexState.DEFAULT;
         this.name = name;
     }
 
     get color() {
         switch (this.state) {
-            case VertexState.EMPTY:
+            case VertexState.DEFAULT:
                 return 'white';
             case VertexState.HIGHLIGHTED:
                 return 'yellow';
@@ -89,4 +89,4 @@ export const VertexComponent = ({ vertex, draggable, onDragStart, onDragEnd, onD
 
 export const vertexBorderWidth = 2;
 
-export const VertexState = Object.freeze({ EMPTY: 0, HIGHLIGHTED: 1, PRE_COMPLETED: 2, COMPLETED: 3 });
+export const VertexState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, PRE_COMPLETED: 2, COMPLETED: 3 });

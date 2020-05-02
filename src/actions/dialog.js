@@ -1,10 +1,10 @@
-export const actionName = Object.freeze({
+export const ActionType = Object.freeze({
     START_DIALOG_FOR_RESULT: 'START_DIALOG_FOR_RESULT',
     CLOSE_DIALOG: 'CLOSE_DIALOG'
 });
 
 export const startDialogForResult = (title, text, hint, inputPlaceholder, onSubmit, onCancel, pattern = ".*") => ({
-    type: actionName.START_DIALOG_FOR_RESULT,
+    type: ActionType.START_DIALOG_FOR_RESULT,
     title,
     text,
     hint,
@@ -15,7 +15,7 @@ export const startDialogForResult = (title, text, hint, inputPlaceholder, onSubm
 });
 
 const closeDialog = () => ({
-   type: actionName.CLOSE_DIALOG
+   type: ActionType.CLOSE_DIALOG
 });
 
 export const cancelDialog = (onCancel) => (dispatch) => {

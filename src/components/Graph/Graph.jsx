@@ -27,7 +27,7 @@ const mapStateToProps = state => ({
     selectedVertex: state.graphReducer.selectedVertex
 });
 
-export const graphMode = Object.freeze({
+export const GraphMode = Object.freeze({
     DEFAULT: 0,
     ADD_VERTEX: 1,
     ADD_EDGE: 2,
@@ -168,9 +168,9 @@ class GraphComponent extends React.Component {
     handleCanvasClick = e => {
         const x = e.evt.clientX, y = e.evt.clientY;
 
-        if (this.props.graphMode === graphMode.ADD_VERTEX)
+        if (this.props.graphMode === GraphMode.ADD_VERTEX)
             this.props.addVertex(x, y, vertexRadius);
-        else if (this.props.graphMode === graphMode.ADD_EDGE) {
+        else if (this.props.graphMode === GraphMode.ADD_EDGE) {
             if (this.props.selectedVertex !== undefined) {
                 this.props.unselectVertex();
             }
@@ -178,10 +178,10 @@ class GraphComponent extends React.Component {
     };
 
     handleVertexClick = (e, vertex) => {
-        if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE) {
+        if (this.props.graphMode === GraphMode.REMOVE_VERTEX_OR_EDGE) {
             e.cancelBubble = true;
             this.props.removeVertex(vertex);
-        } else if (this.props.graphMode === graphMode.ADD_EDGE) {
+        } else if (this.props.graphMode === GraphMode.ADD_EDGE) {
             e.cancelBubble = true;
 
             if (this.props.selectedVertex === undefined) {
@@ -203,7 +203,7 @@ class GraphComponent extends React.Component {
                     "[0-9]{0,2}"
                 );
             }
-        } else if (this.props.graphMode === graphMode.ALGORITHM_PRE_CALL_SELECT_VERTEX) {
+        } else if (this.props.graphMode === GraphMode.ALGORITHM_PRE_CALL_SELECT_VERTEX) {
             e.cancelBubble = true;
 
             this.props.callAlgorithm(vertex, null);
@@ -211,10 +211,10 @@ class GraphComponent extends React.Component {
     };
 
     handleEdgeClick = (e, edge) => {
-        if (this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE) {
+        if (this.props.graphMode === GraphMode.REMOVE_VERTEX_OR_EDGE) {
             e.cancelBubble = true;
             this.props.removeEdge(edge);
-        } else if (this.props.graphMode === graphMode.ALGORITHM_PRE_CALL_SELECT_EDGE) {
+        } else if (this.props.graphMode === GraphMode.ALGORITHM_PRE_CALL_SELECT_EDGE) {
             e.cancelBubble = true;
             this.props.callAlgorithm(null, edge);
         }
@@ -241,7 +241,7 @@ class GraphComponent extends React.Component {
                             <VertexComponent
                                 key={index}
                                 vertex={vertex}
-                                draggable={this.props.graphMode === graphMode.DEFAULT}
+                                draggable={this.props.graphMode === GraphMode.DEFAULT}
                                 onClick={(e) => this.handleVertexClick(e, vertex)}
                                 onDragStart={e => this.handleVertexDragStart(e, vertex)}
                                 onDragEnd={e => this.handleVertexDragEnd(e, vertex)}

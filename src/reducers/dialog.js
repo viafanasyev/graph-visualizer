@@ -1,4 +1,4 @@
-import { actionName } from "../actions/dialog";
+import { ActionType } from "../actions/dialog";
 import React from "react";
 
 const defaultState = {
@@ -15,7 +15,7 @@ const defaultState = {
 const dialog = (state = defaultState, action) => {
     let newState;
     switch (action.type) {
-        case actionName.START_DIALOG_FOR_RESULT:
+        case ActionType.START_DIALOG_FOR_RESULT:
             newState = {
                 ...state,
                 isOpen: true,
@@ -38,7 +38,7 @@ const dialog = (state = defaultState, action) => {
             };
 
             return newState;
-        case actionName.CLOSE_DIALOG:
+        case ActionType.CLOSE_DIALOG:
             return defaultState;
         default:
             return state;

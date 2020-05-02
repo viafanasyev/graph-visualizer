@@ -7,7 +7,7 @@ export class Edge {
         this._from = vertexFrom;
         this._to = vertexTo;
         this.weight = weight;
-        this.state = EdgeState.NORMAL;
+        this.state = EdgeState.DEFAULT;
         this._oriented = oriented;
     }
 
@@ -21,7 +21,7 @@ export class Edge {
 
     get color() {
         switch (this.state) {
-            case EdgeState.NORMAL:
+            case EdgeState.DEFAULT:
                 return 'black';
             case EdgeState.HIGHLIGHTED:
                 return '#f7ff00';
@@ -117,7 +117,7 @@ const EdgeLabel = ({ x, y, text }) => {
 };
 
 export const EdgeType = Object.freeze({ ONE_SIDE_ORIENTED: 0, TWO_SIDE_ORIENTED: 1, NOT_ORIENTED: 2, LOOP: 3 });
-export const EdgeState = Object.freeze({ NORMAL: 0, HIGHLIGHTED: 1, ERASED: 2 });
+export const EdgeState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, ERASED: 2 });
 
 export const getEdgePointsForType = (edge, edgeType) => {
     const vertexFrom = edge.from;

@@ -1,16 +1,16 @@
-import { Graph, graphMode } from "../components/Graph/Graph";
-import { actionName } from "../actions";
+import { Graph, GraphMode } from "../components/Graph/Graph";
+import { ActionType } from "../actions";
 import { VertexState } from "../components/Graph/Vertex/Vertex";
 import { combineReducers } from "redux";
 import dialog from "./dialog";
 import algorithm from "./algorithm";
-import { algorithmActionType, vertexAction } from "../algorithms/graph";
+import { AlgorithmActionType, VertexAction } from "../algorithms/graph";
 import { EdgeState } from "../components/Graph/Edge/Edge";
 
 const defaultState = {
     graph: new Graph(false),
     message: undefined,
-    graphMode: graphMode.DEFAULT,
+    graphMode: GraphMode.DEFAULT,
     selectedVertex: undefined // For 'ADD_EDGE' // TODO: Do 'ADD_EDGE' in a cleaner way
 };
 
@@ -22,20 +22,20 @@ const unselectSelectedVertex = (state) => {
     if (state.selectedVertex !== undefined) {
         const i = state.graph.vertices.findIndex(v => v === state.selectedVertex);
         if (i !== -1)
-            state.graph.vertices[i].state = VertexState.EMPTY;
+            state.graph.vertices[i].state = VertexState.DEFAULT;
         state.selectedVertex = undefined;
     }
 };
 
 const updateVertexByAction = (vertex, action) => {
     switch (action) {
-        case vertexAction.SELECT:
+        case VertexAction.SELECT:
             vertex.state = VertexState.HIGHLIGHTED;
             break;
-        case vertexAction.ENTER:
+        case VertexAction.ENTER:
             vertex.state = VertexState.PRE_COMPLETED;
             break;
-        case vertexAction.EXIT:
+        case VertexAction.EXIT:
             vertex.state = VertexState.COMPLETED;
             break;
         default:
@@ -43,8 +43,8 @@ const updateVertexByAction = (vertex, action) => {
 };
 
 const cleanGraphSelections = (state) => {
-    state.graph.vertices.forEach(v => v.state = VertexState.EMPTY);
-    state.graph.edges.forEach(e => e.state = EdgeState.NORMAL);
+    state.graph.vertices.forEach(v => v.state = VertexState.DEFAULT);
+    state.graph.edges.forEach(e => e.state = EdgeState.DEFAULT);
     state.selectedVertex = undefined;
 };
 
@@ -52,7 +52,7 @@ const reducer = (state = defaultState, action) => {
     let newState;
     let i;
     switch (action.type) {
-        case actionName.ADD_VERTEX:
+        case ActionType.ADD_VERTEX:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -61,7 +61,7 @@ const reducer = (state = defaultState, action) => {
             newState.graph.addVertex(action.x, action.y, action.radius);
 
             return newState;
-        case actionName.ADD_EDGE:
+        case ActionType.ADD_EDGE:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -70,7 +70,7 @@ const reducer = (state = defaultState, action) => {
             newState.graph.addEdge(action.vertexFrom, action.vertexTo, action.weight);
 
             return newState;
-        case actionName.REMOVE_VERTEX:
+        case ActionType.REMOVE_VERTEX:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -79,7 +79,7 @@ const reducer = (state = defaultState, action) => {
             newState.graph.removeVertex(action.vertex);
 
             return newState;
-        case actionName.REMOVE_EDGE:
+        case ActionType.REMOVE_EDGE:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -88,7 +88,7 @@ const reducer = (state = defaultState, action) => {
             newState.graph.removeEdge(action.edge);
 
             return newState;
-        case actionName.UPDATE_VERTEX_POSITION:
+        case ActionType.UPDATE_VERTEX_POSITION:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -98,7 +98,7 @@ const reducer = (state = defaultState, action) => {
             newState.graph.vertices[action.vertexIndex].y = action.y;
 
             return newState;
-        case actionName.CHANGE_GRAPH_MODE:
+        case ActionType.CHANGE_GRAPH_MODE:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -111,7 +111,7 @@ const reducer = (state = defaultState, action) => {
             }
 
             return newState;
-        case actionName.SELECT_VERTEX:
+        case ActionType.SELECT_VERTEX:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -126,7 +126,7 @@ const reducer = (state = defaultState, action) => {
             }
 
             return newState;
-        case actionName.UNSELECT_VERTEX:
+        case ActionType.UNSELECT_VERTEX:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -135,17 +135,17 @@ const reducer = (state = defaultState, action) => {
             unselectSelectedVertex(newState);
 
             return newState;
-        case actionName.SHOW_MESSAGE:
+        case ActionType.SHOW_MESSAGE:
             return {
                 ...state,
                 message: action.message
             };
-        case actionName.CLOSE_MESSAGE:
+        case ActionType.CLOSE_MESSAGE:
             return {
                 ...state,
                 message: undefined
             };
-        case actionName.INVERT_ORIENTATION:
+        case ActionType.INVERT_ORIENTATION:
             newState = {
                 ...state,
                 graph: clone(state.graph)
@@ -154,23 +154,23 @@ const reducer = (state = defaultState, action) => {
             newState.graph.invertOrientation();
 
             return newState;
-        case actionName.ALGORITHM_STEP:
+        case ActionType.ALGORITHM_STEP:
             newState = {
                 ...state,
                 graph: clone(state.graph)
             };
 
             const step = action.step;
-            if (step.actionType === algorithmActionType.VERTEX_ACTION) {
+            if (step.actionType === AlgorithmActionType.VERTEX_ACTION) {
                 const vertex = newState.graph.vertices.find(v => v.name === step.vertex);
                 if (vertex)
                     updateVertexByAction(vertex, step.action);
-            } else if (step.actionType === algorithmActionType.EDGE_ACTION) {
+            } else if (step.actionType === AlgorithmActionType.EDGE_ACTION) {
                 // TODO: Implement edge action
             }
 
             return newState;
-        case actionName.CLEAN_GRAPH_SELECTIONS:
+        case ActionType.CLEAN_GRAPH_SELECTIONS:
             newState = {
                 ...state,
                 graph: clone(state.graph)

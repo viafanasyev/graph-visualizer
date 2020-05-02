@@ -7,7 +7,7 @@ import { SliderComponent } from "../Sliders/Sliders";
 import { DropDownList } from "../DropDownLists/DropDownLists";
 import { changeGraphMode, cleanGraphSelections, closeMessage, invertOrientation, showMessage } from "../../actions";
 import { connect } from "react-redux";
-import { graphMode } from "../Graph/Graph";
+import { GraphMode } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
 import { call, continueCall, pause, preCall, setAlgorithm, setSpeed } from "../../actions/algorithm";
 import DFS from "../../algorithms/graph/dfs"
@@ -39,7 +39,7 @@ class MenuComponent extends React.Component {
 
     handleAlgorithmChange = e => {
         this.clearVisualization();
-        this.props.changeGraphMode(graphMode.DEFAULT);
+        this.props.changeGraphMode(GraphMode.DEFAULT);
         this.props.closeMessage();
 
         this.props.setAlgorithm(this.state.algorithms[e.target.value]);
@@ -65,7 +65,7 @@ class MenuComponent extends React.Component {
     stopVisualization = () => {
         this.clearVisualization();
         this.props.closeMessage();
-        this.props.changeGraphMode(graphMode.DEFAULT);
+        this.props.changeGraphMode(GraphMode.DEFAULT);
     };
 
     handleAlgorithmSpeedChange = e => {
@@ -80,7 +80,7 @@ class MenuComponent extends React.Component {
     };
 
     closeMessage = () => {
-        this.props.changeGraphMode(graphMode.DEFAULT);
+        this.props.changeGraphMode(GraphMode.DEFAULT);
         this.props.closeMessage();
     };
 
@@ -105,19 +105,19 @@ class MenuComponent extends React.Component {
                             <ButtonComponent
                                 text={"Режим просмотра"} // TODO: Find proper name
                                 onClick={() => this.closeMessage()}
-                                activated={this.props.graphMode === graphMode.DEFAULT}/>
+                                activated={this.props.graphMode === GraphMode.DEFAULT}/>
                             <ButtonComponent
                                 text={"Добавить вершину"}
-                                onClick={() => this.askForAction("Выберите точку для добавления вершины", graphMode.ADD_VERTEX)}
-                                activated={this.props.graphMode === graphMode.ADD_VERTEX}/>
+                                onClick={() => this.askForAction("Выберите точку для добавления вершины", GraphMode.ADD_VERTEX)}
+                                activated={this.props.graphMode === GraphMode.ADD_VERTEX}/>
                             <ButtonComponent
                                 text={"Добавить ребро"}
-                                onClick={() => this.askForAction("Выберите вершины, которые нужно соединить ребром", graphMode.ADD_EDGE)}
-                                activated={this.props.graphMode === graphMode.ADD_EDGE}/>
+                                onClick={() => this.askForAction("Выберите вершины, которые нужно соединить ребром", GraphMode.ADD_EDGE)}
+                                activated={this.props.graphMode === GraphMode.ADD_EDGE}/>
                             <ButtonComponent
                                 text={"Удалить вершину/ребро"}
-                                onClick={() => this.askForAction("Выберите объект для удаления", graphMode.REMOVE_VERTEX_OR_EDGE)}
-                                activated={this.props.graphMode === graphMode.REMOVE_VERTEX_OR_EDGE}/>
+                                onClick={() => this.askForAction("Выберите объект для удаления", GraphMode.REMOVE_VERTEX_OR_EDGE)}
+                                activated={this.props.graphMode === GraphMode.REMOVE_VERTEX_OR_EDGE}/>
                         </div>
                         <RoundedToggleSwitch
                             className={cx("switch")}

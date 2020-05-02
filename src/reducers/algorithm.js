@@ -1,6 +1,6 @@
-import { actionName } from "../actions/algorithm";
+import { ActionType } from "../actions/algorithm";
 import React from "react";
-import { preCallAction } from "../algorithms/graph/index";
+import { PreCallAction } from "../algorithms/graph/index";
 
 const defaultState = {
     trace: [],
@@ -12,7 +12,7 @@ const defaultState = {
 const algorithm = (state = defaultState, action) => {
     let newState;
     switch (action.type) {
-        case actionName.CALL:
+        case ActionType.CALL:
             newState = {
                 ...state
             };
@@ -21,15 +21,15 @@ const algorithm = (state = defaultState, action) => {
             const vertices = action.graph.vertices;
             const edges = action.graph.edges;
             let trace = [];
-            if (preCall === preCallAction.SELECT_VERTEX) {
+            if (preCall === PreCallAction.SELECT_VERTEX) {
                 trace = state.algorithm.call(vertices, edges, action.vertex);
-            } else if (preCall === preCallAction.SELECT_EDGE) {
+            } else if (preCall === PreCallAction.SELECT_EDGE) {
                 trace = state.algorithm.call(vertices, edges, action.edge);
             }
             newState.trace = trace;
 
             return newState;
-        case actionName.POP_TRACE_STEP:
+        case ActionType.POP_TRACE_STEP:
             newState = {
                 ...state,
                 trace: [...state.trace]
@@ -38,22 +38,22 @@ const algorithm = (state = defaultState, action) => {
             newState.trace.shift();
 
             return newState;
-        case actionName.START:
+        case ActionType.START:
             return {
                 ...state,
                 isActive: true
             };
-        case actionName.PAUSE:
+        case ActionType.PAUSE:
             return {
                 ...state,
                 isActive: false
             };
-        case actionName.SET_ALGORITHM:
+        case ActionType.SET_ALGORITHM:
             return {
                 ...state,
                 algorithm: action.algorithm
             };
-        case actionName.SET_SPEED:
+        case ActionType.SET_SPEED:
             return {
                 ...state,
                 speed: action.speed

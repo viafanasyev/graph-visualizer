@@ -1,9 +1,9 @@
 import { changeGraphMode, showMessage, algorithmStep, closeMessage } from "./index";
-import { graphMode } from "../components/Graph/Graph";
-import { preCallAction } from "../algorithms/graph";
+import { GraphMode } from "../components/Graph/Graph";
+import { PreCallAction } from "../algorithms/graph";
 import { sleep } from "../utils/sleep";
 
-export const actionName = Object.freeze({
+export const ActionType = Object.freeze({
     PRE_CALL: 'PRE_CALL',
     CALL: 'CALL',
     START: 'START',
@@ -16,30 +16,30 @@ export const actionName = Object.freeze({
 export const preCall = () => (dispatch, getState) => {
     const preCall = getState().algorithmReducer.algorithm.preCall;
 
-    if (preCall === preCallAction.SELECT_VERTEX) {
-        dispatch(changeGraphMode(graphMode.ALGORITHM_PRE_CALL_SELECT_VERTEX));
+    if (preCall === PreCallAction.SELECT_VERTEX) {
+        dispatch(changeGraphMode(GraphMode.ALGORITHM_PRE_CALL_SELECT_VERTEX));
         dispatch(showMessage("Выберите вершину"));
-    } else if (preCall === preCallAction.SELECT_EDGE) {
-        dispatch(changeGraphMode(graphMode.ALGORITHM_PRE_CALL_SELECT_EDGE));
+    } else if (preCall === PreCallAction.SELECT_EDGE) {
+        dispatch(changeGraphMode(GraphMode.ALGORITHM_PRE_CALL_SELECT_EDGE));
         dispatch(showMessage("Выберите ребро"));
-    } else if (preCall === preCallAction.NOTHING) {
+    } else if (preCall === PreCallAction.NOTHING) {
         dispatch(call());
     }
 };
 
 export const setSpeed = (speed) => ({
-    type: actionName.SET_SPEED,
+    type: ActionType.SET_SPEED,
     speed
 });
 
 export const setAlgorithm = (algorithm) => ({
-    type: actionName.SET_ALGORITHM,
+    type: ActionType.SET_ALGORITHM,
     algorithm
 });
 
 export const call = (vertex, edge) => (dispatch, getState) => {
     dispatch(closeMessage());
-    dispatch(changeGraphMode(graphMode.DEFAULT));
+    dispatch(changeGraphMode(GraphMode.DEFAULT));
     const graph = getState().graphReducer.graph;
     dispatch(callConnector(graph, vertex, edge));
     dispatch(start());
@@ -52,15 +52,15 @@ export const continueCall = () => (dispatch) => {
 };
 
 const start = () => ({
-    type: actionName.START
+    type: ActionType.START
 });
 
 export const pause = () => ({
-    type: actionName.PAUSE
+    type: ActionType.PAUSE
 });
 
 const callConnector = (graph, vertex, edge) => ({
-    type: actionName.CALL,
+    type: ActionType.CALL,
     graph,
     vertex,
     edge
@@ -85,5 +85,5 @@ const callSuccess = () => async (dispatch, getState) => {
 };
 
 const popTraceStep = () => ({
-    type: actionName.POP_TRACE_STEP
+    type: ActionType.POP_TRACE_STEP
 });
