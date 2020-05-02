@@ -162,8 +162,9 @@ const reducer = (state = defaultState, action) => {
 
             const step = action.step;
             if (step.actionType === algorithmActionType.VERTEX_ACTION) {
-                const vertex = newState.graph.vertices[step.vertex];
-                updateVertexByAction(vertex, step.action);
+                const vertex = newState.graph.vertices.find(v => v.name === step.vertex);
+                if (vertex)
+                    updateVertexByAction(vertex, step.action);
             } else if (step.actionType === algorithmActionType.EDGE_ACTION) {
                 // TODO: Implement edge action
             }
