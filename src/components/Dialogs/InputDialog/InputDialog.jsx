@@ -13,6 +13,17 @@ const customStyles = {
     overlay: {zIndex: 100000}
 };
 
+const mapStateToProps = state => ({
+    isOpen: state.dialogReducer.isOpen,
+    title: state.dialogReducer.title,
+    text: state.dialogReducer.text,
+    hint: state.dialogReducer.hint,
+    inputPlaceholder: state.dialogReducer.inputPlaceholder,
+    pattern: state.dialogReducer.pattern,
+    onSubmit: state.dialogReducer.onSubmit,
+    onCancel: state.dialogReducer.onCancel
+});
+
 class InputDialog extends React.Component {
     state = {
         value: ""
@@ -79,4 +90,4 @@ const mapDispatchToProps = dispatch => ({
     cancelDialog: (onCancel) => dispatch(cancelDialog(onCancel))
 });
 
-export default connect(null, mapDispatchToProps)(InputDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(InputDialog);

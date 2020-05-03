@@ -6,31 +6,18 @@ import GraphComponent from "./Graph/Graph";
 import MenuComponent from "./Menu/Menu";
 import MessageBox from "./MessageBox/MessageBox";
 import InputDialog from "./Dialogs/InputDialog/InputDialog";
-import { connect } from "react-redux";
 import InfoBox from "./InfoBox/InfoBox";
 
 const cx = classnames.bind(styles);
 
-const mapStateToProps = state => ({
-    inputDialogProps: state.dialogReducer,
-});
-
-const App = ({ inputDialogProps }) => (
+const App = () => (
     <div className={cx("app")}>
         <MenuComponent/>
         <GraphComponent/>
         <MessageBox/>
         <InfoBox/>
-        <InputDialog
-            isOpen={inputDialogProps.isOpen}
-            title={inputDialogProps.title}
-            text={inputDialogProps.text}
-            hint={inputDialogProps.hint}
-            inputPlaceholder={inputDialogProps.inputPlaceholder}
-            pattern={inputDialogProps.pattern}
-            onSubmit={inputDialogProps.onSubmit}
-            onCancel={inputDialogProps.onCancel}/>
+        <InputDialog/>
     </div>
 );
 
-export default connect(mapStateToProps)(App);
+export default App;
