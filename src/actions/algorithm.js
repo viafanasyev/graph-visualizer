@@ -12,7 +12,8 @@ export const ActionType = Object.freeze({
     SET_ALGORITHM: 'SET_ALGORITHM',
     SET_SPEED: 'SET_SPEED',
     SET_IS_ONE_STEP: 'SET_IS_ONE_STEP',
-    CLEAR_TRACE: 'CLEAR_TRACE'
+    CLEAR_TRACE: 'CLEAR_TRACE',
+    CLEAR_STATISTICS: 'CLEAR_STATISTICS'
 });
 
 export const preCall = (isOneStep = false) => (dispatch, getState) => {
@@ -108,4 +109,8 @@ const popTraceStep = () => ({
 
 export const clearTrace = () => ({
     type: ActionType.CLEAR_TRACE
+});
+
+export const clearStatistics = () => ({
+    type: ActionType.CLEAR_STATISTICS
 });

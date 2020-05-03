@@ -7,7 +7,8 @@ const defaultState = {
     isActive: false,
     algorithm: null,
     speed: 1000,
-    isOneStep: false
+    isOneStep: false,
+    statistics: []
 };
 
 const algorithm = (state = defaultState, action) => {
@@ -21,13 +22,14 @@ const algorithm = (state = defaultState, action) => {
             const preCall = state.algorithm.preCall;
             const vertices = action.graph.vertices;
             const edges = action.graph.edges;
-            let trace = [];
+            let result;
             if (preCall === PreCallAction.SELECT_VERTEX) {
-                trace = state.algorithm.call(vertices, edges, action.vertex);
+                result = state.algorithm.call(vertices, edges, action.vertex);
             } else if (preCall === PreCallAction.SELECT_EDGE) {
-                trace = state.algorithm.call(vertices, edges, action.edge);
+                result = state.algorithm.call(vertices, edges, action.edge);
             }
-            newState.trace = trace;
+            newState.trace = result.trace;
+            newState.statistics = result.statistics;
 
             return newState;
         case ActionType.POP_TRACE_STEP:
@@ -68,6 +70,11 @@ const algorithm = (state = defaultState, action) => {
             return {
                 ...state,
                 trace: []
+            };
+        case ActionType.CLEAR_STATISTICS:
+            return {
+                ...state,
+                statistics: []
             };
         default:
             return state;

@@ -33,7 +33,20 @@ export default {
         let used = {};
         vertices.forEach(vertex => used[vertex.name] = false);
         let trace = [];
+
+        const startTime = window.performance.now();
+
         bfs(start.name, adjacencyList, used, trace);
-        return trace;
+
+        const endTime = window.performance.now();
+        const duration = endTime - startTime;
+
+        return {
+            trace,
+            statistics: [
+                `Время: ${duration.toFixed(4)}мс`,
+                `Кол-во операций: ${trace.length}`
+            ]
+        };
     }
 };

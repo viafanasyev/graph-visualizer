@@ -1,0 +1,24 @@
+.info-box {
+  position: fixed;
+  bottom: 40px;
+  left: 35px;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 10001;
+  background: #ffffff88;
+
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+
+  .text {
+    color: #0a0;
+    font-size: .95em;
+    font-family: monospace;
+  }
+}
+
+.invisible {
+  width: 0;
+}

@@ -7,6 +7,7 @@ import MenuComponent from "./Menu/Menu";
 import MessageBox from "./MessageBox/MessageBox";
 import InputDialog from "./Dialogs/InputDialog/InputDialog";
 import { connect } from "react-redux";
+import InfoBox from "./InfoBox/InfoBox";
 
 const cx = classnames.bind(styles);
 
@@ -19,6 +20,7 @@ const App = ({ inputDialogProps }) => (
         <MenuComponent/>
         <GraphComponent/>
         <MessageBox/>
+        <InfoBox/>
         <InputDialog
             isOpen={inputDialogProps.isOpen}
             title={inputDialogProps.title}

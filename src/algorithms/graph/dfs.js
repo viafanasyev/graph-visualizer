@@ -27,7 +27,20 @@ export default {
         used = {};
         vertices.forEach(vertex => used[vertex.name] = false);
         trace = [];
+
+        const startTime = window.performance.now();
+
         dfs(start.name, adjacencyList);
-        return trace;
+
+        const endTime = window.performance.now();
+        const duration = endTime - startTime;
+
+        return {
+            trace,
+            statistics: [
+                `Время: ${duration.toFixed(4)}мс`,
+                `Кол-во операций: ${trace.length}`
+            ]
+        };
     }
 };

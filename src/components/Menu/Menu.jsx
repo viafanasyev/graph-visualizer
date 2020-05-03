@@ -9,7 +9,16 @@ import { changeGraphMode, cleanGraphSelections, closeMessage, invertOrientation,
 import { connect } from "react-redux";
 import { GraphMode } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
-import { call, clearTrace, continueCall, pause, preCall, setAlgorithm, setSpeed } from "../../actions/algorithm";
+import {
+    call,
+    clearStatistics,
+    clearTrace,
+    continueCall,
+    pause,
+    preCall,
+    setAlgorithm,
+    setSpeed
+} from "../../actions/algorithm";
 import DFS from "../../algorithms/graph/dfs"
 import BFS from "../../algorithms/graph/bfs"
 
@@ -102,6 +111,7 @@ class MenuComponent extends React.Component {
         this.setState({ algorithmPaused: false });
         this.props.cleanGraphSelections();
         this.props.clearTrace();
+        this.props.clearStatistics();
     };
 
     render() {
@@ -173,7 +183,8 @@ const mapDispatchToProps = dispatch => ({
     pause: () => dispatch(pause()),
     continue: (isOneStep) => dispatch(continueCall(isOneStep)),
     cleanGraphSelections: () => dispatch(cleanGraphSelections()),
-    clearTrace: () => dispatch(clearTrace())
+    clearTrace: () => dispatch(clearTrace()),
+    clearStatistics: () => dispatch(clearStatistics())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);
