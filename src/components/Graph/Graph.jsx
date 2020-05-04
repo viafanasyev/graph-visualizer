@@ -38,7 +38,7 @@ export const GraphMode = Object.freeze({
 });
 
 export class Graph {
-    constructor(oriented, vertices, edges) {
+    constructor(oriented, vertices = null, edges = null) {
         if (!vertices || !Array.isArray(vertices) || !edges || !Array.isArray(edges)) {
             this._vertices = [];
             this._edges = [];
@@ -46,6 +46,39 @@ export class Graph {
             this._oriented = oriented;
             this._currentName = 0;
         } else {
+            for (let i = 0; i < vertices.length; ++i) {
+                if ((vertices[i].name < 0) || (vertices[i].name > 999))
+                    throw new Error("Invalid vertex name");
+
+                for (let j = 0; j < vertices.length; ++j) {
+                    if ((i !== j) && (vertices[i].name === vertices[j].name))
+                        throw new Error("Two vertices with equal names");
+                }
+            }
+
+            for (let i = 0; i < edges.length; ++i) {
+                if (edges[i].weight && ((edges[i].weight < 0) || (edges[i].weight > 99)))
+                    throw new Error("Invalid edge weight");
+                if (vertices.findIndex(v => v.name === edges[i].from.name) === -1)
+                    throw new Error("Invalid vertex 'from'");
+                if (vertices.findIndex(v => v.name === edges[i].to.name) === -1)
+                    throw new Error("Invalid vertex 'to'");
+
+                for (let j = 0; j < edges.length; ++j) {
+                    if (i !== j) {
+                        if (oriented) {
+                            if ((edges[i].from.name === edges[j].from.name) && (edges[i].to.name === edges[j].to.name))
+                                throw new Error("Multiedges aren't supported");
+                        } else {
+                            if ((edges[i].from.name === edges[j].from.name) && (edges[i].to.name === edges[j].to.name)
+                                || (edges[i].to.name === edges[j].from.name) && (edges[i].from.name === edges[j].to.name)) {
+                                throw new Error("Multiedges aren't supported");
+                            }
+                        }
+                    }
+                }
+            }
+
             this._vertices = [...vertices];
             this._edges = [...edges];
             this._visualizationEdges = [];

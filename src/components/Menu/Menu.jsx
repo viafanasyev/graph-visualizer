@@ -179,39 +179,22 @@ class MenuComponent extends React.Component {
         reader.onload = (e) => {
             try {
                 const json = JSON.parse(e.target.result);
-                this.validateGraphJson(json);
 
                 const oriented = json.oriented;
-                if (oriented !== this.props.isOriented)
-                    this.invertOrientation();
-
                 const vertices = json.vertices.map(v => new Vertex(v.x, v.y, vertexRadius, v.name));
-
-                const edges = [];
-                json.edges.forEach(e => {
-                    if (oriented) {
-                        if (edges.findIndex(edge => (edge.from.name === e.from) && (edge.to.name === e.to)) === -1) {
-                            edges.push(new Edge(
-                                vertices.find(v => v.name === e.from),
-                                vertices.find(v => v.name === e.to),
-                                oriented,
-                                e.weight
-                            ));
-                        }
-                    } else {
-                        if ((edges.findIndex(edge => (edge.from.name === e.from) && (edge.to.name === e.to)) === -1)
-                            && (edges.findIndex(edge => (edge.to.name === e.from) && (edge.from.name === e.to)) === -1)) {
-                            edges.push(new Edge(
-                                vertices.find(v => v.name === e.from),
-                                vertices.find(v => v.name === e.to),
-                                oriented,
-                                e.weight
-                            ));
-                        }
-                    }
-                });
+                const edges = json.edges.map(e =>
+                    new Edge(
+                        vertices.find(v => v.name === e.from),
+                        vertices.find(v => v.name === e.to),
+                        oriented,
+                        e.weight
+                    )
+                );
 
                 const graph = new Graph(oriented, vertices, edges);
+
+                if (oriented !== this.props.isOriented)
+                    this.invertOrientation();
                 this.props.setGraph(graph);
             } catch (e) {
                 this.props.showMessage("Некорректный формат файла");
@@ -220,28 +203,6 @@ class MenuComponent extends React.Component {
 
         reader.readAsText(file);
         document.getElementById("fileLoad").value = null;
-    };
-
-    validateGraphJson = (json) => {
-        const vertices = json.vertices;
-        for (let i = 0; i < vertices.length; ++i) {
-            if ((vertices[i].name < 0) || (vertices[i].name > 999))
-                throw new Error("Invalid vertex name");
-            for (let j = 0; j < vertices.length; ++j) {
-                if ((i !== j) && (vertices[i].name === vertices[j].name))
-                    throw new Error("Two vertices with equal names");
-            }
-        }
-
-        const edges = json.edges;
-        for (let i = 0; i < edges.length; ++i) {
-            if (edges[i].weight && ((edges[i].weight < 0) || (edges[i].weight > 99)))
-                throw new Error("Invalid edge weight");
-            if (vertices.findIndex(v => v.name === edges[i].from) === -1)
-                throw new Error("Invalid vertex 'from'");
-            if (vertices.findIndex(v => v.name === edges[i].to) === -1)
-                throw new Error("Invalid vertex 'to'");
-        }
     };
 
     render() {
