@@ -20,7 +20,7 @@ import { VisualizationEdgeComponent } from "./VisualizationEdge/VisualizationEdg
 
 const cx = classnames.bind(styles);
 
-const vertexRadius = 20;
+export const vertexRadius = 20;
 
 const mapStateToProps = state => ({
     graph: state.graphReducer.graph,
@@ -38,12 +38,20 @@ export const GraphMode = Object.freeze({
 });
 
 export class Graph {
-    constructor(oriented) {
-        this._vertices = [];
-        this._edges = [];
-        this._visualizationEdges = [];
-        this._oriented = oriented;
-        this._currentName = 0;
+    constructor(oriented, vertices, edges) {
+        if (!vertices || !Array.isArray(vertices) || !edges || !Array.isArray(edges)) {
+            this._vertices = [];
+            this._edges = [];
+            this._visualizationEdges = [];
+            this._oriented = oriented;
+            this._currentName = 0;
+        } else {
+            this._vertices = [...vertices];
+            this._edges = [...edges];
+            this._visualizationEdges = [];
+            this._oriented = oriented;
+            this._currentName = Math.max(...vertices.map(v => v.name)) + 1;
+        }
     }
 
     addVertex(x, y, radius) {

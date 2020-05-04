@@ -5,9 +5,16 @@ import Draggable from 'react-draggable';
 import { ButtonComponent } from "../Buttons/Buttons";
 import { SliderComponent } from "../Sliders/Sliders";
 import { DropDownList } from "../DropDownLists/DropDownLists";
-import { changeGraphMode, cleanGraphSelections, closeMessage, invertOrientation, showMessage } from "../../actions";
+import {
+    changeGraphMode,
+    cleanGraphSelections,
+    closeMessage,
+    invertOrientation,
+    setGraph,
+    showMessage
+} from "../../actions";
 import { connect } from "react-redux";
-import { GraphMode } from "../Graph/Graph";
+import { Graph, GraphMode, vertexRadius } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
 import {
     call,
@@ -21,6 +28,8 @@ import {
 } from "../../actions/algorithm";
 import DFS from "../../algorithms/graph/dfs"
 import BFS from "../../algorithms/graph/bfs"
+import { Vertex } from "../Graph/Vertex/Vertex";
+import { Edge } from "../Graph/Edge/Edge";
 
 const cx = classnames.bind(styles);
 
@@ -33,7 +42,8 @@ const mapStateToProps = state => ({
     isVisualizationActive: state.algorithmReducer.isActive,
     visualizationSpeed: state.algorithmReducer.speed,
     selectedAlgorithm: state.algorithmReducer.algorithm,
-    remainingAlgorithmSteps: state.algorithmReducer.trace.length
+    remainingAlgorithmSteps: state.algorithmReducer.trace.length,
+    graph: state.graphReducer.graph
 });
 
 class MenuComponent extends React.Component {
@@ -45,6 +55,22 @@ class MenuComponent extends React.Component {
     componentDidMount() {
         this.props.setAlgorithm(this.state.algorithms[0]);
         this.props.setSpeed((minAlgorithmSpeed + maxAlgorithmSpeed) / 2);
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.graphMode !== this.props.graphMode)
+            return true;
+        if (nextProps.isOriented !== this.props.isOriented)
+            return true;
+        if (nextProps.isVisualizationActive !== this.props.isVisualizationActive)
+            return true;
+        if (nextProps.visualizationSpeed !== this.props.visualizationSpeed)
+            return true;
+        if (nextProps.selectedAlgorithm !== this.props.selectedAlgorithm)
+            return true;
+        if (nextProps.remainingAlgorithmSteps !== this.props.remainingAlgorithmSteps)
+            return true;
+        return false;
     }
 
     handleAlgorithmChange = e => {
@@ -114,6 +140,110 @@ class MenuComponent extends React.Component {
         this.props.clearStatistics();
     };
 
+    writeToFile = () => {
+        this.clearVisualization();
+        this.props.changeGraphMode(GraphMode.DEFAULT);
+
+        const json = JSON.stringify({
+            vertices: this.props.graph.vertices.map(v => ({
+                x: v.x,
+                y: v.y,
+                name: v.name
+            })),
+            edges: this.props.graph.edges.map(e => ({
+                from: e.from.name,
+                to: e.to.name,
+                weight: e.weight
+            })),
+            oriented: this.props.isOriented
+        });
+
+        const exportData = "data:text/json;charset=utf-8," + escape(json);
+        const anchorElement = document.getElementById("fileSave");
+        anchorElement.setAttribute("href", exportData);
+        anchorElement.setAttribute("download", "graph.json");
+        anchorElement.click();
+    };
+
+    askReadFromFile = () => {
+        this.clearVisualization();
+        this.props.changeGraphMode(GraphMode.DEFAULT);
+
+        document.getElementById("fileLoad").click();
+    };
+
+    readFromFile = (e) => {
+        const reader = new FileReader();
+        const file = e.target.files[0];
+
+        reader.onload = (e) => {
+            try {
+                const json = JSON.parse(e.target.result);
+                this.validateGraphJson(json);
+
+                const oriented = json.oriented;
+                if (oriented !== this.props.isOriented)
+                    this.invertOrientation();
+
+                const vertices = json.vertices.map(v => new Vertex(v.x, v.y, vertexRadius, v.name));
+
+                const edges = [];
+                json.edges.forEach(e => {
+                    if (oriented) {
+                        if (edges.findIndex(edge => (edge.from.name === e.from) && (edge.to.name === e.to)) === -1) {
+                            edges.push(new Edge(
+                                vertices.find(v => v.name === e.from),
+                                vertices.find(v => v.name === e.to),
+                                oriented,
+                                e.weight
+                            ));
+                        }
+                    } else {
+                        if ((edges.findIndex(edge => (edge.from.name === e.from) && (edge.to.name === e.to)) === -1)
+                            && (edges.findIndex(edge => (edge.to.name === e.from) && (edge.from.name === e.to)) === -1)) {
+                            edges.push(new Edge(
+                                vertices.find(v => v.name === e.from),
+                                vertices.find(v => v.name === e.to),
+                                oriented,
+                                e.weight
+                            ));
+                        }
+                    }
+                });
+
+                const graph = new Graph(oriented, vertices, edges);
+                this.props.setGraph(graph);
+            } catch (e) {
+                this.props.showMessage("Некорректный формат файла");
+            }
+        };
+
+        reader.readAsText(file);
+        document.getElementById("fileLoad").value = null;
+    };
+
+    validateGraphJson = (json) => {
+        const vertices = json.vertices;
+        for (let i = 0; i < vertices.length; ++i) {
+            if ((vertices[i].name < 0) || (vertices[i].name > 999))
+                throw new Error("Invalid vertex name");
+            for (let j = 0; j < vertices.length; ++j) {
+                if ((i !== j) && (vertices[i].name === vertices[j].name))
+                    throw new Error("Two vertices with equal names");
+            }
+        }
+
+        const edges = json.edges;
+        for (let i = 0; i < edges.length; ++i) {
+            if (edges[i].weight && ((edges[i].weight < 0) || (edges[i].weight > 99)))
+                throw new Error("Invalid edge weight");
+            if (vertices.findIndex(v => v.name === edges[i].from) === -1)
+                throw new Error("Invalid vertex 'from'");
+            if (vertices.findIndex(v => v.name === edges[i].to) === -1)
+                throw new Error("Invalid vertex 'to'");
+        }
+    };
+
     render() {
         return (
             <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select"]}>
@@ -165,6 +295,21 @@ class MenuComponent extends React.Component {
                             <ButtonComponent text={"Стоп"} onClick={this.stopVisualization}/>
                         </div>
                     </div>
+                    <div className={cx("menu-sub")}>
+                        <div className={cx("file-control-buttons")}>
+                            <ButtonComponent
+                                text={"Сохранить"}
+                                onClick={() => this.writeToFile()}
+                                activated={false}/>
+                            <a id="fileSave" style={{"display": "none"}} aria-hidden={true} href="/#">Save graph</a>
+
+                            <ButtonComponent
+                                text={"Загрузить"}
+                                onClick={() => this.askReadFromFile()}
+                                activated={false}/>
+                            <input id="fileLoad" type="file" accept=".json" style={{"display": "none"}} onChange={(e) => this.readFromFile(e)}/>
+                        </div>
+                    </div>
                 </div>
             </Draggable>
         );
@@ -184,7 +329,8 @@ const mapDispatchToProps = dispatch => ({
     continue: (isOneStep) => dispatch(continueCall(isOneStep)),
     cleanGraphSelections: () => dispatch(cleanGraphSelections()),
     clearTrace: () => dispatch(clearTrace()),
-    clearStatistics: () => dispatch(clearStatistics())
+    clearStatistics: () => dispatch(clearStatistics()),
+    setGraph: (graph) => dispatch(setGraph(graph))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

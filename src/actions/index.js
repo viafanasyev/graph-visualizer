@@ -13,7 +13,8 @@ export const ActionType = Object.freeze({
     UPDATE_VERTEX_POSITION: 'UPDATE_VERTEX_POSITION',
     INVERT_ORIENTATION: 'INVERT_ORIENTATION',
     ALGORITHM_STEP: 'ALGORITHM_STEP',
-    CLEAN_GRAPH_SELECTIONS: 'CLEAN_GRAPH_SELECTIONS'
+    CLEAN_GRAPH_SELECTIONS: 'CLEAN_GRAPH_SELECTIONS',
+    SET_GRAPH: 'SET_GRAPH'
 });
 
 export const addVertex = (x, y, radius) => ({
@@ -46,13 +47,13 @@ export const changeGraphMode = (graphMode) => ({
 });
 
 export const selectVertex = (vertex) => ({
-   type: ActionType.SELECT_VERTEX,
-   vertex
+    type: ActionType.SELECT_VERTEX,
+    vertex
 });
 
 export const unselectVertex = (vertex) => ({
-   type: ActionType.UNSELECT_VERTEX,
-   vertex
+    type: ActionType.UNSELECT_VERTEX,
+    vertex
 });
 
 let currentMessageId = 0;
@@ -82,14 +83,19 @@ export const updateVertexPosition = (vertexIndex, x, y) => ({
 });
 
 export const invertOrientation = () => ({
-   type: ActionType.INVERT_ORIENTATION
+    type: ActionType.INVERT_ORIENTATION
 });
 
 export const algorithmStep = (step) => ({
-   type: ActionType.ALGORITHM_STEP,
-   step
+    type: ActionType.ALGORITHM_STEP,
+    step
 });
 
 export const cleanGraphSelections = () => ({
-   type: ActionType.CLEAN_GRAPH_SELECTIONS
+    type: ActionType.CLEAN_GRAPH_SELECTIONS
+});
+
+export const setGraph = (graph) => ({
+    type: ActionType.SET_GRAPH,
+    graph
 });

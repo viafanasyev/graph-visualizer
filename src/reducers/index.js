@@ -195,6 +195,11 @@ const reducer = (state = defaultState, action) => {
             cleanGraphSelections(newState);
 
             return newState;
+        case ActionType.SET_GRAPH:
+            return {
+                ...state,
+                graph: action.graph
+            };
         default:
             return state;
     }

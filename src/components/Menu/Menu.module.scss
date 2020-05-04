@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 560px;
+  height: 620px;
   width: 340px;
   backdrop-filter: blur(10px);
 
@@ -30,7 +30,7 @@
       flex-direction: column;
       justify-content: space-between;
       width: 100%;
-      padding: 6px 14px 14px;
+      padding: 4px 14px 4px;
       height: 250px;
       margin-bottom: 0;
       margin-top: 0;
@@ -46,13 +46,14 @@
 
     .switch {
       width: 100%;
-      margin: 0 0 14px;
+      margin: 4px 0 4px;
       font-size: .9em;
     }
 
-    .visualization-control-buttons {
+    .visualization-control-buttons,
+    .file-control-buttons {
       width: 100%;
-      padding: 6px 14px 14px;
+      padding: 4px 14px 4px;
       margin: 0;
       display: flex;
       flex-direction: row;
