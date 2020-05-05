@@ -66,7 +66,7 @@ export default {
 
     preCall: PreCallAction.NOTHING,
 
-    criteria: Criteria.CONNECTED | Criteria.WEIGHTED,
+    criteria: Criteria.CONNECTED | Criteria.WEIGHTED | Criteria.NOT_ORIENTED,
 
     call: (vertices, edges) => {
         if (vertices.length === 0)

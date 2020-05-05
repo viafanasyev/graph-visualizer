@@ -30,6 +30,10 @@ export const preCall = (isOneStep = false) => (dispatch, getState) => {
             }
         }
     }
+    if ((criteria & Criteria.NOT_ORIENTED) && (getState().graphReducer.graph.isOriented())) {
+        dispatch(showMessage("Граф должен быть неориентированным!", true));
+        return;
+    }
     if ((criteria & Criteria.CONNECTED) && (getState().graphReducer.graph.vertices.length > 0)) {
         const graph = getState().graphReducer.graph;
         const vertices = graph.vertices;
