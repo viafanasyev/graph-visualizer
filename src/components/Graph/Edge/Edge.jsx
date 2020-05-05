@@ -29,6 +29,8 @@ export class Edge {
                 return '#ff5f3c';
             case EdgeState.ERASED:
                 return '#ffffff00';
+            case EdgeState.SHADOWED:
+                return '#dddddd';
             default:
                 return 'black';
         }
@@ -119,7 +121,7 @@ export const EdgeLabel = ({ x, y, text }) => {
 };
 
 export const EdgeType = Object.freeze({ ONE_SIDE_ORIENTED: 0, TWO_SIDE_ORIENTED: 1, NOT_ORIENTED: 2, LOOP: 3 });
-export const EdgeState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, ERASED: 2, WALKED: 3 });
+export const EdgeState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, ERASED: 2, WALKED: 3, SHADOWED: 4 });
 
 export const getEdgePointsForType = (edge, edgeType) => {
     const vertexFrom = edge.from;

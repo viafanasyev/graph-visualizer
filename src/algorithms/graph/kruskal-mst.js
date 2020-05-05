@@ -6,6 +6,10 @@ const kruskal = (vertices, edges, trace) => {
     vertices.forEach(v => dsu.makeSet(v.name));
     edges.sort((a, b) => a.weight - b.weight);
 
+    edges.forEach(e => {
+        trace.push({ from: e.from.name, to: e.to.name, oriented: false, weight: e.weight, action: EdgeAction.SHADOW, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
+    });
+
     let mstWeight = 0;
     let from, to, weight;
     edges.forEach(e => {
@@ -18,7 +22,7 @@ const kruskal = (vertices, edges, trace) => {
             dsu.union(from, to);
             trace.push({ from, to, oriented: false, weight, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
         } else {
-            trace.push({ from, to, oriented: false, weight, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION });
+            trace.push({ from, to, oriented: false, weight, action: EdgeAction.SHADOW, actionType: AlgorithmActionType.EDGE_ACTION });
         }
     });
 

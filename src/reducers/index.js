@@ -55,6 +55,9 @@ const updateEdgeByAction = (edge, action) => {
         case EdgeAction.HIGHLIGHT:
             edge.state = EdgeState.HIGHLIGHTED;
             break;
+        case EdgeAction.SHADOW:
+            edge.state = EdgeState.SHADOWED;
+            break;
         default:
     }
 };
