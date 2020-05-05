@@ -7,12 +7,13 @@ import PropTypes from "prop-types";
 const cx = classnames.bind(styles);
 
 const mapStateToProps = state => ({
-    lines: state.algorithmReducer.statistics
+    lines: state.algorithmReducer.statistics,
+    isVisible: state.algorithmReducer.isStatisticsShown
 });
 
-const InfoBox = ({ lines }) => {
+const InfoBox = ({ lines, isVisible }) => {
     return (
-        <div className={cx("info-box", {[`invisible`]: !(Array.isArray(lines) && lines.length)})}>
+        <div className={cx("info-box", {[`invisible`]: !(isVisible && Array.isArray(lines) && lines.length)})}>
             {lines.map((line, index) => <div className={cx("text")} key={index}>{line}</div>)}
         </div>
     );
@@ -24,7 +25,8 @@ InfoBox.propTypes = {
         PropTypes.number,
         PropTypes.symbol,
         PropTypes.bool
-    ]))
+    ])),
+    isVisible: PropTypes.bool
 };
 
 export default connect(mapStateToProps)(InfoBox);

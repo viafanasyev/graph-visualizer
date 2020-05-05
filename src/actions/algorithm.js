@@ -13,6 +13,7 @@ export const ActionType = Object.freeze({
     SET_SPEED: 'SET_SPEED',
     SET_IS_ONE_STEP: 'SET_IS_ONE_STEP',
     CLEAR_TRACE: 'CLEAR_TRACE',
+    SHOW_STATISTICS: 'SHOW_STATISTICS',
     CLEAR_STATISTICS: 'CLEAR_STATISTICS'
 });
 
@@ -94,6 +95,10 @@ const callSuccess = (isOneStep = false) => async (dispatch, getState) => {
         if (getState().algorithmReducer.trace.length > 0) {
             dispatch(algorithmStep(getState().algorithmReducer.trace[0]));
             dispatch(popTraceStep());
+
+            if (getState().algorithmReducer.trace.length === 0) {
+                dispatch(showStatistics());
+            }
         }
         return;
     }
@@ -110,6 +115,7 @@ const callSuccess = (isOneStep = false) => async (dispatch, getState) => {
     }
     if (getState().algorithmReducer.isActive) {
         dispatch(pause());
+        dispatch(showStatistics());
     }
 };
 
@@ -119,6 +125,10 @@ const popTraceStep = () => ({
 
 export const clearTrace = () => ({
     type: ActionType.CLEAR_TRACE
+});
+
+const showStatistics = () => ({
+   type: ActionType.SHOW_STATISTICS
 });
 
 export const clearStatistics = () => ({

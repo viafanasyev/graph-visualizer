@@ -8,7 +8,8 @@ const defaultState = {
     algorithm: null,
     speed: 1000,
     isOneStep: false,
-    statistics: []
+    statistics: [],
+    isStatisticsShown: false
 };
 
 const algorithm = (state = defaultState, action) => {
@@ -71,10 +72,16 @@ const algorithm = (state = defaultState, action) => {
                 ...state,
                 trace: []
             };
+        case ActionType.SHOW_STATISTICS:
+            return {
+                ...state,
+                isStatisticsShown: true
+            };
         case ActionType.CLEAR_STATISTICS:
             return {
                 ...state,
-                statistics: []
+                statistics: [],
+                isStatisticsShown: false
             };
         default:
             return state;
