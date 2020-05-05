@@ -143,12 +143,16 @@ export class Graph {
         }
     }
 
-    findVisualizationEdge(vertexFrom, vertexTo) {
-        return this._visualizationEdges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo));
+    findVisualizationEdge(vertexFrom, vertexTo, oriented) {
+        if (oriented)
+            return this._visualizationEdges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo));
+        else
+            return this._visualizationEdges.findIndex(e => (e.from === vertexFrom) && (e.to === vertexTo)
+                || (e.to === vertexFrom) && (e.from === vertexTo));
     }
 
     addVisualizationEdge(vertexFrom, vertexTo, oriented, weight) {
-        const i = this.findVisualizationEdge(vertexFrom, vertexTo);
+        const i = this.findVisualizationEdge(vertexFrom, vertexTo, oriented);
         if (i === -1) {
             const edge = new Edge(vertexFrom, vertexTo, oriented, weight);
             this._visualizationEdges.push(edge);
