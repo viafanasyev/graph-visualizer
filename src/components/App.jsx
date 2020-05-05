@@ -7,6 +7,7 @@ import MenuComponent from "./Menu/Menu";
 import MessageBox from "./MessageBox/MessageBox";
 import InputDialog from "./Dialogs/InputDialog/InputDialog";
 import InfoBox from "./InfoBox/InfoBox";
+import MatrixDialog from "./Dialogs/MatrixDialog/MatrixDialog";
 
 const cx = classnames.bind(styles);
 
@@ -17,6 +18,7 @@ const App = () => (
         <MessageBox/>
         <InfoBox/>
         <InputDialog/>
+        <MatrixDialog/>
     </div>
 );
 

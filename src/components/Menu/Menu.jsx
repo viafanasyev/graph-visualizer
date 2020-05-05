@@ -30,6 +30,7 @@ import DFS from "../../algorithms/graph/dfs"
 import BFS from "../../algorithms/graph/bfs"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
+import { startMatrixDialogForResult } from "../../actions/matrixDialog";
 
 const cx = classnames.bind(styles);
 
@@ -205,6 +206,10 @@ class MenuComponent extends React.Component {
         document.getElementById("fileLoad").value = null;
     };
 
+    showAdjacencyMatrix = () => {
+        this.props.startMatrixDialog();
+    };
+
     render() {
         return (
             <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select"]}>
@@ -271,6 +276,14 @@ class MenuComponent extends React.Component {
                             <input id="fileLoad" type="file" accept=".json" style={{"display": "none"}} onChange={(e) => this.readFromFile(e)}/>
                         </div>
                     </div>
+                    <div className={cx("menu-sub")}>
+                        <div className={cx("matrix-control-buttons")}>
+                            <ButtonComponent
+                                text={"Матрица смежности"}
+                                onClick={() => this.showAdjacencyMatrix()}
+                                activated={false}/>
+                        </div>
+                    </div>
                 </div>
             </Draggable>
         );
@@ -291,7 +304,8 @@ const mapDispatchToProps = dispatch => ({
     cleanGraphSelections: () => dispatch(cleanGraphSelections()),
     clearTrace: () => dispatch(clearTrace()),
     clearStatistics: () => dispatch(clearStatistics()),
-    setGraph: (graph) => dispatch(setGraph(graph))
+    setGraph: (graph) => dispatch(setGraph(graph)),
+    startMatrixDialog: () => dispatch(startMatrixDialogForResult())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

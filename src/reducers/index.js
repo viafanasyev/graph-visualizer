@@ -4,6 +4,7 @@ import { VertexState } from "../components/Graph/Vertex/Vertex";
 import { combineReducers } from "redux";
 import dialog from "./dialog";
 import algorithm from "./algorithm";
+import matrixDialog from "./matrixDialog";
 import { AlgorithmActionType, EdgeAction, VertexAction } from "../algorithms/graph";
 import { EdgeState } from "../components/Graph/Edge/Edge";
 
@@ -208,5 +209,6 @@ const reducer = (state = defaultState, action) => {
 export default combineReducers({
     graphReducer: reducer,
     dialogReducer: dialog,
-    algorithmReducer: algorithm
+    algorithmReducer: algorithm,
+    matrixDialogReducer: matrixDialog
 });
