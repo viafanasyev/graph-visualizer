@@ -28,6 +28,8 @@ const algorithm = (state = defaultState, action) => {
                 result = state.algorithm.call(vertices, edges, action.vertex);
             } else if (preCall === PreCallAction.SELECT_EDGE) {
                 result = state.algorithm.call(vertices, edges, action.edge);
+            } else if (preCall === PreCallAction.NOTHING) {
+                result = state.algorithm.call(vertices, edges);
             }
             newState.trace = result.trace;
             newState.statistics = result.statistics;
