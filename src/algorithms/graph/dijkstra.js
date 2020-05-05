@@ -1,4 +1,12 @@
-import { AlgorithmActionType, Criteria, EdgeAction, PreCallAction, VertexAction, VertexHintAction } from "./index";
+import {
+    AlgorithmActionType,
+    Criteria,
+    EdgeAction,
+    getOperationsCount,
+    PreCallAction,
+    VertexAction,
+    VertexHintAction
+} from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
 const dijkstra = (start, vertices, adjacencyList, used, trace) => {
@@ -7,7 +15,7 @@ const dijkstra = (start, vertices, adjacencyList, used, trace) => {
         if (v === start)
             return;
         d[v] = Number.MAX_SAFE_INTEGER;
-        trace.push({ vertex: v, hint: "∞", action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION });
+        trace.push({ vertex: v, hint: "∞", action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
     });
     d[start] = 0;
     trace.push({ vertex: start, hint: "0", action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION });
@@ -32,7 +40,7 @@ const dijkstra = (start, vertices, adjacencyList, used, trace) => {
             trace.push({ from: v, to, oriented: true, weight, action: EdgeAction.HIGHLIGHT, actionType: AlgorithmActionType.EDGE_ACTION });
             if (d[v] + weight < d[to]) {
                 d[to] = d[v] + weight;
-                trace.push({ from: v, to, oriented: true, weight, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
+                trace.push({ from: v, to, oriented: true, weight, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
                 trace.push({ vertex: to, hint: d[to], action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION });
             } else {
                 trace.push({ from: v, to, oriented: true, weight, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION });
@@ -66,7 +74,7 @@ export default {
             trace,
             statistics: [
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${trace.length}`
+                `Кол-во операций: ${getOperationsCount(trace)}`
             ]
         };
     }

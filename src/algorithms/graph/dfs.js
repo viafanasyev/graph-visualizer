@@ -1,4 +1,4 @@
-import { AlgorithmActionType, Criteria, EdgeAction, PreCallAction, VertexAction } from "./index";
+import { AlgorithmActionType, Criteria, EdgeAction, getOperationsCount, PreCallAction, VertexAction } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
 let used = {};
@@ -43,7 +43,7 @@ export default {
             trace,
             statistics: [
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${trace.length}`
+                `Кол-во операций: ${getOperationsCount(trace)}`
             ]
         };
     }

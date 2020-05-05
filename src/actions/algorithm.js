@@ -92,8 +92,10 @@ let currentVisualizationId = 0; // To prevent several visualization 'threads'
 
 const callSuccess = (isOneStep = false) => async (dispatch, getState) => {
     if (isOneStep) {
-        if (getState().algorithmReducer.trace.length > 0) {
-            dispatch(algorithmStep(getState().algorithmReducer.trace[0]));
+        let traceStep = {isChained : true};
+        while ((getState().algorithmReducer.trace.length > 0) && traceStep.isChained) {
+            traceStep = getState().algorithmReducer.trace[0];
+            dispatch(algorithmStep(traceStep));
             dispatch(popTraceStep());
 
             if (getState().algorithmReducer.trace.length === 0) {
@@ -104,10 +106,12 @@ const callSuccess = (isOneStep = false) => async (dispatch, getState) => {
     }
 
     const visualizationId = ++currentVisualizationId;
+    let traceStep;
     while ((getState().algorithmReducer.trace.length > 0) && getState().algorithmReducer.isActive) {
-        dispatch(algorithmStep(getState().algorithmReducer.trace[0]));
+        traceStep = getState().algorithmReducer.trace[0];
+        dispatch(algorithmStep(traceStep));
         dispatch(popTraceStep());
-        if (getState().algorithmReducer.trace.length > 0) {
+        if ((getState().algorithmReducer.trace.length > 0) && !traceStep.isChained) {
             await sleep(getState().algorithmReducer.speed);
             if (currentVisualizationId !== visualizationId)
                 return;

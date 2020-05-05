@@ -33,3 +33,12 @@ export const Criteria = Object.freeze({
     NOTHING: 0,
     WEIGHTED: 1
 });
+
+export const getOperationsCount = (trace) => {
+    let operationsCount = 0;
+    trace.forEach((t, i) => {
+        if ((i + 1 === trace.length) || !t.isChained)
+            ++operationsCount;
+    });
+    return operationsCount;
+};
