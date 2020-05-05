@@ -7,11 +7,12 @@ const bfs = (start, adjacencyList, used, trace) => {
     const queue = new Queue();
     queue.push(start);
     trace.push({ vertex: start, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
-    let vertex;
+    let vertex, to;
     while (!queue.isEmpty()) {
         vertex = queue.pop();
         trace.push({ vertex, action: VertexAction.SELECT, actionType: AlgorithmActionType.VERTEX_ACTION });
-        adjacencyList[vertex].forEach(to => {
+        adjacencyList[vertex].forEach(toVertex => {
+            to = toVertex.name;
             if (!used[to]) {
                 trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
                 used[to] = true;

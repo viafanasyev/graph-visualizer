@@ -8,6 +8,8 @@ export class Vertex {
         this.radius = radius;
         this.state = VertexState.DEFAULT;
         this.name = name;
+        this.hint = "";
+        this.hintState = VertexHintState.CLEAR;
     }
 
     get color() {
@@ -37,6 +39,19 @@ export class Vertex {
                 return 'white';
             default:
                 return 'black';
+        }
+    }
+
+    get hintColor() {
+        switch (this.hintState) {
+            case VertexHintState.CLEAR:
+                return '#00000000';
+            case VertexHintState.DEFAULT:
+                return '#ff5f3c';
+            case VertexState.HIGHLIGHTED:
+                return '#f7ff00';
+            default:
+                return '#00000000';
         }
     }
 }
@@ -98,9 +113,21 @@ export const VertexComponent = ({ vertex, draggable, onDragStart, onDragEnd, onD
                 height={labelHeight}
                 align={'center'}
                 verticalAlign={'middle'}/>
+
+            <Text
+                text={vertex.hint}
+                x={-2 * vertex.radius}
+                y={-2 * vertex.radius}
+                fontSize={20}
+                fill={vertex.hintColor}
+                width={labelWidth}
+                height={labelHeight}
+                align={'center'}
+                verticalAlign={'middle'}/>
         </Group>);
 };
 
 export const vertexBorderWidth = 2;
 
 export const VertexState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, PRE_COMPLETED: 2, COMPLETED: 3 });
+export const VertexHintState = Object.freeze({ CLEAR: 0, DEFAULT: 1, HIGHLIGHTED: 2 });

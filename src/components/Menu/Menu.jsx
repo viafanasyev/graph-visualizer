@@ -28,6 +28,7 @@ import {
 } from "../../actions/algorithm";
 import DFS from "../../algorithms/graph/dfs"
 import BFS from "../../algorithms/graph/bfs"
+import Dijkstra from "../../algorithms/graph/dijkstra"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
 import { startMatrixDialogForResult } from "../../actions/matrixDialog";
@@ -49,7 +50,7 @@ const mapStateToProps = state => ({
 
 class MenuComponent extends React.Component {
     state = {
-        algorithms: [DFS, BFS],
+        algorithms: [DFS, BFS, Dijkstra],
         algorithmPaused: false
     };
 

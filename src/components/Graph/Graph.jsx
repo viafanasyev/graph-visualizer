@@ -164,6 +164,18 @@ export class Graph {
         this._visualizationEdges = this._visualizationEdges.filter(e => e !== edge);
     }
 
+    removeVisualizationEdgeByVertices(vertexFrom, vertexTo, oriented) {
+        if (oriented)
+            this._visualizationEdges = this._visualizationEdges.filter(e =>
+                (e.from.name !== vertexFrom.name) || (e.to.name !== vertexTo.name)
+            );
+        else
+            this._visualizationEdges = this._visualizationEdges.filter(e =>
+                ((e.from.name !== vertexFrom.name) || (e.to.name !== vertexTo.name)) &&
+                ((e.to.name !== vertexFrom.name) || (e.from.name !== vertexTo.name))
+            );
+    }
+
     get vertices() {
         return this._vertices;
     }

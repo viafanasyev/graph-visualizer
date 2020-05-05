@@ -2,12 +2,12 @@ export const edgesListToAdjacencyList = (vertices, edges) => {
     const adjacencyList = {};
     vertices.forEach(vertex => adjacencyList[vertex.name] = []);
     edges.forEach(edge => {
-        adjacencyList[edge.from.name].push(edge.to.name);
+        adjacencyList[edge.from.name].push({name: edge.to.name, weight: edge.weight});
         if (!edge.isOriented() && (edge.from !== edge.to))
-            adjacencyList[edge.to.name].push(edge.from.name);
+            adjacencyList[edge.to.name].push({name: edge.from.name, weight: edge.weight});
     });
     for (let [, verticesList] of Object.entries(adjacencyList))
-        verticesList = verticesList.sort((a, b) => a - b);
+        verticesList = verticesList.sort((a, b) => a.name - b.name);
     return adjacencyList;
 };
 

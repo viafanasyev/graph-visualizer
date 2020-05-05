@@ -1,11 +1,11 @@
 import { Graph, GraphMode } from "../components/Graph/Graph";
 import { ActionType } from "../actions";
-import { VertexState } from "../components/Graph/Vertex/Vertex";
+import { VertexHintState, VertexState } from "../components/Graph/Vertex/Vertex";
 import { combineReducers } from "redux";
 import dialog from "./dialog";
 import algorithm from "./algorithm";
 import matrixDialog from "./matrixDialog";
-import { AlgorithmActionType, EdgeAction, VertexAction } from "../algorithms/graph";
+import { AlgorithmActionType, EdgeAction, VertexAction, VertexHintAction } from "../algorithms/graph";
 import { EdgeState } from "../components/Graph/Edge/Edge";
 
 const defaultState = {
@@ -39,6 +39,9 @@ const updateVertexByAction = (vertex, action) => {
         case VertexAction.EXIT:
             vertex.state = VertexState.COMPLETED;
             break;
+        case VertexAction.UNSELECT:
+            vertex.state = VertexState.DEFAULT;
+            break;
         default:
     }
 };
@@ -55,8 +58,27 @@ const updateEdgeByAction = (edge, action) => {
     }
 };
 
+const updateVertexHintByAction = (vertex, action) => {
+    switch (action) {
+        case VertexHintAction.REMOVE:
+            vertex.hintState = VertexHintState.CLEAR;
+            break;
+        case VertexHintAction.SET:
+            vertex.hintState = VertexHintState.DEFAULT;
+            break;
+        case VertexHintAction.HIGHLIGHT:
+            vertex.hintState = VertexHintState.HIGHLIGHTED;
+            break;
+        default:
+    }
+};
+
 const cleanGraphSelections = (state) => {
-    state.graph.vertices.forEach(v => v.state = VertexState.DEFAULT);
+    state.graph.vertices.forEach(v => {
+        v.state = VertexState.DEFAULT;
+        v.hintState = VertexHintState.CLEAR;
+        v.hint = "";
+    });
     state.graph.edges.forEach(e => e.state = EdgeState.DEFAULT);
     state.graph.visualizationEdges = [];
     state.selectedVertex = undefined;
@@ -182,8 +204,21 @@ const reducer = (state = defaultState, action) => {
             } else if (step.actionType === AlgorithmActionType.EDGE_ACTION) {
                 const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
                 const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
-                const edge = newState.graph.addVisualizationEdge(vertexFrom, vertexTo, step.oriented, step.weight);
-                updateEdgeByAction(edge, step.action);
+                if (step.action === EdgeAction.UNSELECT) {
+                    newState.graph.removeVisualizationEdgeByVertices(vertexFrom, vertexTo, step.oriented);
+                } else {
+                    const edge = newState.graph.addVisualizationEdge(vertexFrom, vertexTo, step.oriented, step.weight);
+                    updateEdgeByAction(edge, step.action);
+                }
+            } else if (step.actionType === AlgorithmActionType.VERTEX_HINT_ACTION) {
+                const vertex = newState.graph.vertices.find(v => v.name === step.vertex);
+                if (vertex) {
+                    if (step.action === VertexHintAction.REMOVE)
+                        vertex.hint = "";
+                    else
+                        vertex.hint = step.hint;
+                    updateVertexHintByAction(vertex, step.action);
+                }
             }
 
             return newState;

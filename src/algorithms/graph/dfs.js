@@ -7,7 +7,9 @@ let trace = [];
 const dfs = (vertex, adjacencyList) => {
     used[vertex] = true;
     trace.push({ vertex, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
-    adjacencyList[vertex].forEach(to => {
+    let to;
+    adjacencyList[vertex].forEach(toVertex => {
+        to = toVertex.name;
         if (!used[to]) {
             trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
             dfs(to, adjacencyList);
