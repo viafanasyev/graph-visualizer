@@ -28,7 +28,7 @@ export default {
 
     preCall: PreCallAction.NOTHING,
 
-    criteria: Criteria.CONNECTED | Criteria.NOT_ORIENTED,
+    criteria: Criteria.NOT_ORIENTED,
 
     call: (vertices, edges) => {
         if (vertices.length === 0)
@@ -41,8 +41,14 @@ export default {
 
         const startTime = window.performance.now();
 
-        const start = vertices[Math.floor(Math.random() * vertices.length)];
-        const isBipartite = dfs(start.name, adjacencyList);
+        let isBipartite = true;
+        for (const {name: vertex} of vertices) {
+            if (!used[vertex]) {
+                isBipartite &= dfs(vertex, adjacencyList);
+                if (!isBipartite)
+                    break;
+            }
+        }
 
         const endTime = window.performance.now();
         const duration = endTime - startTime;
