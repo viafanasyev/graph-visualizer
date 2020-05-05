@@ -11,6 +11,7 @@ import { EdgeState } from "../components/Graph/Edge/Edge";
 const defaultState = {
     graph: new Graph(false),
     message: undefined,
+    isAlert: false,
     graphMode: GraphMode.DEFAULT,
     selectedVertex: undefined // For 'ADD_EDGE' // TODO: Do 'ADD_EDGE' in a cleaner way
 };
@@ -174,12 +175,14 @@ const reducer = (state = defaultState, action) => {
         case ActionType.SHOW_MESSAGE:
             return {
                 ...state,
-                message: action.message
+                message: action.message,
+                isAlert: action.isAlert
             };
         case ActionType.CLOSE_MESSAGE:
             return {
                 ...state,
-                message: undefined
+                message: undefined,
+                isAlert: false
             };
         case ActionType.INVERT_ORIENTATION:
             newState = {

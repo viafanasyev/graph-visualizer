@@ -1,4 +1,4 @@
-import { AlgorithmActionType, EdgeAction, PreCallAction, VertexAction, VertexHintAction } from "./index";
+import { AlgorithmActionType, Criteria, EdgeAction, PreCallAction, VertexAction, VertexHintAction } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
 const dijkstra = (start, vertices, adjacencyList, used, trace) => {
@@ -46,6 +46,8 @@ export default {
     name: "Алгоритм Дейкстры",
 
     preCall: PreCallAction.SELECT_VERTEX,
+
+    criteria: Criteria.WEIGHTED,
 
     call: (vertices, edges, start) => {
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);

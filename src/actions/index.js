@@ -58,17 +58,18 @@ export const unselectVertex = (vertex) => ({
 
 let currentMessageId = 0;
 
-export const showMessage = (message) => async (dispatch) => {
+export const showMessage = (message, isAlert = false) => async (dispatch) => {
     const messageId = ++currentMessageId;
-    dispatch(showMessageConnector(message));
+    dispatch(showMessageConnector(message, isAlert));
     await sleep(2000);
     if (messageId === currentMessageId)
         dispatch(closeMessage());
 };
 
-const showMessageConnector = (message) => ({
+const showMessageConnector = (message, isAlert = false) => ({
     type: ActionType.SHOW_MESSAGE,
-    message
+    message,
+    isAlert
 });
 
 export const closeMessage = () => ({

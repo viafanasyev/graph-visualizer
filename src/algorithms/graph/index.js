@@ -28,3 +28,8 @@ export const PreCallAction = Object.freeze({
     SELECT_VERTEX: 1,
     SELECT_EDGE: 2
 });
+
+export const Criteria = Object.freeze({
+    NOTHING: 0,
+    WEIGHTED: 1
+});

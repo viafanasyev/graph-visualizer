@@ -1,6 +1,6 @@
 import { algorithmStep, changeGraphMode, closeMessage, showMessage } from "./index";
 import { GraphMode } from "../components/Graph/Graph";
-import { PreCallAction } from "../algorithms/graph";
+import { Criteria, PreCallAction } from "../algorithms/graph";
 import { sleep } from "../utils/sleep";
 
 export const ActionType = Object.freeze({
@@ -18,6 +18,16 @@ export const ActionType = Object.freeze({
 
 export const preCall = (isOneStep = false) => (dispatch, getState) => {
     dispatch(setIsOneStep(isOneStep));
+
+    const criteria = getState().algorithmReducer.algorithm.criteria;
+    if (criteria === Criteria.WEIGHTED) {
+        for (const edge of getState().graphReducer.graph.edges) {
+            if (!edge.isWeighted()) {
+                dispatch(showMessage("Граф должен быть взвешенным!", true));
+                return;
+            }
+        }
+    }
 
     const preCall = getState().algorithmReducer.algorithm.preCall;
     if (preCall === PreCallAction.SELECT_VERTEX) {

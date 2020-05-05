@@ -1,4 +1,4 @@
-import { AlgorithmActionType, EdgeAction, PreCallAction, VertexAction } from "./index";
+import { AlgorithmActionType, Criteria, EdgeAction, PreCallAction, VertexAction } from "./index";
 import { Queue } from "../../utils/queue";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 
@@ -28,6 +28,8 @@ export default {
     name: "Поиск в ширину",
 
     preCall: PreCallAction.SELECT_VERTEX,
+
+    criteria: Criteria.NOTHING,
 
     call: (vertices, edges, start) => {
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
