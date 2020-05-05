@@ -22,6 +22,10 @@ export class Vertex {
                 return '#CCCCCC';
             case VertexState.COMPLETED:
                 return '#444444';
+            case VertexState.COLOR_1:
+                return '#ff0000';
+            case VertexState.COLOR_2:
+                return '#0000ff';
             default:
                 return 'white';
         }
@@ -36,6 +40,10 @@ export class Vertex {
             case VertexState.PRE_COMPLETED:
                 return 'black';
             case VertexState.COMPLETED:
+                return 'white';
+            case VertexState.COLOR_1:
+                return 'white';
+            case VertexState.COLOR_2:
                 return 'white';
             default:
                 return 'black';
@@ -129,5 +137,5 @@ export const VertexComponent = ({ vertex, draggable, onDragStart, onDragEnd, onD
 
 export const vertexBorderWidth = 2;
 
-export const VertexState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, PRE_COMPLETED: 2, COMPLETED: 3 });
+export const VertexState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, PRE_COMPLETED: 2, COMPLETED: 3, COLOR_1: 4, COLOR_2: 5 });
 export const VertexHintState = Object.freeze({ CLEAR: 0, DEFAULT: 1, HIGHLIGHTED: 2 });

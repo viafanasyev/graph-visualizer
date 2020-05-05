@@ -32,6 +32,7 @@ import Dijkstra from "../../algorithms/graph/dijkstra"
 import PrimMST from "../../algorithms/graph/prim-mst"
 import KruskalMST from "../../algorithms/graph/kruskal-mst"
 import CheckConnected from "../../algorithms/graph/check-connected"
+import CheckBipartite from "../../algorithms/graph/check-bipartite"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
 import { startMatrixDialogForResult } from "../../actions/matrixDialog";
@@ -53,7 +54,7 @@ const mapStateToProps = state => ({
 
 class MenuComponent extends React.Component {
     state = {
-        algorithms: [DFS, BFS, Dijkstra, PrimMST, KruskalMST, CheckConnected],
+        algorithms: [DFS, BFS, Dijkstra, PrimMST, KruskalMST, CheckConnected, CheckBipartite],
         algorithmPaused: false
     };
 

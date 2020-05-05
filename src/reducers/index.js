@@ -43,6 +43,12 @@ const updateVertexByAction = (vertex, action) => {
         case VertexAction.UNSELECT:
             vertex.state = VertexState.DEFAULT;
             break;
+        case VertexAction.COLOR_1:
+            vertex.state = VertexState.COLOR_1;
+            break;
+        case VertexAction.COLOR_2:
+            vertex.state = VertexState.COLOR_2;
+            break;
         default:
     }
 };

@@ -2,7 +2,9 @@ export const VertexAction = Object.freeze({
     SELECT: 0,
     UNSELECT: 1,
     ENTER: 2,
-    EXIT: 3
+    EXIT: 3,
+    COLOR_1: 4,
+    COLOR_2: 5
 });
 
 export const VertexHintAction = Object.freeze({
