@@ -2,6 +2,7 @@ import { algorithmStep, changeGraphMode, closeMessage, showMessage } from "./ind
 import { GraphMode } from "../components/Graph/Graph";
 import { Criteria, PreCallAction } from "../algorithms/graph";
 import { sleep } from "../utils/sleep";
+import { edgesListToAdjacencyList } from "../utils/graphConverter";
 
 export const ActionType = Object.freeze({
     PRE_CALL: 'PRE_CALL',
@@ -21,10 +22,37 @@ export const preCall = (isOneStep = false) => (dispatch, getState) => {
     dispatch(setIsOneStep(isOneStep));
 
     const criteria = getState().algorithmReducer.algorithm.criteria;
-    if (criteria === Criteria.WEIGHTED) {
+    if (criteria & Criteria.WEIGHTED) {
         for (const edge of getState().graphReducer.graph.edges) {
             if (!edge.isWeighted()) {
                 dispatch(showMessage("Граф должен быть взвешенным!", true));
+                return;
+            }
+        }
+    }
+    if ((criteria & Criteria.CONNECTED) && (getState().graphReducer.graph.vertices.length > 0)) {
+        const graph = getState().graphReducer.graph;
+        const vertices = graph.vertices;
+        const edges = graph.edges;
+        const adjacencyList = edgesListToAdjacencyList(vertices, edges);
+
+        let used = {};
+        vertices.forEach(vertex => used[vertex.name] = false);
+        const dfs = (v) => {
+            used[v] = true;
+            let to;
+            adjacencyList[v].forEach(toVertex => {
+                to = toVertex.name;
+                if (!used[to]) {
+                    dfs(to);
+                }
+            });
+        };
+        dfs(vertices[0].name);
+
+        for (const v of vertices) {
+            if (!used[v.name]) {
+                dispatch(showMessage("Граф должен быть связным!", true));
                 return;
             }
         }

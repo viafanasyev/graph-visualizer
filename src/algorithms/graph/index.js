@@ -31,7 +31,8 @@ export const PreCallAction = Object.freeze({
 
 export const Criteria = Object.freeze({
     NOTHING: 0,
-    WEIGHTED: 1
+    WEIGHTED: 0b1,
+    CONNECTED: 0b10
 });
 
 export const getOperationsCount = (trace) => {
