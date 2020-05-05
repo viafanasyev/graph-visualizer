@@ -85,6 +85,8 @@ class MenuComponent extends React.Component {
 
     startVisualization = () => {
         if (this.props.remainingAlgorithmSteps === 0) {
+            this.props.clearTrace();
+            this.props.clearStatistics();
             this.props.cleanGraphSelections();
             this.props.preCall();
         } else if (this.props.isVisualizationActive) {
@@ -98,6 +100,8 @@ class MenuComponent extends React.Component {
 
     stepVisualization = () => {
         if (this.props.remainingAlgorithmSteps === 0) {
+            this.props.clearTrace();
+            this.props.clearStatistics();
             this.props.cleanGraphSelections();
             this.props.preCall(true);
         } else {
