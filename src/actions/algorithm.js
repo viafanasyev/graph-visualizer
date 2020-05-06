@@ -83,11 +83,11 @@ export const preCall = (isOneStep = false) => (dispatch, getState) => {
             used[v] = 2;
             return true;
         };
-        const isAcyclic = dfs(vertices[0].name);
-
-        if (!isAcyclic) {
-            dispatch(showMessage("Граф должен быть ацикличным!", true));
-            return;
+        for (const {name: start} of vertices) {
+            if (!used[start] && !dfs(start)) {
+                dispatch(showMessage("Граф должен быть ацикличным!", true));
+                return;
+            }
         }
     }
 
