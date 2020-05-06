@@ -56,7 +56,7 @@ export class Vertex {
                 return '#00000000';
             case VertexHintState.DEFAULT:
                 return '#ff5f3c';
-            case VertexState.HIGHLIGHTED:
+            case VertexHintState.HIGHLIGHTED:
                 return '#f7ff00';
             default:
                 return '#00000000';
@@ -126,9 +126,10 @@ export const VertexComponent = ({ vertex, draggable, onDragStart, onDragEnd, onD
                 text={vertex.hint}
                 x={-2 * vertex.radius}
                 y={-2 * vertex.radius}
-                fontSize={20}
+                fontSize={25}
                 fill={vertex.hintColor}
-                width={labelWidth}
+                stroke={vertex.hintColor}
+                width={labelWidth * 2}
                 height={labelHeight}
                 align={'center'}
                 verticalAlign={'middle'}/>
