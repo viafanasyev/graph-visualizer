@@ -210,17 +210,25 @@ const reducer = (state = defaultState, action) => {
 
             const step = action.step;
             if (step.actionType === AlgorithmActionType.VERTEX_ACTION) {
-                const vertex = newState.graph.vertices.find(v => v.name === step.vertex);
-                if (vertex)
-                    updateVertexByAction(vertex, step.action);
-            } else if (step.actionType === AlgorithmActionType.EDGE_ACTION) {
-                const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
-                const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
-                if (step.action === EdgeAction.UNSELECT) {
-                    newState.graph.removeVisualizationEdgeByVertices(vertexFrom, vertexTo, step.oriented);
+                if (step.action === VertexAction.CLEAR_ALL_SELECTIONS) {
+                    newState.graph.vertices.forEach(v => v.state = VertexState.DEFAULT);
                 } else {
-                    const edge = newState.graph.addVisualizationEdge(vertexFrom, vertexTo, step.oriented, step.weight);
-                    updateEdgeByAction(edge, step.action);
+                    const vertex = newState.graph.vertices.find(v => v.name === step.vertex);
+                    if (vertex)
+                        updateVertexByAction(vertex, step.action);
+                }
+            } else if (step.actionType === AlgorithmActionType.EDGE_ACTION) {
+                if (step.action === EdgeAction.CLEAR_ALL_SELECTIONS) {
+                    newState.graph.visualizationEdges = [];
+                } else {
+                    const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
+                    const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
+                    if (step.action === EdgeAction.UNSELECT) {
+                        newState.graph.removeVisualizationEdgeByVertices(vertexFrom, vertexTo, step.oriented);
+                    } else {
+                        const edge = newState.graph.addVisualizationEdge(vertexFrom, vertexTo, step.oriented, step.weight);
+                        updateEdgeByAction(edge, step.action);
+                    }
                 }
             } else if (step.actionType === AlgorithmActionType.VERTEX_HINT_ACTION) {
                 const vertex = newState.graph.vertices.find(v => v.name === step.vertex);

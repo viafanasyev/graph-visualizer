@@ -4,7 +4,8 @@ export const VertexAction = Object.freeze({
     ENTER: 2,
     EXIT: 3,
     COLOR_1: 4,
-    COLOR_2: 5
+    COLOR_2: 5,
+    CLEAR_ALL_SELECTIONS: 6
 });
 
 export const VertexHintAction = Object.freeze({
@@ -17,7 +18,8 @@ export const EdgeAction = Object.freeze({
     WALK: 0,
     HIGHLIGHT: 1,
     UNSELECT: 2,
-    SHADOW: 3
+    SHADOW: 3,
+    CLEAR_ALL_SELECTIONS: 4
 });
 
 export const AlgorithmActionType = Object.freeze({
