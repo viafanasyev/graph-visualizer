@@ -22,8 +22,9 @@ const dfs = (vertex, adjacencyList) => {
     adjacencyList[vertex].forEach(toVertex => {
         to = toVertex.name;
         if (!used[to]) {
-            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
+            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
             dfs(to, adjacencyList);
+            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
         }
     });
     trace.push({ vertex, hint: addedVertices++, action: VertexHintAction.HIGHLIGHT, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
@@ -52,8 +53,6 @@ const topSort = (vertices, edges, adjacencyList, trace) => {
             dfs(start, adjacencyList);
         }
     }
-
-    trace.push({ action: EdgeAction.CLEAR_ALL_SELECTIONS, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
 
     for (const v of topSortList.reverse()) {
         trace.push({ vertex: v, hint: sortedVertices++, action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
