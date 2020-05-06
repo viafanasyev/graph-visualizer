@@ -29,12 +29,10 @@ const dfs = (vertex, adjacencyList, parent = -1) => {
             dfs(to, adjacencyList, vertex);
             tout[vertex] = Math.min(tout[vertex], tout[to]);
             trace.push({ vertex, hint: tin[vertex] + " " + tout[vertex], action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
+            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION });
             if (tout[to] > tin[vertex]) {
                 ++countBridges;
-                trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION });
                 trace.push({ from: vertex, to, oriented: false, action: EdgeAction.HIGHLIGHT, actionType: AlgorithmActionType.EDGE_ACTION });
-            } else {
-                trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION });
             }
         } else {
             trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
