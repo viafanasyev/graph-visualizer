@@ -224,8 +224,12 @@ const reducer = (state = defaultState, action) => {
                     const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
                     const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
                     const edge = newState.graph.findEdge(vertexFrom, vertexTo);
-                    if (edge !== -1)
-                        newState.graph.edges[edge].state = EdgeState.FLIPPED;
+                    if (edge !== -1) {
+                        if (newState.graph.edges[edge].state === EdgeState.FLIPPED)
+                            newState.graph.edges[edge].state = EdgeState.DEFAULT;
+                        else
+                            newState.graph.edges[edge].state = EdgeState.FLIPPED;
+                    }
                 } else {
                     const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
                     const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
