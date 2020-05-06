@@ -1,3 +1,5 @@
+import { Edge } from "../components/Graph/Edge/Edge";
+
 export const edgesListToAdjacencyList = (vertices, edges) => {
     const adjacencyList = {};
     vertices.forEach(vertex => adjacencyList[vertex.name] = []);
@@ -9,6 +11,12 @@ export const edgesListToAdjacencyList = (vertices, edges) => {
     for (let [, verticesList] of Object.entries(adjacencyList))
         verticesList = verticesList.sort((a, b) => a.name - b.name);
     return adjacencyList;
+};
+
+export const edgesListToReversedAdjacencyList = (vertices, edges) => {
+    return edgesListToAdjacencyList(vertices, edges.map(e =>
+        new Edge(e.to, e.from, e.isOriented(), e.weight))
+    );
 };
 
 export const edgesListToAdjacencyMatrix = (vertices, edges) => {
