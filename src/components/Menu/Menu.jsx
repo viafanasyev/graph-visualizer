@@ -38,6 +38,7 @@ import FindDiameter from "../../algorithms/graph/diameter"
 import TopologicalSort from "../../algorithms/graph/topological-sort"
 import FindBridges from "../../algorithms/graph/find-bridges"
 import FindArticulationPoints from "../../algorithms/graph/find-articulation-points"
+import SCCKosaraju from "../../algorithms/graph/scc-kosaraju"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
 import { startMatrixDialogForResult } from "../../actions/matrixDialog";
@@ -71,7 +72,8 @@ class MenuComponent extends React.Component {
             FindDiameter,
             TopologicalSort,
             FindBridges,
-            FindArticulationPoints
+            FindArticulationPoints,
+            SCCKosaraju
         ],
         algorithmPaused: false
     };
