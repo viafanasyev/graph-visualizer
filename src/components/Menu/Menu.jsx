@@ -35,6 +35,7 @@ import CheckConnected from "../../algorithms/graph/check-connected"
 import CheckBipartite from "../../algorithms/graph/check-bipartite"
 import FindRadius from "../../algorithms/graph/radius"
 import FindDiameter from "../../algorithms/graph/diameter"
+import TopologicalSort from "../../algorithms/graph/topological-sort"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
 import { startMatrixDialogForResult } from "../../actions/matrixDialog";
@@ -56,7 +57,18 @@ const mapStateToProps = state => ({
 
 class MenuComponent extends React.Component {
     state = {
-        algorithms: [DFS, BFS, Dijkstra, PrimMST, KruskalMST, CheckConnected, CheckBipartite, FindRadius, FindDiameter],
+        algorithms: [
+            DFS,
+            BFS,
+            Dijkstra,
+            PrimMST,
+            KruskalMST,
+            CheckConnected,
+            CheckBipartite,
+            FindRadius,
+            FindDiameter,
+            TopologicalSort
+        ],
         algorithmPaused: false
     };
 
