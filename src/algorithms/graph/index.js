@@ -38,7 +38,9 @@ export const Criteria = Object.freeze({
     NOTHING: 0,
     WEIGHTED: 0b1,
     CONNECTED: 0b10,
-    NOT_ORIENTED: 0b100
+    NOT_ORIENTED: 0b100,
+    ORIENTED: 0b1000,
+    ACYCLIC: 0b10000
 });
 
 export const getOperationsCount = (trace) => {

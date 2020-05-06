@@ -21,25 +21,29 @@ export const ActionType = Object.freeze({
 export const preCall = (isOneStep = false) => (dispatch, getState) => {
     dispatch(setIsOneStep(isOneStep));
 
+    const graph = getState().graphReducer.graph;
+    const vertices = graph.vertices;
+    const edges = graph.edges;
+    const adjacencyList = edgesListToAdjacencyList(vertices, edges);
+
     const criteria = getState().algorithmReducer.algorithm.criteria;
     if (criteria & Criteria.WEIGHTED) {
-        for (const edge of getState().graphReducer.graph.edges) {
+        for (const edge of edges) {
             if (!edge.isWeighted()) {
                 dispatch(showMessage("Граф должен быть взвешенным!", true));
                 return;
             }
         }
     }
-    if ((criteria & Criteria.NOT_ORIENTED) && (getState().graphReducer.graph.isOriented())) {
+    if ((criteria & Criteria.NOT_ORIENTED) && graph.isOriented()) {
         dispatch(showMessage("Граф должен быть неориентированным!", true));
         return;
     }
-    if ((criteria & Criteria.CONNECTED) && (getState().graphReducer.graph.vertices.length > 0)) {
-        const graph = getState().graphReducer.graph;
-        const vertices = graph.vertices;
-        const edges = graph.edges;
-        const adjacencyList = edgesListToAdjacencyList(vertices, edges);
-
+    if ((criteria & Criteria.ORIENTED) && !graph.isOriented()) {
+        dispatch(showMessage("Граф должен быть ориентированным!", true));
+        return;
+    }
+    if ((criteria & Criteria.CONNECTED) && (vertices.length > 0)) {
         let used = {};
         vertices.forEach(vertex => used[vertex.name] = false);
         const dfs = (v) => {
@@ -59,6 +63,31 @@ export const preCall = (isOneStep = false) => (dispatch, getState) => {
                 dispatch(showMessage("Граф должен быть связным!", true));
                 return;
             }
+        }
+    }
+    if ((criteria & Criteria.ACYCLIC) && (vertices.length > 0)) {
+        let used = {};
+        vertices.forEach(vertex => used[vertex.name] = 0);
+        const dfs = (v) => {
+            used[v] = 1;
+            let to;
+            for (const toVertex of adjacencyList[v]) {
+                to = toVertex.name;
+                if (!used[to]) {
+                    if (!dfs(to))
+                        return false;
+                } else if (used[to] === 1) {
+                    return false;
+                }
+            }
+            used[v] = 2;
+            return true;
+        };
+        const isAcyclic = dfs(vertices[0].name);
+
+        if (!isAcyclic) {
+            dispatch(showMessage("Граф должен быть ацикличным!", true));
+            return;
         }
     }
 
