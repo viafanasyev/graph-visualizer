@@ -31,6 +31,8 @@ export class Edge {
                 return '#ffffff00';
             case EdgeState.SHADOWED:
                 return '#dddddd';
+            case EdgeState.FLIPPED:
+                return 'black';
             default:
                 return 'black';
         }
@@ -42,6 +44,10 @@ export class Edge {
 
     isOriented() {
         return this._oriented;
+    }
+
+    isFlipped() {
+        return this.state === EdgeState.FLIPPED;
     }
 
     invertOrientation() {
@@ -121,11 +127,14 @@ export const EdgeLabel = ({ x, y, text }) => {
 };
 
 export const EdgeType = Object.freeze({ ONE_SIDE_ORIENTED: 0, TWO_SIDE_ORIENTED: 1, NOT_ORIENTED: 2, LOOP: 3 });
-export const EdgeState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, ERASED: 2, WALKED: 3, SHADOWED: 4 });
+export const EdgeState = Object.freeze({ DEFAULT: 0, HIGHLIGHTED: 1, ERASED: 2, WALKED: 3, SHADOWED: 4, FLIPPED: 5 });
 
 export const getEdgePointsForType = (edge, edgeType) => {
-    const vertexFrom = edge.from;
-    const vertexTo = edge.to;
+    let vertexFrom = edge.from;
+    let vertexTo = edge.to;
+    if (edge.isFlipped())
+        [vertexFrom, vertexTo] = [vertexTo, vertexFrom];
+
     const dx = vertexTo.x - vertexFrom.x;
     const dy = vertexFrom.y - vertexTo.y;
     const angle = Math.atan2(dy, dx);

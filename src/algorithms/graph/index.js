@@ -19,7 +19,8 @@ export const EdgeAction = Object.freeze({
     HIGHLIGHT: 1,
     UNSELECT: 2,
     SHADOW: 3,
-    CLEAR_ALL_SELECTIONS: 4
+    CLEAR_ALL_SELECTIONS: 4,
+    FLIP: 5
 });
 
 export const AlgorithmActionType = Object.freeze({

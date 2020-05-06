@@ -220,6 +220,12 @@ const reducer = (state = defaultState, action) => {
             } else if (step.actionType === AlgorithmActionType.EDGE_ACTION) {
                 if (step.action === EdgeAction.CLEAR_ALL_SELECTIONS) {
                     newState.graph.visualizationEdges = [];
+                } else if (step.action === EdgeAction.FLIP) {
+                    const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
+                    const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
+                    const edge = newState.graph.findEdge(vertexFrom, vertexTo);
+                    if (edge !== -1)
+                        newState.graph.edges[edge].state = EdgeState.FLIPPED;
                 } else {
                     const vertexFrom = newState.graph.vertices.find(v => v.name === step.from);
                     const vertexTo = newState.graph.vertices.find(v => v.name === step.to);
