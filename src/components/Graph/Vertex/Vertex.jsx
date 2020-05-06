@@ -57,7 +57,7 @@ export class Vertex {
             case VertexHintState.DEFAULT:
                 return '#ff5f3c';
             case VertexHintState.HIGHLIGHTED:
-                return '#f7ff00';
+                return '#2c99c3';
             default:
                 return '#00000000';
         }
