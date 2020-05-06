@@ -152,16 +152,10 @@ export class Graph {
     }
 
     addVisualizationEdge(vertexFrom, vertexTo, oriented, weight) {
-        const i = this.findVisualizationEdge(vertexFrom, vertexTo, oriented);
-        if (i === -1) {
-            const edge = new Edge(vertexFrom, vertexTo, oriented, weight);
-            this._visualizationEdges.push(edge);
-            return edge;
-        }
-        else {
-            this._visualizationEdges[i].weight = weight;
-            return this._visualizationEdges[i];
-        }
+        this.removeVisualizationEdgeByVertices(vertexFrom, vertexTo, oriented);
+        const edge = new Edge(vertexFrom, vertexTo, oriented, weight);
+        this._visualizationEdges.push(edge);
+        return edge;
     }
 
     removeVisualizationEdge(edge) {
