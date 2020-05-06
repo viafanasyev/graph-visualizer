@@ -36,6 +36,7 @@ import CheckBipartite from "../../algorithms/graph/check-bipartite"
 import FindRadius from "../../algorithms/graph/radius"
 import FindDiameter from "../../algorithms/graph/diameter"
 import TopologicalSort from "../../algorithms/graph/topological-sort"
+import FindBridges from "../../algorithms/graph/find-bridges"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
 import { startMatrixDialogForResult } from "../../actions/matrixDialog";
@@ -67,7 +68,8 @@ class MenuComponent extends React.Component {
             CheckBipartite,
             FindRadius,
             FindDiameter,
-            TopologicalSort
+            TopologicalSort,
+            FindBridges
         ],
         algorithmPaused: false
     };
