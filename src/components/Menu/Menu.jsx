@@ -250,7 +250,7 @@ class MenuComponent extends React.Component {
                     <div className={cx("menu-sub")}>
                         <div className={cx("graph-control-buttons")}>
                             <ButtonComponent
-                                text={"Режим просмотра"} // TODO: Find proper name
+                                text={"Режим просмотра"}
                                 onClick={() => this.closeMessage()}
                                 activated={this.props.graphMode === GraphMode.DEFAULT}/>
                             <ButtonComponent
