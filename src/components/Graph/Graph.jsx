@@ -370,7 +370,7 @@ class GraphComponent extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
     addVertex: (x, y, radius) => dispatch(addVertex(x, y, radius)),
-    addEdge: (vertexFrom, vertexTo, radius) => dispatch(addEdge(vertexFrom, vertexTo, radius)),
+    addEdge: (vertexFrom, vertexTo, weight) => dispatch(addEdge(vertexFrom, vertexTo, weight)),
     removeVertex: (vertex) => dispatch(removeVertex(vertex)),
     removeEdge: (edge) => dispatch(removeEdge(edge)),
     updateVertexPosition: (vertexIndex, x, y) => dispatch(updateVertexPosition(vertexIndex, x, y)),
