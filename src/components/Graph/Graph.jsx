@@ -130,9 +130,11 @@ export class Graph {
 
     invertOrientation() {
         this._oriented = !this._oriented;
-        if (this._oriented)
+        if (this._oriented) {
             this._edges.forEach(edge => edge.invertOrientation());
-        else {
+            const oldEdges = [...this._edges];
+            oldEdges.forEach(e => this.addEdge(e.to, e.from, e.weight));
+        } else {
             const newEdges = [];
             this._edges.forEach(edge => {
                 if (newEdges.findIndex(e => (e.from === edge.from) && (e.to === edge.to)
