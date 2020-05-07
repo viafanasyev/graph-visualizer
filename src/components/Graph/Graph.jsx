@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import {
     addEdge,
     addVertex,
+    moveCanvas,
     removeEdge,
     removeVertex,
     selectVertex,
@@ -25,7 +26,9 @@ export const vertexRadius = 20;
 const mapStateToProps = state => ({
     graph: state.graphReducer.graph,
     graphMode: state.graphReducer.graphMode,
-    selectedVertex: state.graphReducer.selectedVertex
+    selectedVertex: state.graphReducer.selectedVertex,
+    canvasX: state.graphReducer.canvasX,
+    canvasY: state.graphReducer.canvasY
 });
 
 export const GraphMode = Object.freeze({
@@ -221,8 +224,11 @@ class GraphComponent extends React.Component {
 
     updateDraggedVertex = (x, y) => {
         const vertex = this.state.draggedVertex;
-        if (vertex !== undefined)
+        if (vertex !== undefined) {
+            x -= this.props.canvasX;
+            y -= this.props.canvasY;
             this.props.updateVertexPosition(vertex, x, y);
+        }
     };
 
     handleVertexDragMove = e => {
@@ -249,7 +255,7 @@ class GraphComponent extends React.Component {
     };
 
     handleCanvasClick = e => {
-        const x = e.evt.clientX, y = e.evt.clientY;
+        const x = e.evt.clientX - this.props.canvasX, y = e.evt.clientY - this.props.canvasY;
 
         if (this.props.graphMode === GraphMode.ADD_VERTEX)
             this.props.addVertex(x, y, vertexRadius);
@@ -303,9 +309,20 @@ class GraphComponent extends React.Component {
         }
     };
 
+    handleCanvasDragEnd = (e) => {
+        this.props.moveCanvas(e.target.x(), e.target.y());
+    };
+
     render() {
         return (
-            <Stage onClick={this.handleCanvasClick} width={this.state.windowWidth} height={this.state.windowHeight}>
+            <Stage
+                x={this.props.canvasX}
+                y={this.props.canvasY}
+                draggable={this.props.graphMode === GraphMode.DEFAULT}
+                onDragEnd={this.handleCanvasDragEnd}
+                onClick={this.handleCanvasClick}
+                width={this.state.windowWidth}
+                height={this.state.windowHeight}>
                 <Layer>
                     <Rect fill={'white'} x={0} y={0} width={this.state.windowWidth} height={this.state.windowHeight}/>
                     {
@@ -358,7 +375,8 @@ const mapDispatchToProps = dispatch => ({
     unselectVertex: (vertex) => dispatch(unselectVertex(vertex)),
     startDialogForResult: (title, text, hint, inputPlaceholder, onSubmit, onClose, pattern) =>
         dispatch(startDialogForResult(title, text, hint, inputPlaceholder, onSubmit, onClose, pattern)),
-    callAlgorithm: (vertex, edge) => dispatch(call(vertex, edge))
+    callAlgorithm: (vertex, edge) => dispatch(call(vertex, edge)),
+    moveCanvas: (x, y) => dispatch(moveCanvas(x, y))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GraphComponent);

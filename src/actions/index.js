@@ -14,7 +14,8 @@ export const ActionType = Object.freeze({
     INVERT_ORIENTATION: 'INVERT_ORIENTATION',
     ALGORITHM_STEP: 'ALGORITHM_STEP',
     CLEAN_GRAPH_SELECTIONS: 'CLEAN_GRAPH_SELECTIONS',
-    SET_GRAPH: 'SET_GRAPH'
+    SET_GRAPH: 'SET_GRAPH',
+    MOVE_CANVAS: 'MOVE_CANVAS'
 });
 
 export const addVertex = (x, y, radius) => ({
@@ -99,4 +100,10 @@ export const cleanGraphSelections = () => ({
 export const setGraph = (graph) => ({
     type: ActionType.SET_GRAPH,
     graph
+});
+
+export const moveCanvas = (x, y) => ({
+    type: ActionType.MOVE_CANVAS,
+    x,
+    y
 });

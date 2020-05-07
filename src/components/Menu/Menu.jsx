@@ -10,6 +10,7 @@ import {
     cleanGraphSelections,
     closeMessage,
     invertOrientation,
+    moveCanvas,
     setGraph,
     showMessage
 } from "../../actions";
@@ -230,6 +231,7 @@ class MenuComponent extends React.Component {
                 if (oriented !== this.props.isOriented)
                     this.invertOrientation();
                 this.props.setGraph(graph);
+                this.props.resetCanvasPosition();
             } catch (e) {
                 this.props.showMessage("Некорректный формат файла");
             }
@@ -338,7 +340,8 @@ const mapDispatchToProps = dispatch => ({
     clearTrace: () => dispatch(clearTrace()),
     clearStatistics: () => dispatch(clearStatistics()),
     setGraph: (graph) => dispatch(setGraph(graph)),
-    startMatrixDialog: () => dispatch(startMatrixDialogForResult())
+    startMatrixDialog: () => dispatch(startMatrixDialogForResult()),
+    resetCanvasPosition: () => dispatch(moveCanvas(0, 0))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuComponent);

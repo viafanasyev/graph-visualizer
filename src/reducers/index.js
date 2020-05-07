@@ -13,7 +13,9 @@ const defaultState = {
     message: undefined,
     isAlert: false,
     graphMode: GraphMode.DEFAULT,
-    selectedVertex: undefined // For 'ADD_EDGE' // TODO: Do 'ADD_EDGE' in a cleaner way
+    selectedVertex: undefined, // For 'ADD_EDGE' // TODO: Do 'ADD_EDGE' in a cleaner way
+    canvasX: 0,
+    canvasY: 0
 };
 
 const clone = object => {
@@ -265,6 +267,12 @@ const reducer = (state = defaultState, action) => {
             return {
                 ...state,
                 graph: action.graph
+            };
+        case ActionType.MOVE_CANVAS:
+            return {
+                ...state,
+                canvasX: action.x,
+                canvasY: action.y
             };
         default:
             return state;
