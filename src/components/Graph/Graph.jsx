@@ -218,24 +218,27 @@ class GraphComponent extends React.Component {
     };
 
     handleVertexDragStart = (e, vertex) => {
+        e.cancelBubble = true;
+
         const i = this.findIndexOfVertex(vertex);
         this.setState({ draggedVertex: (i !== -1 ? i : undefined) });
     };
 
     updateDraggedVertex = (x, y) => {
         const vertex = this.state.draggedVertex;
-        if (vertex !== undefined) {
-            x -= this.props.canvasX;
-            y -= this.props.canvasY;
+        if (vertex !== undefined)
             this.props.updateVertexPosition(vertex, x, y);
-        }
     };
 
     handleVertexDragMove = e => {
+        e.cancelBubble = true;
+
         this.updateDraggedVertex(e.target.x(), e.target.y());
     };
 
     handleVertexDragEnd = (e, vertex) => {
+        e.cancelBubble = true;
+
         this.updateDraggedVertex(e.target.x(), e.target.y());
         this.setState({ draggedVertex: undefined });
     };
