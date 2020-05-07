@@ -282,7 +282,7 @@ class GraphComponent extends React.Component {
             else {
                 this.props.startDialogForResult(
                     "Введите вес ребра",
-                    "",
+                    `(${this.props.selectedVertex.name} ${this.props.graph.isOriented() ? '->' : '<->'} ${vertex.name})`,
                     "Оставьте поле пустым, чтобы добавить невзвешенное ребро",
                     "Вес ребра",
                     (value) => {
