@@ -24,6 +24,7 @@ const MatrixRow = ({ row, first, last, vertexNumber }) => {
             <div className={cx("label-cell")}>{vertexNumber}</div>
             {row.map((cell, index) =>
                 <MatrixCell
+                    key={index}
                     cell={cell}
                     topLeft={(index === 0) && first}
                     topRight={(index + 1 === row.length) && first}
@@ -39,9 +40,10 @@ const AdjacencyMatrix = ({ graph }) => {
     return (
         <div className={cx("matrix")}>
             <div className={cx("label-cell")}>{" "}</div>
-            {verticesNumbers.map(v => <div className={cx("label-cell")}>{v}</div>)}
+            {verticesNumbers.map(v => <div key={v} className={cx("label-cell")}>{v}</div>)}
             {adjacencyMatrix.map((row, index) =>
                 <MatrixRow
+                    key={index}
                     row={row}
                     first={index === 0}
                     last={index + 1 === graph.vertices.length}
