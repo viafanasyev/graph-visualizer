@@ -39,6 +39,8 @@ import TopologicalSort from "../../algorithms/graph/topological-sort"
 import FindBridges from "../../algorithms/graph/find-bridges"
 import FindArticulationPoints from "../../algorithms/graph/find-articulation-points"
 import SCCKosaraju from "../../algorithms/graph/scc-kosaraju"
+import EulerPath from "../../algorithms/graph/euler-path"
+import EulerCycle from "../../algorithms/graph/euler-cycle"
 import { Vertex } from "../Graph/Vertex/Vertex";
 import { Edge } from "../Graph/Edge/Edge";
 import { startMatrixDialogForResult } from "../../actions/matrixDialog";
@@ -73,7 +75,9 @@ class MenuComponent extends React.Component {
             TopologicalSort,
             FindBridges,
             FindArticulationPoints,
-            SCCKosaraju
+            SCCKosaraju,
+            EulerPath,
+            EulerCycle
         ],
         algorithmPaused: false
     };
