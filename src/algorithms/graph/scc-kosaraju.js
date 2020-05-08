@@ -8,17 +8,19 @@ import {
     VertexHintAction
 } from "./index";
 import { edgesListToAdjacencyList, edgesListToReversedAdjacencyList } from "../../utils/graphConverter";
+import { sizeof } from "../../utils/sizeof";
 
 let used = {};
 let trace = [];
 let topSortList = [];
 let addedVertices = 0;
 let sortedVertices = 0;
+let memoryUsed = 0;
 
 const dfs = (vertex, adjacencyList) => {
     used[vertex] = true;
     trace.push({ vertex, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
-    let to;
+    let to = 0;
     adjacencyList[vertex].forEach(toVertex => {
         to = toVertex.name;
         if (!used[to]) {
@@ -30,6 +32,8 @@ const dfs = (vertex, adjacencyList) => {
     trace.push({ vertex, hint: addedVertices++, action: VertexHintAction.HIGHLIGHT, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
     trace.push({ vertex, action: VertexAction.EXIT, actionType: AlgorithmActionType.VERTEX_ACTION });
     topSortList.push(vertex);
+
+    memoryUsed += sizeof(to);
 };
 
 const topSort = (vertices, edges, adjacencyList, trace) => {
@@ -66,7 +70,7 @@ const findComponents = (vertices, edges, adjacencyList, trace) => {
         trace.push({ vertex, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION, isChained: true });
         trace.push({ vertex, hint: componentsNumber, action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION});
 
-        let to;
+        let to = 0;
         adjacencyList[vertex].forEach(toVertex => {
             to = toVertex.name;
             if (!used[to]) {
@@ -77,6 +81,8 @@ const findComponents = (vertices, edges, adjacencyList, trace) => {
         });
 
         trace.push({ vertex, action: VertexAction.EXIT, actionType: AlgorithmActionType.VERTEX_ACTION });
+
+        memoryUsed += sizeof(to);
     };
 
     for (const v of topSortList) {
@@ -89,6 +95,8 @@ const findComponents = (vertices, edges, adjacencyList, trace) => {
     for (const {from, to} of edges) {
         trace.push({ from: from.name, to: to.name, oriented: true, action: EdgeAction.FLIP, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
     }
+
+    memoryUsed += sizeof(componentsNumber);
 
     return componentsNumber;
 };
@@ -105,6 +113,7 @@ export default {
         const reversedAdjacencyList = edgesListToReversedAdjacencyList(vertices, edges);
 
         trace = [];
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -114,12 +123,22 @@ export default {
         const endTime = window.performance.now();
         const duration = endTime - startTime;
 
+        memoryUsed +=
+            sizeof(adjacencyList) +
+            sizeof(reversedAdjacencyList) +
+            sizeof(componentsNumber) +
+            sizeof(used) +
+            sizeof(topSortList) +
+            sizeof(addedVertices) +
+            sizeof(sortedVertices);
+
         return {
             trace,
             statistics: [
                 `Количество компонент сильной связности: ${componentsNumber}`,
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }

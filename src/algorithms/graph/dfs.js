@@ -1,13 +1,15 @@
 import { AlgorithmActionType, Criteria, EdgeAction, getOperationsCount, PreCallAction, VertexAction } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
+import { sizeof } from "../../utils/sizeof";
 
 let used = {};
 let trace = [];
+let memoryUsed = 0;
 
 const dfs = (vertex, adjacencyList) => {
     used[vertex] = true;
     trace.push({ vertex, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
-    let to;
+    let to = 0;
     adjacencyList[vertex].forEach(toVertex => {
         to = toVertex.name;
         if (!used[to]) {
@@ -17,6 +19,8 @@ const dfs = (vertex, adjacencyList) => {
         }
     });
     trace.push({ vertex, action: VertexAction.EXIT, actionType: AlgorithmActionType.VERTEX_ACTION });
+
+    memoryUsed += sizeof(to);
 };
 
 export default {
@@ -31,6 +35,7 @@ export default {
         used = {};
         vertices.forEach(vertex => used[vertex.name] = false);
         trace = [];
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -39,11 +44,16 @@ export default {
         const endTime = window.performance.now();
         const duration = endTime - startTime;
 
+        memoryUsed +=
+            sizeof(used) +
+            sizeof(adjacencyList);
+
         return {
             trace,
             statistics: [
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }

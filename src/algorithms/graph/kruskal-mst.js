@@ -1,5 +1,8 @@
 import { AlgorithmActionType, Criteria, EdgeAction, getOperationsCount, PreCallAction } from "./index";
 import { DSU } from "../../utils/dsu";
+import { sizeof } from "../../utils/sizeof";
+
+let memoryUsed = 0;
 
 const kruskal = (vertices, edges, trace) => {
     const dsu = new DSU();
@@ -11,7 +14,7 @@ const kruskal = (vertices, edges, trace) => {
     });
 
     let mstWeight = 0;
-    let from, to, weight;
+    let from = 0, to = 0, weight = 0;
     edges.forEach(e => {
         from = e.from.name;
         to = e.to.name;
@@ -25,6 +28,13 @@ const kruskal = (vertices, edges, trace) => {
             trace.push({ from, to, oriented: false, weight, action: EdgeAction.SHADOW, actionType: AlgorithmActionType.EDGE_ACTION });
         }
     });
+
+    memoryUsed +=
+        sizeof(dsu) +
+        sizeof(mstWeight) +
+        sizeof(from) +
+        sizeof(to) +
+        sizeof(weight);
 
     return mstWeight;
 };
@@ -41,6 +51,7 @@ export default {
             return {trace: [], statistics: []};
 
         let trace = [];
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -54,7 +65,8 @@ export default {
             statistics: [
                 `Вес минимального каркаса: ${mstWeight}`,
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }

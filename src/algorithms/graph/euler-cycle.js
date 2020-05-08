@@ -8,12 +8,16 @@ import {
     VertexHintAction
 } from "./index";
 import { edgesListToAdjacencyList, edgesListToReversedAdjacencyList } from "../../utils/graphConverter";
+import { sizeof } from "../../utils/sizeof";
 
 let trace = [];
+let memoryUsed = 0;
 
 const checkForEuler = (vertices, edges, adjacencyList, trace) => {
     let oriented = edges[0].isOriented();
     const reversedAdjacencyList = edgesListToReversedAdjacencyList(vertices, edges);
+
+    memoryUsed += sizeof(oriented) + sizeof(reversedAdjacencyList);
 
     if (!oriented) {
 
@@ -31,7 +35,9 @@ const checkForEuler = (vertices, edges, adjacencyList, trace) => {
             }
         }
     } else {
-        let degree;
+        let degree = 0;
+        memoryUsed += sizeof(degree);
+
         for (const {name: v} of vertices) {
             degree = reversedAdjacencyList[v].length - adjacencyList[v].length;
             if (degree !== 0) {
@@ -66,6 +72,7 @@ const checkForEuler = (vertices, edges, adjacencyList, trace) => {
     };
 
     dfs(vertices[0].name);
+    memoryUsed += sizeof(used);
 
     for (const {name: v} of vertices) {
         if (!used[v]) {
@@ -95,7 +102,7 @@ const findEulerCycle = (vertices, edges, adjacencyList, trace) => {
     const currentVertices = [];
     let pathLen = 0;
     currentVertices.push(start);
-    let cur;
+    let cur = 0;
     while (currentVertices.length > 0) {
         cur = currentVertices[currentVertices.length - 1];
         if (adjacencyList[cur].length > 0) {
@@ -105,6 +112,8 @@ const findEulerCycle = (vertices, edges, adjacencyList, trace) => {
                 adjacencyList[to] = adjacencyList[to].filter(e => e.name !== cur);
             }
             trace.push({ from: cur, to, oriented: true, action: EdgeAction.HIGHLIGHT, actionType: AlgorithmActionType.EDGE_ACTION });
+
+            memoryUsed += sizeof(to);
         } else {
             currentVertices.pop();
             if (currentVertices.length > 0) {
@@ -114,6 +123,14 @@ const findEulerCycle = (vertices, edges, adjacencyList, trace) => {
             }
         }
     }
+
+    memoryUsed +=
+        sizeof(oriented) +
+        sizeof(reversedAdjacencyList) +
+        sizeof(start) +
+        sizeof(currentVertices) +
+        sizeof(pathLen) +
+        sizeof(cur);
 };
 
 export default {
@@ -127,6 +144,7 @@ export default {
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
 
         trace = [];
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -140,12 +158,17 @@ export default {
         const endTime = window.performance.now();
         const duration = endTime - startTime;
 
+        memoryUsed +=
+            sizeof(adjacencyList) +
+            sizeof(isEuler);
+
         return {
             trace,
             statistics: [
                 `Эйлеров цикл ${isEuler ? '' : 'не'} существует`,
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }

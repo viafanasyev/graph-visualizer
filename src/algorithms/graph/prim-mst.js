@@ -8,6 +8,9 @@ import {
     VertexHintAction
 } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
+import { sizeof } from "../../utils/sizeof";
+
+let memoryUsed = 0;
 
 const prim = (start, vertices, edges, adjacencyList, used, trace) => {
     edges.forEach(e => {
@@ -28,6 +31,9 @@ const prim = (start, vertices, edges, adjacencyList, used, trace) => {
 
     for (let i in vertices) {
         let v = -1;
+
+        memoryUsed += sizeof(v);
+
         vertices.forEach(j => {
             if (!used[j] && ((v === -1) || (d[j] < d[v])))
                 v = j;
@@ -62,6 +68,9 @@ const prim = (start, vertices, edges, adjacencyList, used, trace) => {
     let mstWeight = 0;
     for (const v in d)
         mstWeight += d[v];
+
+    memoryUsed += sizeof(d) + sizeof(mst);
+
     return mstWeight;
 };
 
@@ -80,6 +89,7 @@ export default {
         let used = {};
         vertices.forEach(vertex => used[vertex.name] = false);
         let trace = [];
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -89,12 +99,19 @@ export default {
         const endTime = window.performance.now();
         const duration = endTime - startTime;
 
+        memoryUsed +=
+            sizeof(used) +
+            sizeof(adjacencyList) +
+            sizeof(start) +
+            sizeof(mstWeight);
+
         return {
             trace,
             statistics: [
                 `Вес минимального каркаса: ${mstWeight}`,
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }

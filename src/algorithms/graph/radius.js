@@ -9,6 +9,9 @@ import {
 } from "./index";
 import { Queue } from "../../utils/queue";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
+import { sizeof } from "../../utils/sizeof";
+
+let memoryUsed = 0;
 
 const bfs = (start, vertices, adjacencyList, used, trace) => {
     const d = {}, p = {};
@@ -21,7 +24,7 @@ const bfs = (start, vertices, adjacencyList, used, trace) => {
     queue.push({ vertex: start, level: 0 });
     trace.push({ vertex: start, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });
 
-    let vertex, level, to;
+    let vertex = 0, level = 0, to = 0;
     while (!queue.isEmpty()) {
         vertex = queue.peek().vertex;
         level = queue.pop().level;
@@ -43,6 +46,15 @@ const bfs = (start, vertices, adjacencyList, used, trace) => {
     }
     trace.push({ vertex, action: VertexAction.SELECT, actionType: AlgorithmActionType.VERTEX_ACTION, isChained: true });
     trace.push({ vertex: start, hint: level, action: VertexHintAction.HIGHLIGHT, actionType: AlgorithmActionType.VERTEX_HINT_ACTION });
+
+    memoryUsed +=
+        sizeof(d) +
+        sizeof(p) +
+        sizeof(queue) +
+        sizeof(vertex) +
+        sizeof(level) +
+        sizeof(to);
+
     return level;
 };
 
@@ -68,6 +80,11 @@ const findRadius = (vertices, edges, adjacencyList, trace) => {
             trace.push({ vertex: v, action: VertexAction.SELECT, actionType: AlgorithmActionType.VERTEX_ACTION, isChained: true });
     }
 
+    memoryUsed +=
+        sizeof(used) +
+        sizeof(eccentricities) +
+        sizeof(radius);
+
     return radius;
 };
 
@@ -84,6 +101,7 @@ export default {
 
         const trace = [];
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -92,12 +110,17 @@ export default {
         const endTime = window.performance.now();
         const duration = endTime - startTime;
 
+        memoryUsed +=
+            sizeof(adjacencyList) +
+            sizeof(radius);
+
         return {
             trace,
             statistics: [
                 `Радиус графа: ${radius}`,
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }

@@ -8,12 +8,14 @@ import {
     VertexHintAction
 } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
+import { sizeof } from "../../utils/sizeof";
 
 let used = {};
 let trace = [];
 let timer = 0;
 let tin = {}, tout = {};
 let countBridges = 0;
+let memoryUsed = 0;
 
 const dfs = (vertex, adjacencyList, parent = -1) => {
     used[vertex] = true;
@@ -69,6 +71,7 @@ export default {
     call: (vertices, edges) => {
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
         trace = [];
+        memoryUsed = 0;
 
         const startTime = window.performance.now();
 
@@ -77,12 +80,21 @@ export default {
         const endTime = window.performance.now();
         const duration = endTime - startTime;
 
+        memoryUsed +=
+            sizeof(used) +
+            sizeof(adjacencyList) +
+            sizeof(timer) +
+            sizeof(tin) +
+            sizeof(tout) +
+            sizeof(countBridges);
+
         return {
             trace,
             statistics: [
                 `Количество мостов: ${countBridges}`,
                 `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`
+                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Память: ${memoryUsed} байт(а)`
             ]
         };
     }
