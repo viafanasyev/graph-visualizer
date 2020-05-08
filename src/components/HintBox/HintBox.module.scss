@@ -1,0 +1,47 @@
+.hint-box {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 10001;
+  background: #00000066;
+
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+
+  .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #ddd;
+
+    &:hover {
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+
+  .text {
+    padding: 10px 5px 5px;
+    color: #fff;
+    font-size: .8em;
+    font-family: monospace;
+
+    ul {
+      list-style-type: none;
+      padding-left: 15px;
+    }
+  }
+
+  &-hidden {
+    display: none;
+  }
+}
+
+.invisible {
+  display: none;
+  visibility: hidden;
+}
