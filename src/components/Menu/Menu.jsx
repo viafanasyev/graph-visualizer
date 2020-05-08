@@ -80,7 +80,6 @@ class MenuComponent extends React.Component {
             EulerPath,
             EulerCycle
         ],
-        algorithmPaused: false,
         hidden: false
     };
 
@@ -123,9 +122,7 @@ class MenuComponent extends React.Component {
             this.props.preCall();
         } else if (this.props.isVisualizationActive) {
             this.props.pause();
-            this.setState({ algorithmPaused: true });
         } else {
-            this.setState({ algorithmPaused: false });
             this.props.continue();
         }
     };
@@ -137,7 +134,6 @@ class MenuComponent extends React.Component {
             this.props.cleanGraphSelections();
             this.props.preCall(true);
         } else {
-            this.setState({ algorithmPaused: false });
             this.props.continue(true);
         }
     };
@@ -172,7 +168,6 @@ class MenuComponent extends React.Component {
 
     clearVisualization = () => {
         this.props.pause();
-        this.setState({ algorithmPaused: false });
         this.props.cleanGraphSelections();
         this.props.clearTrace();
         this.props.clearStatistics();
@@ -303,7 +298,7 @@ class MenuComponent extends React.Component {
                         </div>
                         <div className={cx("visualization-control-buttons")}>
                             <ButtonComponent
-                                text={this.state.algorithmPaused ? "Далее" : (this.props.isVisualizationActive ? "Пауза" : "Старт")}
+                                text={this.props.isVisualizationActive ? "Пауза" : "Старт"}
                                 onClick={this.startVisualization}/>
                             <ButtonComponent text={"Шаг"} onClick={this.stepVisualization}/>
                             <ButtonComponent text={"Стоп"} onClick={this.stopVisualization}/>
