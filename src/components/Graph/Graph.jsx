@@ -183,6 +183,13 @@ export class Graph {
             );
     }
 
+    clearGraph() {
+        this._vertices = [];
+        this._visualizationEdges = [];
+        this._edges = [];
+        this._currentName = 0;
+    }
+
     get vertices() {
         return this._vertices;
     }

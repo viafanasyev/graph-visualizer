@@ -294,6 +294,15 @@ const reducer = (state = defaultState, action) => {
             });
 
             return newState;
+        case ActionType.CLEAR_GRAPH:
+            newState = {
+                ...state,
+                graph: clone(state.graph)
+            };
+
+            newState.graph.clearGraph();
+
+            return newState;
         default:
             return state;
     }
