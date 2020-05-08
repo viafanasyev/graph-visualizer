@@ -17,7 +17,7 @@ const bfs = (start, adjacencyList, used, trace) => {
         adjacencyList[vertex].forEach(toVertex => {
             to = toVertex.name;
             if (!used[to]) {
-                trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
+                trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
                 used[to] = true;
                 queue.push(to);
                 trace.push({ vertex: to, action: VertexAction.ENTER, actionType: AlgorithmActionType.VERTEX_ACTION });

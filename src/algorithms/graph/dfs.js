@@ -13,7 +13,7 @@ const dfs = (vertex, adjacencyList) => {
     adjacencyList[vertex].forEach(toVertex => {
         to = toVertex.name;
         if (!used[to]) {
-            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
+            trace.push({ from: vertex, to: to, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
             dfs(to, adjacencyList);
             trace.push({ from: to, to: vertex, oriented: true, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
         }
