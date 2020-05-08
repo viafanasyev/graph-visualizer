@@ -3,12 +3,12 @@
   z-index: 10000;
   background: rgba(60, 67, 102, 0.2);
   border-radius: 8px;
-  padding: 10px 15px 10px;
+  padding: 30px 15px 10px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 685px;
+  height: 700px;
   width: 340px;
   backdrop-filter: blur(10px);
 
@@ -104,5 +104,31 @@
         padding-bottom: 15px;
       }
     }
+  }
+}
+
+.collapse-button {
+  position: absolute;
+  top: -5px;
+  right: 15px;
+  font-size: 1.5em;
+  color: #555;
+
+  &:hover {
+    cursor: pointer;
+    color: #000;
+  }
+}
+
+.menu-hidden {
+
+  height: 30px;
+
+  * {
+    display: none;
+  }
+
+  .collapse-button {
+    display: block;
   }
 }

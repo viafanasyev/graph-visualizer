@@ -80,7 +80,8 @@ class MenuComponent extends React.Component {
             EulerPath,
             EulerCycle
         ],
-        algorithmPaused: false
+        algorithmPaused: false,
+        hidden: false
     };
 
     componentDidMount() {
@@ -100,6 +101,8 @@ class MenuComponent extends React.Component {
         if (nextProps.selectedAlgorithm !== this.props.selectedAlgorithm)
             return true;
         if (nextProps.remainingAlgorithmSteps !== this.props.remainingAlgorithmSteps)
+            return true;
+        if (nextState !== this.state)
             return true;
         return false;
     }
@@ -245,10 +248,20 @@ class MenuComponent extends React.Component {
         this.props.startMatrixDialog();
     };
 
+    collapse = () => {
+        this.setState({ hidden: !this.state.hidden });
+        // FIXME: Fix unfolding in the bottom of the screen
+    };
+
     render() {
         return (
             <Draggable grid={[4, 4]} bounds={"body"} cancel={["button", "input", "select"]}>
-                <div className={cx("menu")}>
+                <div className={cx("menu", {[`menu-hidden`]: this.state.hidden})}>
+                    <div
+                        className={cx("collapse-button")}
+                        onClick={() => this.collapse()}>
+                        &ndash;
+                    </div>
                     <div className={cx("menu-sub")}>
                         <div className={cx("graph-control-buttons")}>
                             <ButtonComponent
