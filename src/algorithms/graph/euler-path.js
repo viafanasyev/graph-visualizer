@@ -144,7 +144,6 @@ const findEulerPath = (vertices, edges, adjacencyList, trace) => {
             if (currentVertices.length > 0) {
                 if (pathLen === 0)
                     trace.push({ vertex: cur, action: VertexAction.COLOR_1, actionType: AlgorithmActionType.VERTEX_ACTION, isChained: true });
-                trace.push({ from: currentVertices[currentVertices.length - 1], to: cur, oriented: true, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
                 trace.push({ from: cur, to: currentVertices[currentVertices.length - 1], oriented: true, weight: ++pathLen, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION });
             }
         }
