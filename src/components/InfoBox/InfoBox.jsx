@@ -12,9 +12,19 @@ const mapStateToProps = state => ({
 });
 
 const InfoBox = ({ lines, isVisible }) => {
+    const writeToFile = (lines) => {
+        const exportData = "data:text/plain;charset=UTF-8," + lines.map(line => line + "\n").reduce((acc, cur) => acc + cur, "");
+        const anchorElement = document.getElementById("fileSave");
+        anchorElement.setAttribute("href", exportData);
+        anchorElement.setAttribute("download", "result.txt");
+        anchorElement.click();
+    };
+
     return (
         <div className={cx("info-box", {[`invisible`]: !(isVisible && Array.isArray(lines) && lines.length)})}>
             {lines.map((line, index) => <div className={cx("text")} key={index}>{line}</div>)}
+            <div className={cx("save-button")} onClick={() => writeToFile(lines)}>Сохранить</div>
+            <a id="fileSave" style={{"display": "none"}} aria-hidden={true} href="/#">Save result</a>
         </div>
     );
 };

@@ -17,6 +17,17 @@
     font-size: .95em;
     font-family: monospace;
   }
+
+  .save-button {
+    color: #666;
+    margin-top: 10px;
+    font-size: smaller;
+
+    &:hover {
+      color: #000;
+      cursor: pointer;
+    }
+  }
 }
 
 .invisible {
