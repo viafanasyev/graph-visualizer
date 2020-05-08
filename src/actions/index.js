@@ -15,7 +15,8 @@ export const ActionType = Object.freeze({
     ALGORITHM_STEP: 'ALGORITHM_STEP',
     CLEAN_GRAPH_SELECTIONS: 'CLEAN_GRAPH_SELECTIONS',
     SET_GRAPH: 'SET_GRAPH',
-    MOVE_CANVAS: 'MOVE_CANVAS'
+    MOVE_CANVAS: 'MOVE_CANVAS',
+    GENERATE_GRAPH: 'GENERATE_GRAPH'
 });
 
 export const addVertex = (x, y, radius) => ({
@@ -106,4 +107,8 @@ export const moveCanvas = (x, y) => ({
     type: ActionType.MOVE_CANVAS,
     x,
     y
+});
+
+export const generateGraph = () => ({
+    type: ActionType.GENERATE_GRAPH
 });

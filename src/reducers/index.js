@@ -7,6 +7,7 @@ import algorithm from "./algorithm";
 import matrixDialog from "./matrixDialog";
 import { AlgorithmActionType, EdgeAction, VertexAction, VertexHintAction } from "../algorithms/graph";
 import { EdgeState } from "../components/Graph/Edge/Edge";
+import generatorDialog from "./generatorDialog";
 
 const defaultState = {
     graph: new Graph(false),
@@ -274,6 +275,25 @@ const reducer = (state = defaultState, action) => {
                 canvasX: action.x,
                 canvasY: action.y
             };
+        case ActionType.GENERATE_GRAPH:
+            newState = {
+                ...state,
+                graph: clone(state.graph)
+            };
+
+            newState.graph.removeAllEdges();
+            newState.graph.vertices.forEach(vertexFrom => {
+                let edgesNumber = 1 + Math.max(0, Math.floor(Math.random() * Math.floor(Math.log2(newState.graph.vertices.length) - 2)));
+
+                while (edgesNumber--) {
+                    const vertexTo = newState.graph.vertices[Math.floor(Math.random() * Math.floor(newState.graph.vertices.length))];
+                    const weight = Math.floor(Math.random() * Math.floor(100));
+
+                    newState.graph.addEdge(vertexFrom, vertexTo, weight);
+                }
+            });
+
+            return newState;
         default:
             return state;
     }
@@ -283,5 +303,6 @@ export default combineReducers({
     graphReducer: reducer,
     dialogReducer: dialog,
     algorithmReducer: algorithm,
-    matrixDialogReducer: matrixDialog
+    matrixDialogReducer: matrixDialog,
+    generatorDialogReducer: generatorDialog
 });

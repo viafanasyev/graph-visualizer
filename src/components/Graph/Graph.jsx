@@ -128,6 +128,10 @@ export class Graph {
         this._edges = this._edges.filter(e => e !== edge);
     }
 
+    removeAllEdges() {
+        this._edges = [];
+    }
+
     invertOrientation() {
         this._oriented = !this._oriented;
         if (this._oriented) {
