@@ -89,7 +89,7 @@ const findDiameter = (vertices, edges, adjacencyList, trace) => {
 };
 
 export default {
-    name: "Диаметр и переферийные вершины графа",
+    name: "Диаметр и периферийные вершины графа",
 
     preCall: PreCallAction.NOTHING,
 
@@ -118,8 +118,8 @@ export default {
             trace,
             statistics: [
                 `Диаметр графа: ${diameter}`,
-                `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
+                `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
             ]
         };

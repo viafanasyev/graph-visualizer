@@ -59,7 +59,7 @@ const dijkstra = (start, vertices, adjacencyList, used, trace) => {
 };
 
 export default {
-    name: "Алгоритм Дейкстры",
+    name: "Поиск кратчайшего пути (Алгоритм Дейкстры)",
 
     preCall: PreCallAction.SELECT_VERTEX,
 
@@ -86,8 +86,8 @@ export default {
         return {
             trace,
             statistics: [
-                `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
+                `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
             ]
         };

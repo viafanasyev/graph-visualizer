@@ -102,7 +102,7 @@ const findComponents = (vertices, edges, adjacencyList, trace) => {
 };
 
 export default {
-    name: "Конденсация графа (алгоритм Косарайю)",
+    name: "Поиск компонент сильной связности (Алгоритм Косарайю)",
 
     preCall: PreCallAction.NOTHING,
 
@@ -136,8 +136,8 @@ export default {
             trace,
             statistics: [
                 `Количество компонент сильной связности: ${componentsNumber}`,
-                `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
+                `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
             ]
         };

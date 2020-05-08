@@ -75,7 +75,7 @@ const prim = (start, vertices, edges, adjacencyList, used, trace) => {
 };
 
 export default {
-    name: "Алгоритм Прима",
+    name: "Поиск минимального каркаса (Алгоритм Прима)",
 
     preCall: PreCallAction.NOTHING,
 
@@ -109,8 +109,8 @@ export default {
             trace,
             statistics: [
                 `Вес минимального каркаса: ${mstWeight}`,
-                `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
+                `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
             ]
         };

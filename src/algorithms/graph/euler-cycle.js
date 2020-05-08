@@ -166,8 +166,8 @@ export default {
             trace,
             statistics: [
                 `Эйлеров цикл ${isEuler ? '' : 'не'} существует`,
-                `Время: ${duration.toFixed(4)}мс`,
-                `Кол-во операций: ${getOperationsCount(trace)}`,
+                `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
+                `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
             ]
         };
