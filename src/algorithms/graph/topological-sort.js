@@ -39,21 +39,12 @@ const dfs = (vertex, adjacencyList) => {
 const topSort = (vertices, edges, adjacencyList, trace) => {
     used = {};
     topSortList = [];
-    const isStartVertex = {};
-    vertices.forEach(vertex => {
-        used[vertex.name] = false;
-        isStartVertex[vertex.name] = true;
-    });
-    for (const {name: from} of vertices) {
-        adjacencyList[from].forEach(to => {
-            isStartVertex[to.name] = false;
-        });
-    }
+    vertices.forEach(vertex => used[vertex.name] = false);
     addedVertices = 0;
     sortedVertices = 0;
 
     for (const {name: start} of vertices) {
-        if (isStartVertex[start]) {
+        if (!used[start]) {
             dfs(start, adjacencyList);
         }
     }
@@ -62,8 +53,6 @@ const topSort = (vertices, edges, adjacencyList, trace) => {
         trace.push({ vertex: v, hint: sortedVertices++, action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
         trace.push({ vertex: v, action: VertexAction.UNSELECT, actionType: AlgorithmActionType.VERTEX_ACTION });
     }
-
-    memoryUsed += sizeof(isStartVertex);
 };
 
 export default {
