@@ -51,10 +51,10 @@ const prim = (start, vertices, edges, adjacencyList, used, trace) => {
 
             trace.push({ from: v, to, oriented: false, weight, action: EdgeAction.HIGHLIGHT, actionType: AlgorithmActionType.EDGE_ACTION });
             if (weight < d[to]) {
-                d[to] = weight;
                 if (mst[to] !== null) {
-                    trace.push({ from: mst[to], to, oriented: false, weight, action: EdgeAction.SHADOW, actionType: AlgorithmActionType.EDGE_ACTION, isChained: false });
+                    trace.push({ from: mst[to], to, oriented: false, weight: d[to], action: EdgeAction.SHADOW, actionType: AlgorithmActionType.EDGE_ACTION, isChained: false });
                 }
+                d[to] = weight;
                 mst[to] = v;
                 trace.push({ from: v, to, oriented: false, weight, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
                 trace.push({ vertex: to, hint: d[to], action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION });
