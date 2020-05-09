@@ -177,6 +177,9 @@ export default {
     criteria: Criteria.NOTHING,
 
     call: (vertices, edges) => {
+        if (edges.length === 0)
+            return {trace: [], statistics: []};
+
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
 
         trace = [];
