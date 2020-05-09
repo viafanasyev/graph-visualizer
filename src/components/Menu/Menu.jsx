@@ -217,7 +217,7 @@ class MenuComponent extends React.Component {
                         vertices.find(v => v.name === e.from),
                         vertices.find(v => v.name === e.to),
                         oriented,
-                        e.weight
+                        isNaN(Number(e.weight)) ? undefined : Number(e.weight)
                     )
                 );
 

@@ -301,6 +301,8 @@ class GraphComponent extends React.Component {
                     (value) => {
                         if (value === "")
                             value = undefined;
+                        else
+                            value = Number(value);
                         this.props.addEdge(this.props.selectedVertex, vertex, value);
                         this.props.unselectVertex();
                     },
