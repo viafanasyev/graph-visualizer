@@ -33,6 +33,9 @@ class HintBox extends React.Component {
                             <li>Ctrl + Alt + C - удалить всё</li>
                             <li>I - свернуть/развернуть информацию об алгоритме</li>
                         </ul>
+                        <p className={cx("hint")}>
+                            (Некоторые горячие клавиши могут работать только в английской раскладке)
+                        </p>
                     </div>
                 </div>
             </Draggable>

@@ -25,9 +25,9 @@ const cx = classnames.bind(styles);
 
 const App = ({ stopVisualization, generateGraph, clearGraph, invertAlgorithmInfoCollapsed }) => {
     const keyMap = {
-        GENERATE: "ctrl+g",
-        CLEAR: "ctrl+alt+c",
-        COLLAPSE_ALGORITHM_INFO: "i"
+        GENERATE: ["ctrl+g", "ctrl+п"],
+        CLEAR: ["ctrl+alt+c", "ctrl+alt+с"],
+        COLLAPSE_ALGORITHM_INFO: ["i", "ш"]
     };
 
     const handlers = {
@@ -43,7 +43,6 @@ const App = ({ stopVisualization, generateGraph, clearGraph, invertAlgorithmInfo
         },
         COLLAPSE_ALGORITHM_INFO: (e) => {
             e.preventDefault();
-            console.log(e.key);
             invertAlgorithmInfoCollapsed();
         }
     };
