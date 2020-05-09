@@ -235,7 +235,7 @@ class MenuComponent extends React.Component {
                 this.props.setGraph(graph);
                 this.props.resetCanvasPosition();
             } catch (e) {
-                this.props.showMessage("Некорректный формат файла");
+                this.props.showMessage("Некорректный формат файла", true);
             }
         };
 
@@ -339,7 +339,7 @@ class MenuComponent extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
     changeGraphMode: (graphMode) => dispatch(changeGraphMode(graphMode)),
-    showMessage: (message) => dispatch(showMessage(message)),
+    showMessage: (message, isAlert) => dispatch(showMessage(message, isAlert)),
     closeMessage: () => dispatch(closeMessage()),
     invertOrientation: () => dispatch(invertOrientation()),
     setAlgorithm: (algorithm) => dispatch(setAlgorithm(algorithm)),
