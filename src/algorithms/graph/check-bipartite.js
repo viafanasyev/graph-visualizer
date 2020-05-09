@@ -1,6 +1,7 @@
 import { AlgorithmActionType, Criteria, EdgeAction, getOperationsCount, PreCallAction, VertexAction } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let used = {};
 let trace = [];
@@ -68,6 +69,43 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список смежности: O(|V| + |E|)
+                    </li>
+                    <li>
+                        Матрица смежности: O(|V|^2)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function dfs(v, color):
+      покрасить v в цвет color
+
+      для всех рёбер (v, u):
+          если u не посещена:
+              dfs(u, цвет обратный color)
+          иначе:
+              если цвет u равен color:
+                  граф недвудольный
+
+  для всех непокрашенных вершин v:
+      dfs(v, случайный цвет)
+
+  если удалось покрасить все вершины:
+      граф двудольный
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Белые вершины - не посещённые</li>
+                    <li>Красные и синие вершины - обработанные</li>
+                    <li>Красные рёбра - рёбра дерева обхода</li>
+                </ul>
             ]
         };
     }

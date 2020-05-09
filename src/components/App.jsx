@@ -12,14 +12,22 @@ import { GlobalHotKeys } from "react-hotkeys";
 import { connect } from "react-redux";
 import { cleanGraphSelections, clearGraph, generateGraph } from "../actions";
 import HintBox from "./HintBox/HintBox";
-import { clearAlgorithmInfo, clearStatistics, clearTrace, pause } from "../actions/algorithm";
+import {
+    clearAlgorithmInfo,
+    clearStatistics,
+    clearTrace,
+    invertAlgorithmInfoCollapsed,
+    pause
+} from "../actions/algorithm";
+import AlgorithmInfoBox from "./AlgorithmInfoBox/AlgorithmInfoBox";
 
 const cx = classnames.bind(styles);
 
-const App = ({ stopVisualization, generateGraph, clearGraph }) => {
+const App = ({ stopVisualization, generateGraph, clearGraph, invertAlgorithmInfoCollapsed }) => {
     const keyMap = {
         GENERATE: "ctrl+g",
-        CLEAR: "ctrl+alt+c"
+        CLEAR: "ctrl+alt+c",
+        COLLAPSE_ALGORITHM_INFO: "i"
     };
 
     const handlers = {
@@ -32,6 +40,11 @@ const App = ({ stopVisualization, generateGraph, clearGraph }) => {
             e.preventDefault();
             stopVisualization();
             clearGraph();
+        },
+        COLLAPSE_ALGORITHM_INFO: (e) => {
+            e.preventDefault();
+            console.log(e.key);
+            invertAlgorithmInfoCollapsed();
         }
     };
 
@@ -43,6 +56,7 @@ const App = ({ stopVisualization, generateGraph, clearGraph }) => {
             <MessageBox/>
             <InfoBox/>
             <HintBox/>
+            <AlgorithmInfoBox/>
             <InputDialog/>
             <MatrixDialog/>
         </div>
@@ -58,7 +72,9 @@ const mapDispatchToProps = dispatch => ({
         dispatch(cleanGraphSelections());
         dispatch(clearTrace());
         dispatch(clearStatistics());
-    }
+        dispatch(clearAlgorithmInfo());
+    },
+    invertAlgorithmInfoCollapsed: () => dispatch(invertAlgorithmInfoCollapsed())
 });
 
 export default connect(null, mapDispatchToProps)(App);

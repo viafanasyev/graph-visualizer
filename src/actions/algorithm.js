@@ -15,7 +15,10 @@ export const ActionType = Object.freeze({
     SET_IS_ONE_STEP: 'SET_IS_ONE_STEP',
     CLEAR_TRACE: 'CLEAR_TRACE',
     SHOW_STATISTICS: 'SHOW_STATISTICS',
-    CLEAR_STATISTICS: 'CLEAR_STATISTICS'
+    CLEAR_STATISTICS: 'CLEAR_STATISTICS',
+    SHOW_ALGORITHM_INFO: 'SHOW_ALGORITHM_INFO',
+    CLEAR_ALGORITHM_INFO: 'CLEAR_ALGORITHM_INFO',
+    INVERT_ALGORITHM_INFO_COLLAPSED: 'INVERT_ALGORITHM_INFO_COLLAPSED'
 });
 
 export const preCall = (isOneStep = false) => (dispatch, getState) => {
@@ -123,6 +126,7 @@ export const call = (vertex, edge) => (dispatch, getState) => {
     dispatch(changeGraphMode(GraphMode.DEFAULT));
     const graph = getState().graphReducer.graph;
     dispatch(callConnector(graph, vertex, edge));
+    dispatch(showAlgorithmInfo());
 
     const isOneStep = getState().algorithmReducer.isOneStep;
     isOneStep ? dispatch(pause()) : dispatch(start());
@@ -198,4 +202,16 @@ const showStatistics = () => ({
 
 export const clearStatistics = () => ({
     type: ActionType.CLEAR_STATISTICS
+});
+
+const showAlgorithmInfo = () => ({
+   type: ActionType.SHOW_ALGORITHM_INFO
+});
+
+export const clearAlgorithmInfo = () => ({
+    type: ActionType.CLEAR_ALGORITHM_INFO
+});
+
+export const invertAlgorithmInfoCollapsed = () => ({
+    type: ActionType.INVERT_ALGORITHM_INFO_COLLAPSED,
 });

@@ -31,6 +31,7 @@ class HintBox extends React.Component {
                         <ul>
                             <li>Ctrl + G - сгенерировать случайные рёбра</li>
                             <li>Ctrl + Alt + C - удалить всё</li>
+                            <li>I - свернуть/развернуть информацию об алгоритме</li>
                         </ul>
                     </div>
                 </div>

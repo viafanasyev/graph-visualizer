@@ -1,6 +1,7 @@
 import { AlgorithmActionType, Criteria, EdgeAction, getOperationsCount, PreCallAction } from "./index";
 import { DSU } from "../../utils/dsu";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let memoryUsed = 0;
 
@@ -67,6 +68,30 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список рёбер + СНМ: O(|E| * log|E|)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function mst():
+      отсортировать рёбра по возрастанию их веса
+
+      для каждого ребра E из списка:
+          если добавление ребра E в MST не образует цикл:
+              добавить E в MST
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Жёлтые рёбра - просматриваемые</li>
+                    <li>Красные рёбра - рёбра каркаса</li>
+                </ul>
             ]
         };
     }

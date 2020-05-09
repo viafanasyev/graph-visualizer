@@ -9,6 +9,7 @@ import {
 } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let used = {};
 let trace = [];
@@ -114,6 +115,56 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список смежности: O(|V| + |E|)
+                    </li>
+                    <li>
+                        Матрица смежности: O(|V|^2)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function dfs(v, parent):
+      отметить v как посещённую
+      tin[v] = fup[v] = timer
+      timer++
+      children = 0
+
+      для всех рёбер (v, u):
+          если u не посещена:
+              children++
+              dfs(u)
+              fup[v] = min(fup[v], fup[u])
+              если fup[u] >= tin[v] и parent != -1:
+                  ребро (v, u) - мост
+          иначе:
+              fup[v] = min(fup[v], tin[u])
+      если parent == -1 и children > 1:
+          v - точка сочленения
+
+  timer - счётчик времени
+  tin[] - время входа в вершину
+  fup[v] - min(tin[v], fup[u], tin[p]), 
+           где ребро (v, u) - прямое, (v, p) - обратное
+
+  для всех непосещённых вершин v:
+      dfs(v, -1)
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Белые вершины - не посещённые</li>
+                    <li>Серые вершины - обрабатываемые</li>
+                    <li>Чёрные вершины - обрабатанные</li>
+                    <li>Жёлтые вершины - точки сочленения</li>
+                    <li>Красные рёбра - рёбра обхода</li>
+                    <li>Красные числа - пары tin и fup (см. псевдокод)</li>
+                </ul>
             ]
         };
     }

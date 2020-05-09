@@ -9,6 +9,7 @@ import {
 } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let used = {};
 let trace = [];
@@ -63,6 +64,9 @@ export default {
     criteria: Criteria.ORIENTED | Criteria.ACYCLIC,
 
     call: (vertices, edges) => {
+        if (vertices.length === 0)
+            return {trace: [], statistics: []};
+
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
         trace = [];
         memoryUsed = 0;
@@ -87,6 +91,51 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список смежности: O(|V| + |E|)
+                    </li>
+                    <li>
+                        Матрица смежности: O(|V|^2)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function dfs(v):
+      отметить v как посещённую
+
+      для всех рёбер (v, u):
+          если u не посещена:
+              dfs(u)
+      добавить v в конец списка sorted
+
+  function topological_sort():
+      sorted[] - упорядоченные по времени выхода вершины
+
+      для всех непосещённых вершин v:
+          dfs(v)
+
+      перевернуть sorted
+
+      переименовать:
+          вершину sorted[0] на 0
+          вершину sorted[1] на 1
+          ...
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Белые вершины - не посещённые</li>
+                    <li>Серые вершины - обрабатываемые</li>
+                    <li>Чёрные вершины - обрабатанные</li>
+                    <li>Красные рёбра - рёбра обхода</li>
+                    <li>Синие числа - время выхода</li>
+                    <li>Красные числа - новые номера вершин</li>
+                </ul>
             ]
         };
     }

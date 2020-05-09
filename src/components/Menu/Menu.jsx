@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { Graph, GraphMode, vertexRadius } from "../Graph/Graph";
 import { RoundedToggleSwitch } from "../ToggleSwitches/ToggleSwitches";
 import {
-    call,
+    call, clearAlgorithmInfo,
     clearStatistics,
     clearTrace,
     continueCall,
@@ -116,9 +116,7 @@ class MenuComponent extends React.Component {
 
     startVisualization = () => {
         if (this.props.remainingAlgorithmSteps === 0) {
-            this.props.clearTrace();
-            this.props.clearStatistics();
-            this.props.cleanGraphSelections();
+            this.clearVisualization();
             this.props.preCall();
         } else if (this.props.isVisualizationActive) {
             this.props.pause();
@@ -129,9 +127,7 @@ class MenuComponent extends React.Component {
 
     stepVisualization = () => {
         if (this.props.remainingAlgorithmSteps === 0) {
-            this.props.clearTrace();
-            this.props.clearStatistics();
-            this.props.cleanGraphSelections();
+            this.clearVisualization();
             this.props.preCall(true);
         } else {
             this.props.continue(true);
@@ -171,6 +167,7 @@ class MenuComponent extends React.Component {
         this.props.cleanGraphSelections();
         this.props.clearTrace();
         this.props.clearStatistics();
+        this.props.clearAlgorithmInfo();
     };
 
     writeToFile = () => {
@@ -347,6 +344,7 @@ const mapDispatchToProps = dispatch => ({
     cleanGraphSelections: () => dispatch(cleanGraphSelections()),
     clearTrace: () => dispatch(clearTrace()),
     clearStatistics: () => dispatch(clearStatistics()),
+    clearAlgorithmInfo: () => dispatch(clearAlgorithmInfo()),
     setGraph: (graph) => dispatch(setGraph(graph)),
     startMatrixDialog: () => dispatch(startMatrixDialogForResult()),
     resetCanvasPosition: () => dispatch(moveCanvas(0, 0))

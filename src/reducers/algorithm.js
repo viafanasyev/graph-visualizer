@@ -9,7 +9,10 @@ const defaultState = {
     speed: 1000,
     isOneStep: false,
     statistics: [],
-    isStatisticsShown: false
+    isStatisticsShown: false,
+    algorithmInfo: [],
+    isAlgorithmInfoShown: false,
+    isAlgorithmInfoCollapsed: false
 };
 
 const algorithm = (state = defaultState, action) => {
@@ -33,6 +36,7 @@ const algorithm = (state = defaultState, action) => {
             }
             newState.trace = result.trace;
             newState.statistics = result.statistics;
+            newState.algorithmInfo = result.algorithmInfo;
 
             return newState;
         case ActionType.POP_TRACE_STEP:
@@ -84,6 +88,22 @@ const algorithm = (state = defaultState, action) => {
                 ...state,
                 statistics: [],
                 isStatisticsShown: false
+            };
+        case ActionType.SHOW_ALGORITHM_INFO:
+            return {
+                ...state,
+                isAlgorithmInfoShown: true
+            };
+        case ActionType.CLEAR_ALGORITHM_INFO:
+            return {
+                ...state,
+                algorithmInfo: [],
+                isAlgorithmInfoShown: false
+            };
+        case ActionType.INVERT_ALGORITHM_INFO_COLLAPSED:
+            return {
+                ...state,
+                isAlgorithmInfoCollapsed: !state.isAlgorithmInfoCollapsed
             };
         default:
             return state;

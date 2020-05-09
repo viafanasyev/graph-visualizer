@@ -9,6 +9,7 @@ import {
 } from "./index";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let memoryUsed = 0;
 
@@ -89,6 +90,45 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список смежности: O(|V|^2 + |E|)
+                    </li>
+                    <li>
+                        Список смежности + двоичная куча: O((|V| + |E|) * log|V|)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function dijkstra(start):
+      d[v] - кратчайшее расстояние от start до v
+
+      для всех вершин v кроме start:
+          d[v] = ∞
+      d[start] = 0
+
+      пока d[start] != ∞ и start != -1:
+          для всех рёбер (start, u):
+              d[u] = min(d[u], d[start] + вес ребра (start, u))
+
+          отметить start как посещённую
+
+          start = непосещённая вершина v с минимальным d[v]
+          если нет непосещённых вершин - start = -1
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Белые вершины - не посещённые</li>
+                    <li>Чёрные вершины - обрабатанные</li>
+                    <li>Жёлтая вершина - обрабатываемая</li>
+                    <li>Красные рёбра - рёбра кратчайшего пути</li>
+                    <li>Красные числа - текущее кратчайшее расстояние</li>
+                </ul>
             ]
         };
     }

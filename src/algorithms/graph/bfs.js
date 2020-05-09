@@ -2,6 +2,7 @@ import { AlgorithmActionType, Criteria, EdgeAction, getOperationsCount, PreCallA
 import { Queue } from "../../utils/queue";
 import { edgesListToAdjacencyList } from "../../utils/graphConverter";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let memoryUsed = 0;
 
@@ -60,6 +61,39 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список смежности: O(|V| + |E|)
+                    </li>
+                    <li>
+                        Матрица смежности: O(|V|^2)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function bfs(start):
+      добавить вершину start в очередь
+
+      пока очередь не пуста:
+          достать вершину v из очереди
+          для всех рёбер (v, u):
+              если вершина u не обработана и не в очереди:
+                  добавить u в очередь
+          отметить v как обработанную
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Белые вершины - не посещённые</li>
+                    <li>Серые вершины - добавленные в очередь</li>
+                    <li>Чёрные вершины - обрабатанные</li>
+                    <li>Жёлтая вершина - обрабатываемая</li>
+                    <li>Красные рёбра - рёбра дерева обхода</li>
+                </ul>
             ]
         };
     }

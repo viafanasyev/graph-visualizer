@@ -1,0 +1,45 @@
+.algorithm-info-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 10001;
+  background: #ffffff88;
+
+
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+
+  .text {
+    color: #000;
+    font-size: .7em;
+    font-family: monospace;
+
+    ul {
+      list-style-type: none;
+      padding-left: 15px;
+    }
+
+    pre {
+      background: #ddd;
+      color: #000;
+      border-radius: 5px;
+      margin: 20px;
+
+      max-height: 350px;
+      overflow: auto;
+
+      code {
+        font-size: .8em;
+      }
+    }
+  }
+}
+
+.invisible {
+  display: none;
+  visibility: hidden;
+}

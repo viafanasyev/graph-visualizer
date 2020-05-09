@@ -9,6 +9,7 @@ import {
 } from "./index";
 import { edgesListToAdjacencyList, edgesListToReversedAdjacencyList } from "../../utils/graphConverter";
 import { sizeof } from "../../utils/sizeof";
+import React from "react";
 
 let used = {};
 let trace = [];
@@ -143,6 +144,49 @@ export default {
                 `Время исполнения алгоритма: ${duration.toFixed(4)}мс`,
                 `Кол-во шагов визуализации: ${getOperationsCount(trace)}`,
                 `Память: ${memoryUsed} байт(а)`
+            ],
+            algorithmInfo: [
+                "Временная сложность алгоритма:",
+                <ul>
+                    <li>
+                        Список смежности: O(|V| + |E|)
+                    </li>
+                    <li>
+                        Матрица смежности: O(|V|^2)
+                    </li>
+                </ul>,
+                "Псевдокод:",
+                <pre>
+                    <code>{`
+  function dfs(v, component_number):
+      отметить v как посещённую
+      добавить v в КСС под номером component_number
+
+      для всех рёбер (v, u):
+          если u не посещена:
+              dfs(u, component_number)
+
+  function scc():
+      провести топологическую сортировку
+      перевернуть все рёбра
+
+      components = 0
+      для всех вершин v в порядке топологической сортировки:
+          если v не посещена:
+              dfs(v, components)
+              components++
+                    `}</code>
+                </pre>,
+                "Легенда:",
+                <ul>
+                    <li>Белые вершины - не посещённые</li>
+                    <li>Серые вершины - обрабатываемые</li>
+                    <li>Чёрные вершины - обрабатанные</li>
+                    <li>Красные рёбра - рёбра обхода</li>
+                    <li>Синие числа (при обходе) - время выхода</li>
+                    <li>Синие числа (после обхода) - новые номера вершин (тополог. отсорт.)</li>
+                    <li>Красные числа - номер КСС</li>
+                </ul>
             ]
         };
     }
