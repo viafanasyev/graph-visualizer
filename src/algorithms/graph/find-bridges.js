@@ -69,6 +69,9 @@ export default {
     criteria: Criteria.NOT_ORIENTED,
 
     call: (vertices, edges) => {
+        if (vertices.length === 0)
+            return {trace: [], statistics: []};
+
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
         trace = [];
         memoryUsed = 0;

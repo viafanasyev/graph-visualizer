@@ -59,7 +59,8 @@ const findComponents = (vertices, edges, adjacencyList, trace) => {
     for (const {from, to} of edges) {
         trace.push({ from: from.name, to: to.name, oriented: true, action: EdgeAction.FLIP, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
     }
-    trace[trace.length - 1].isChained = false;
+    if (edges.length > 0)
+        trace[trace.length - 1].isChained = false;
 
     vertices.forEach(vertex => used[vertex.name] = false);
 
@@ -109,6 +110,9 @@ export default {
     criteria: Criteria.ORIENTED,
 
     call: (vertices, edges) => {
+        if (vertices.length === 0)
+            return {trace: [], statistics: []};
+
         const adjacencyList = edgesListToAdjacencyList(vertices, edges);
         const reversedAdjacencyList = edgesListToReversedAdjacencyList(vertices, edges);
 
