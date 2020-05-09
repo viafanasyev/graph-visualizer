@@ -8,22 +8,27 @@ import MessageBox from "./MessageBox/MessageBox";
 import InputDialog from "./Dialogs/InputDialog/InputDialog";
 import InfoBox from "./InfoBox/InfoBox";
 import MatrixDialog from "./Dialogs/MatrixDialog/MatrixDialog";
-import { HotKeys } from "react-hotkeys";
+import { GlobalHotKeys } from "react-hotkeys";
 import { connect } from "react-redux";
 import { cleanGraphSelections, clearGraph, generateGraph } from "../actions";
 import HintBox from "./HintBox/HintBox";
-import { clearStatistics, clearTrace, pause } from "../actions/algorithm";
+import { clearAlgorithmInfo, clearStatistics, clearTrace, pause } from "../actions/algorithm";
 
 const cx = classnames.bind(styles);
 
 const App = ({ stopVisualization, generateGraph, clearGraph }) => {
-    const onKeyDown = (e) => {
-        if (e.ctrlKey && (e.key === 'g')) {
+    const keyMap = {
+        GENERATE: "ctrl+g",
+        CLEAR: "ctrl+alt+c"
+    };
+
+    const handlers = {
+        GENERATE: (e) => {
             e.preventDefault();
             stopVisualization();
             generateGraph();
-        }
-        if (e.ctrlKey && e.altKey && (e.key === 'c')) {
+        },
+        CLEAR: (e) => {
             e.preventDefault();
             stopVisualization();
             clearGraph();
@@ -31,17 +36,16 @@ const App = ({ stopVisualization, generateGraph, clearGraph }) => {
     };
 
     return (
-        <HotKeys onKeyDown={onKeyDown}>
-            <div className={cx("app")}>
-                <MenuComponent/>
-                <GraphComponent/>
-                <MessageBox/>
-                <InfoBox/>
-                <HintBox/>
-                <InputDialog/>
-                <MatrixDialog/>
-            </div>
-        </HotKeys>
+        <div className={cx("app")}>
+            <GlobalHotKeys keyMap={keyMap} handlers={handlers}/>
+            <MenuComponent/>
+            <GraphComponent/>
+            <MessageBox/>
+            <InfoBox/>
+            <HintBox/>
+            <InputDialog/>
+            <MatrixDialog/>
+        </div>
     );
 };
 
