@@ -211,14 +211,21 @@ class MenuComponent extends React.Component {
                 const json = JSON.parse(e.target.result);
 
                 const oriented = json.oriented;
-                const vertices = json.vertices.map(v => new Vertex(v.x, v.y, vertexRadius, v.name));
-                const edges = json.edges.map(e =>
-                    new Edge(
-                        vertices.find(v => v.name === e.from),
-                        vertices.find(v => v.name === e.to),
-                        oriented,
-                        isNaN(Number(e.weight)) ? undefined : Number(e.weight)
-                    )
+                const vertices = json.vertices.map(v => {
+                    if (isNaN(Number(v.name)))
+                        throw new Error("Name of vertex should be a number");
+                    if (isNaN(Number(v.x)) || isNaN(Number(v.y)))
+                        throw new Error("Coordinates of vertex should be numbers");
+                    return new Vertex(Number(v.x), Number(v.y), vertexRadius, Number(v.name));
+                });
+                const edges = json.edges.map(e => {
+                        return new Edge(
+                            vertices.find(v => v.name === Number(e.from)),
+                            vertices.find(v => v.name === Number(e.to)),
+                            oriented,
+                            isNaN(Number(e.weight)) ? undefined : Number(e.weight)
+                        );
+                    }
                 );
 
                 const graph = new Graph(oriented, vertices, edges);
