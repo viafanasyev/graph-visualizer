@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from "classnames/bind";
 import styles from "./App.module.scss";
 import PlainGraph from "./PlainGraph/PlainGraph";
-import GraphComponent from "./Graph/Graph";
+import GraphComponent, { GraphMode } from "./Graph/Graph";
 import MenuComponent from "./Menu/Menu";
 import MessageBox from "./MessageBox/MessageBox";
 import InputDialog from "./Dialogs/InputDialog/InputDialog";
@@ -10,7 +10,14 @@ import InfoBox from "./InfoBox/InfoBox";
 import MatrixDialog from "./Dialogs/MatrixDialog/MatrixDialog";
 import { GlobalHotKeys } from "react-hotkeys";
 import { connect } from "react-redux";
-import { cleanGraphSelections, clearGraph, generateGraph } from "../actions";
+import {
+    changeGraphMode,
+    cleanGraphSelections,
+    clearGraph,
+    closeMessage,
+    generateGraph,
+    showMessage
+} from "../actions";
 import HintBox from "./HintBox/HintBox";
 import {
     clearAlgorithmInfo,
@@ -23,11 +30,20 @@ import AlgorithmInfoBox from "./AlgorithmInfoBox/AlgorithmInfoBox";
 
 const cx = classnames.bind(styles);
 
-const App = ({ stopVisualization, generateGraph, clearGraph, invertAlgorithmInfoCollapsed }) => {
+const App = ({
+    stopVisualization,
+    generateGraph,
+    clearGraph,
+    invertAlgorithmInfoCollapsed,
+    showMessage,
+    closeMessage,
+    changeGraphMode
+}) => {
     const keyMap = {
         GENERATE: ["ctrl+g", "ctrl+п"],
         CLEAR: ["ctrl+alt+c", "ctrl+alt+с"],
-        COLLAPSE_ALGORITHM_INFO: ["i", "ш"]
+        COLLAPSE_ALGORITHM_INFO: ["i", "ш"],
+        CHANGE_GRAPH_MODE: ["1", "2", "3", "4"]
     };
 
     const handlers = {
@@ -44,6 +60,32 @@ const App = ({ stopVisualization, generateGraph, clearGraph, invertAlgorithmInfo
         COLLAPSE_ALGORITHM_INFO: (e) => {
             e.preventDefault();
             invertAlgorithmInfoCollapsed();
+        },
+        CHANGE_GRAPH_MODE: (e) => {
+            e.preventDefault();
+            switch (e.key) {
+                case "1":
+                    stopVisualization();
+                    closeMessage();
+                    changeGraphMode(GraphMode.DEFAULT);
+                    break;
+                case "2":
+                    stopVisualization();
+                    showMessage("Выберите точку для добавления вершины");
+                    changeGraphMode(GraphMode.ADD_VERTEX);
+                    break;
+                case "3":
+                    stopVisualization();
+                    showMessage("Выберите вершины, которые нужно соединить ребром");
+                    changeGraphMode(GraphMode.ADD_EDGE);
+                    break;
+                case "4":
+                    stopVisualization();
+                    showMessage("Выберите объект для удаления");
+                    changeGraphMode(GraphMode.REMOVE_VERTEX_OR_EDGE);
+                    break;
+                default:
+            }
         }
     };
 
@@ -73,7 +115,10 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearStatistics());
         dispatch(clearAlgorithmInfo());
     },
-    invertAlgorithmInfoCollapsed: () => dispatch(invertAlgorithmInfoCollapsed())
+    invertAlgorithmInfoCollapsed: () => dispatch(invertAlgorithmInfoCollapsed()),
+    changeGraphMode: (graphMode) => dispatch(changeGraphMode(graphMode)),
+    showMessage: (message) => dispatch(showMessage(message)),
+    closeMessage: () => dispatch(closeMessage())
 });
 
 export default connect(null, mapDispatchToProps)(App);
