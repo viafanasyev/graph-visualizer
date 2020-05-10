@@ -64,7 +64,6 @@ const App = ({
             e.preventDefault();
             switch (e.key) {
                 case "1":
-                    stopVisualization();
                     closeMessage();
                     changeGraphMode(GraphMode.DEFAULT);
                     break;
