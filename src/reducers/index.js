@@ -7,7 +7,6 @@ import algorithm from "./algorithm";
 import matrixDialog from "./matrixDialog";
 import { AlgorithmActionType, EdgeAction, VertexAction, VertexHintAction } from "../algorithms/graph";
 import { EdgeState } from "../components/Graph/Edge/Edge";
-import generatorDialog from "./generatorDialog";
 
 const defaultState = {
     graph: new Graph(false),
@@ -312,6 +311,5 @@ export default combineReducers({
     graphReducer: reducer,
     dialogReducer: dialog,
     algorithmReducer: algorithm,
-    matrixDialogReducer: matrixDialog,
-    generatorDialogReducer: generatorDialog
+    matrixDialogReducer: matrixDialog
 });
