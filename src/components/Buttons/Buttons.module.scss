@@ -23,6 +23,13 @@
     transform: translateY(2px);
     filter: drop-shadow(0 0 3px rgb(170, 170, 170));
   }
+
+  .hint {
+    color: #999;
+    width: 0;
+    margin: 0 0 0 4px;
+    display: inline-block;
+  }
 }
 
 .activated {

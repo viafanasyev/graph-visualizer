@@ -266,19 +266,23 @@ class MenuComponent extends React.Component {
                             <ButtonComponent
                                 text={"Режим просмотра"}
                                 onClick={() => this.closeMessage()}
-                                activated={this.props.graphMode === GraphMode.DEFAULT}/>
+                                activated={this.props.graphMode === GraphMode.DEFAULT}
+                                hotKeyHint={"1"}/>
                             <ButtonComponent
                                 text={"Добавить вершину"}
                                 onClick={() => this.askForAction("Выберите точку для добавления вершины", GraphMode.ADD_VERTEX)}
-                                activated={this.props.graphMode === GraphMode.ADD_VERTEX}/>
+                                activated={this.props.graphMode === GraphMode.ADD_VERTEX}
+                                hotKeyHint={"2"}/>
                             <ButtonComponent
                                 text={"Добавить ребро"}
                                 onClick={() => this.askForAction("Выберите вершины, которые нужно соединить ребром", GraphMode.ADD_EDGE)}
-                                activated={this.props.graphMode === GraphMode.ADD_EDGE}/>
+                                activated={this.props.graphMode === GraphMode.ADD_EDGE}
+                                hotKeyHint={"3"}/>
                             <ButtonComponent
                                 text={"Удалить вершину/ребро"}
                                 onClick={() => this.askForAction("Выберите объект для удаления", GraphMode.REMOVE_VERTEX_OR_EDGE)}
-                                activated={this.props.graphMode === GraphMode.REMOVE_VERTEX_OR_EDGE}/>
+                                activated={this.props.graphMode === GraphMode.REMOVE_VERTEX_OR_EDGE}
+                                hotKeyHint={"4"}/>
                         </div>
                         <RoundedToggleSwitch
                             className={cx("switch")}
