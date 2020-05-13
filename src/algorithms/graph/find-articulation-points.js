@@ -53,6 +53,7 @@ const dfs = (vertex, adjacencyList, parent = -1) => {
         trace.push({vertex, action: VertexAction.EXIT, actionType: AlgorithmActionType.VERTEX_ACTION});
 
         if ((parent === -1) && (children > 1)) {
+            ++countArticulationPoints;
             trace.push({vertex, action: VertexAction.SELECT, actionType: AlgorithmActionType.VERTEX_ACTION});
         }
     }
