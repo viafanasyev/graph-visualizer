@@ -15,10 +15,12 @@ let memoryUsed = 0;
 
 const dijkstra = (start, vertices, adjacencyList, used, trace) => {
     const d = {};
+    const p = {};
     vertices.forEach(v => {
         if (v === start)
             return;
         d[v] = Number.MAX_SAFE_INTEGER;
+        p[v] = null;
         trace.push({ vertex: v, hint: "∞", action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION, isChained: true });
     });
     d[start] = 0;
@@ -46,7 +48,11 @@ const dijkstra = (start, vertices, adjacencyList, used, trace) => {
 
             trace.push({ from: v, to, oriented: true, weight, action: EdgeAction.HIGHLIGHT, actionType: AlgorithmActionType.EDGE_ACTION });
             if (d[v] + weight < d[to]) {
+                if (p[to] !== null) {
+                    trace.push({ from: p[to], to, oriented: true, action: EdgeAction.UNSELECT, actionType: AlgorithmActionType.EDGE_ACTION });
+                }
                 d[to] = d[v] + weight;
+                p[to] = v;
                 trace.push({ from: v, to, oriented: true, weight, action: EdgeAction.WALK, actionType: AlgorithmActionType.EDGE_ACTION, isChained: true });
                 trace.push({ vertex: to, hint: d[to], action: VertexHintAction.SET, actionType: AlgorithmActionType.VERTEX_HINT_ACTION });
             } else {
